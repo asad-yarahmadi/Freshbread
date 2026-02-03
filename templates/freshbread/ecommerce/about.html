@@ -1,0 +1,703 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en"><!-- Basic -->
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" conStent="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+     <!-- Site Metas -->
+    <title>About - Fresh Bread</title>  
+    <meta name="keywords" content="Fresh Bread Bakery, Kanata bakery, Ottawa bakery, artisan bread, handmade cakes, local bakery, fresh pastries">
+    <meta name="description" content="Learn about Fresh Bread Bakery in Kanata, our story, values, and commitment to fresh handmade bread and pastries.">
+    <meta name="author" content="Fresh Bread Bakery">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="About Fresh Bread Bakery">
+    <meta property="og:description" content="Learn about Fresh Bread Bakery in Kanata, our story, values, and commitment to fresh handmade bread and pastries.">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:site_name" content="Fresh Bread Bakery">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/about-img2.jpg' %}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="About Fresh Bread Bakery">
+    <meta name="twitter:description" content="Learn about Fresh Bread Bakery in Kanata, our story, values, and commitment to fresh handmade bread and pastries.">
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/about-img2.jpg' %}">
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">    
+	<!-- Site CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "name": "About Fresh Bread Bakery",
+      "url": "{{ request.build_absolute_uri }}",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Fresh Bread Bakery",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Kanata",
+          "addressRegion": "ON",
+          "addressCountry": "CA"
+        }
+      }
+    }
+    </script>
+
+  <style>/* === 🛒 Modern Cart Dropdown with Smooth Transition & Backdrop === */
+.cart-count {
+  position: absolute;
+  top: 0;
+  right: -5px;
+  background: #dc3545;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 50%;
+  padding: 2px 7px;
+  font-weight: 600;
+  display: inline-block;
+  box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+}
+
+#cart-menu { position: relative; display:inline-block; }
+.cart-count {
+  position: absolute; top: -6px; right: -10px;
+  background:#e60023;color:#fff;font-size:11px;padding:2px 6px;border-radius:12px;font-weight:700;
+}
+
+/* popup */
+.cart-popup {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  width: 360px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.16);
+  display: none;
+  z-index: 1200;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+#cart-menu:hover .cart-popup { display:block; }
+
+/* tag */
+.cart-tag {
+  display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(0,0,0,0.06);font-weight:600;margin-bottom:10px;
+}
+
+/* items */
+.cart-items { max-height:320px; overflow-y:auto; padding-right:6px; margin-bottom:10px; }
+.cart-item { display:flex; gap:12px; align-items:flex-start; padding:8px 4px; border-radius:10px; }
+.cart-img { width:64px;height:64px;object-fit:cover;border-radius:8px; flex-shrink:0; }
+.item-info { flex:1; min-width:0; }
+
+/* name */
+.item-info .name { margin:0 0 6px 0; font-weight:600; font-size:0.95rem; color:#111; }
+
+/* price + discount */
+.price-final { margin:0; font-weight:700; color:#1aa34a; font-size:1rem; }
+.discount-label { margin:4px 0 0 0; font-size:0.85rem; color:#d40000; opacity:0.95; }
+
+/* qty */
+.quantity-control { display:flex; align-items:center; gap:8px; margin-top:8px; }
+.quantity-control button {
+  width:30px;height:30px;border-radius:8px;border:1px solid #e0e0e0;background:#fafafa; cursor:pointer;
+  font-size:18px; font-weight:700; line-height:1;
+}
+.quantity { min-width:26px; text-align:center; font-weight:700; }
+
+/* footer */
+.cart-total-row { display:flex; justify-content:space-between; font-weight:700; padding-top:8px; border-top:1px solid #eee; margin-top:8px; }
+.btn-continue { width:100%; margin-top:8px; padding:10px 0; border-radius:10px; border:none; background:linear-gradient(135deg,#007bff,#0056d6); color:#fff; font-weight:700; cursor:pointer; }
+.btn-continue:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(0,86,214,0.18); }
+
+/* scrollbar */
+.cart-items::-webkit-scrollbar{ width:6px; }
+.cart-items::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.12); border-radius:8px; }
+
+.item-info {
+  flex: 1;
+}
+
+.name {
+  font-weight: 500;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.price {
+  font-weight: 600;
+  margin: 2px 0;
+}
+
+.original-price {
+  font-size: 0.8rem;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.quantity-control button {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.quantity {
+  min-width: 20px;
+  text-align: center;
+}
+
+
+
+/* NAME */
+.info .name {
+    font-weight: 600;
+    font-size: 14px;
+    margin: 0 0 4px 0;
+}
+
+/* PRICE — NO DISCOUNT */
+.price-normal {
+    font-size: 14px;
+    font-weight: 700;
+    color: #28a745;
+    margin: 0;
+}
+
+/* PRICE — DISCOUNTED (RED STRIKED) */
+.price-discount {
+    color: #d40000;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+    text-decoration: line-through;
+    opacity: 0.8;
+}
+
+/* PRICE — FINAL (GREEN) */
+.price-final {
+    color: #1aa34a;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 2px 0 0 0;
+}
+
+/* TOTAL */
+.cart-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 8px 0;
+    border-top: 1px solid #ececec;
+    margin-bottom: 12px;
+}
+
+/* CONTINUE BUTTON */
+.btn-continue {
+    width: 100%;
+    padding: 11px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-continue:hover {
+    background: #0056b3;
+}
+
+/* === Item Info === */
+.item-info {
+  flex: 1;
+}
+
+.item-info .name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 15px;
+  color: #333;
+}
+
+.item-info .price {
+  margin: 3px 0 0;
+  color: #28a745;
+  font-size: 14px;
+}
+
+/* === Quantity Control === */
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.quantity-control button {
+  border: none;
+  background: #e9ecef;
+  color: #333;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quantity-control button:hover {
+  background: #007bff;
+  color: #fff;
+  transform: translateY(-1px);
+}
+/* موقعیت صحیح کنار آیکن */
+/* کانتینر اصلی */
+#cart-menu {
+    position: relative;
+    display: inline-block;
+}
+
+/* پاپ‌آپ کارت */
+#cart-menu .cart-popup {
+    position: absolute;
+    top: 130%;
+    right: 0;
+    width: 340px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    border: 1px solid rgba(255,255,255,0.4);
+    
+    display: none;
+    z-index: 999;
+
+    /* انیمیشن */
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.25s ease-out;
+}
+
+/* نمایش با Hover */
+#cart-menu:hover .cart-popup {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* آیتم‌ها */
+.cart-items {
+    max-height: 260px;
+    overflow-y: auto;
+    padding-right: 6px;
+    margin-bottom: 14px;
+}
+
+/* اسکرول شیک */
+.cart-items::-webkit-scrollbar {
+    width: 6px;
+}
+.cart-items::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+}
+.cart-items::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+}
+
+/* هر آیتم */
+.cart-items .item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 6px;
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.55);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* فوتر */
+.cart-popup-footer a {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    background: linear-gradient(135deg, #007bff, #0056d6);
+    color: white !important;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: 0.25s;
+}
+
+.cart-popup-footer a:hover {
+    background: linear-gradient(135deg, #0056d6, #003c9f);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+
+
+/* ===== نوار دور تصویر وقتی تخفیف دارد ===== */
+.discount-border {
+    position: relative;
+    display: inline-block;
+    border-radius: 12px;
+    padding: 0; /* نوار کاملاً چسبیده به تصویر */
+
+    border: 3px solid transparent;
+    background: linear-gradient(#ffffff, #ffffff) padding-box,
+                linear-gradient(45deg, #ff4d4d, #ff9900, #ff4d4d) border-box;
+}
+
+.discount-border img {
+    border-radius: 12px;
+}
+
+
+/* ===== علامت درصد سه‌بعدی بالا ===== */
+.discount-symbol-3d {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 45px;
+    font-weight: 900;
+    color: #ffffff;
+
+    text-shadow: 
+        1px 1px 0 #990000,
+        2px 2px 0 #770000,
+        3px 3px 0 #550000,
+        4px 4px 5px rgba(0,0,0,0.45);
+
+    transform: rotateX(15deg) rotateY(-15deg);
+    animation: percentJump 1.4s infinite ease-in-out;
+}
+
+/* انیمیشن بالا–پایین درصد */
+@keyframes percentJump {
+    0%   { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
+    50%  { transform: translateY(-8px) rotateX(10deg) rotateY(-10deg); }
+    100% { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
+}
+
+
+/* ===== باکس تخفیف که با hover ظاهر می‌شود ===== */
+.discount-amount {
+    margin-left: 8px;
+    font-weight: bold;
+    color: #ffffff;
+
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: 0.25s;
+
+    background: #ff0000;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid #ff0000;
+    font-size: 14px;
+    box-shadow: 0 1px 4px rgba(255, 0, 0, 0.25);
+}
+
+/* فعال شدن باکس تخفیف هنگام hover کارت */
+.product-card:hover .discount-amount {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+/* ===== ظاهر کلی کارت ===== */
+.product-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.product-card img {
+    border-radius: 12px;
+    width: 100%;
+}
+
+
+
+/* ===== هماهنگی ریسپانسیو (اختیاری) ===== */
+@media (max-width: 576px) {
+    .discount-symbol-3d {
+        font-size: 26px;
+        top: 5px;
+        right: 6px;
+    }
+    .discount-amount {
+        font-size: 12px;
+        padding: 2px 6px;
+    }
+}
+
+
+
+.discount-border img {
+    border-radius: 12px;
+}
+/* ===== نوار مارپیچی دور تصویر فقط در حالت تخفیف ===== */
+.twisted-border {
+    position: relative;
+    display: inline-block;
+    border-radius: 12px;
+    padding: 0;
+    overflow: visible;
+}
+
+/* ساخت نوار طنابی با pseudo-element */
+.twisted-border::before {
+    content: "";
+    position: absolute;
+    inset: -4px; /* ضخامت نوار */
+    border-radius: 14px;
+
+    background: repeating-linear-gradient(
+        45deg,
+        #ff3b3b 0 6px,
+        #ff9900 6px 12px
+    );
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+
+    padding: 4px;
+}
+
+/* تصویر داخل نوار */
+.twisted-border img {
+    display: block;
+    border-radius: 12px;
+}
+
+
+/* ===== درصد سه‌بعدی بالا ===== */
+.discount-symbol-3d {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 40px;
+    font-weight: 900;
+    color: white;
+
+    text-shadow:
+        1px 1px 0 #a00000,
+        2px 2px 0 #760000,
+        4px 4px 5px rgba(0, 0, 0, 0.45);
+
+    transform: rotateX(15deg) rotateY(-15deg);
+    animation: percentJump 1.4s infinite ease-in-out;
+}
+
+/* انیمیشن بالا پایین درصد */
+@keyframes percentJump {
+    0%   { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
+    50%  { transform: translateY(-8px) rotateX(10deg) rotateY(-10deg); }
+    100% { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
+}
+
+
+/* ===== باکس تخفیف Hover ===== */
+.discount-amount {
+    margin-left: 8px;
+    font-weight: bold;
+    color: #b30000;
+
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: 0.25s;
+
+    background: #ffe6e6;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid #ff4d4d;
+    font-size: 14px;
+    box-shadow: 0 1px 4px rgba(255, 0, 0, 0.25);
+}
+
+.product-card:hover .discount-amount {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+</style>
+</head>
+<body>
+{% include 'freshbread/header.html' %}
+
+<!-- Start header -->
+
+
+	
+	<!-- Start header -->
+	<div class="all-page-title page-breadcrumb">
+		<div class="container text-center">
+			<div class="row">
+				<div class="col-lg-12">
+                    <h1>About Fresh Bread Bakery</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End header -->
+	
+	<!-- Start About -->
+	<div class="about-section-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 col-md-6 col-sm-12">
+                    <img src="{% static 'images/about-img2.jpg' %}" alt="Fresh Bread Bakery baking team preparing fresh bread" class="img-fluid">
+				</div>
+				<div class="col-lg-6 col-md-6 col-sm-12 text-center">
+					<div class="inner-column">
+                        <h1>Welcome To <span>Fresh Bread Bakery</span></h1>
+						<h4>Little Story</h4>
+                        <p>Fresh Bread Bakery was founded in 2020 with a passion for handmade, high-quality baked goods. What started as a personal journey in baking has grown into a community-focused local bakery in Kanata, Ontario. We use fresh ingredients, traditional techniques, and creative recipes to deliver delicious bread, cakes, and pastries every day. Whether you are visiting in person or exploring our menu online, we strive to offer a warm, welcoming experience and authentic flavors that make every bite special.</p>
+						<a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'reservation' %}">Reservation</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End About -->
+	
+	<!-- Start Menu -->
+<div class="menu-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="heading-title text-center">
+                    <h2>Special Menu</h2>
+                    <p>The best foods that I can make!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="special-menu text-center">
+                    <div class="button-group filter-button-group">
+                        <button class="active" data-filter="*">All</button>
+                        <button data-filter=".fastfood">Fast foods</button>
+                        <button data-filter=".slowfood">Slow foods</button>
+                        <button data-filter=".bread">Bread</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<div class="row special-list">
+    {% for product in products %}
+        <div class="col-lg-4 col-md-6 special-grid {{ product.category }}">
+            <div class="gallery-single fix product-card {% if product.discount_percent %}discount-border{% endif %}">
+                
+                <div class="image-wrapper position-relative {% if product.discount_percent %}discount-border{% endif %}">
+
+                    <img src="{{ product.menu_image.url }}" class="img-fluid" alt="{{ product.name }}">
+                    
+                    {% if product.discount_percent %}
+                    <!-- علامت % سه‌بعدی بالا -->
+                    <div class="discount-symbol-3d">%</div>
+                    {% endif %}
+                </div>
+
+                <div class="why-text">
+                    <h4>{{ product.name }}</h4>
+                    <p>{{ product.description|safe }}</p>
+
+                    <h5>
+                        {% if product.discount_percent %}
+                            <span class="text-muted"><del>${{ product.original_price }}</del></span>
+                            <span class="text-success fw-bold ms-2">${{ product.price }}</span>
+
+                            <!-- عدد تخفیف که با hover ظاهر می‌شود -->
+                            <span class="discount-amount">{{ product.discount_percent }}%</span>
+                        {% else %}
+                            <span class="text-success">${{ product.price }}</span>
+                        {% endif %}
+                    </h5>
+
+                    <a href="{% url 'food_de' slug=product.slug %}" class="btn btn-warning text-white mt-2">
+                        View Details
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+    </div>
+</div>
+	<!-- End Menu -->
+
+	<!-- Start Contact info -->
+
+	<!-- End Contact info -->
+	
+	<!-- Start Footer -->
+{% include 'freshbread/footer.html' %}
+	<!-- End Footer -->	
+	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+
+	<!-- ALL JS FILES -->
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- ALL PLUGINS -->
+	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+	<script src="{% static 'js/images-loded.min.js' %}"></script>
+	<script src="{% static 'js/isotope.min.js' %}"></script>
+	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+	<script src="{% static 'js/form-validator.min.js' %}"></script>
+    <script src="{% static 'js/contact-form-script.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+</body>
+</html>

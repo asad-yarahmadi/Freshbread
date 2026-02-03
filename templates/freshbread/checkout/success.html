@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checkout Success - Fresh Bread</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    
+    <style>
+      .quiet-box{background:#f7f7f7;border:1px solid #e5e7eb;border-radius:12px;padding:16px;text-align:center;font-size:20px;font-weight:700}
+      .ref{font-size:22px;font-weight:800;color:#2d6a4f}
+    </style>
+</head>
+{% include 'freshbread/header.html' %}
+<body>
+<h2></h2><br>
+<h2></h2><br>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="quiet-box mb-3">We are checking your request</div>
+        <div class="card p-4">
+          <p class="mb-2">We are checking your request as soon as possible. Please check your email to see if your request is accepted or not.</p>
+          
+          <div class="mt-4 d-flex justify-content-center">
+            <a href="/" class="btn btn-primary mx-2">Go to Home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% include 'freshbread/footer.html' %}
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "app": "kingfood-ca-devc",
+  "port": 80,
+  "platform": "django",
+  "wsgi": "freshbread/wsgi.py",
+  "build": {
+    "location": "iran"
+  },
+  "django": {
+    "pythonVersion": "3.12",
+    "settingsFile": "freshbread/settings.py"
+  },
+  "disks": [
+    {
+      "name": "kingfood-disk",
+      "mountTo": "media"
+    }
+  ]
+}

@@ -1,0 +1,335 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checkout – Step 1 - Fresh Bread</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <style>
+        .section { padding: 60px 0; }
+        .card { border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+        .chip { display:inline-block; background:#f3f4f6; padding:8px 12px; border-radius:999px; margin:4px; }
+        .total-box { font-size:20px; font-weight:700; }
+        .disabled { opacity:.5; pointer-events:none; }
+    </style>
+</head>
+<body>
+{% include 'freshbread/header.html' %}
+<h2></h2><br>
+<h2></h2><br>
+<h2></h2><br>
+    <section class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 mb-4">
+                    <div class="card p-4">
+                        <h3 class="mb-3">Your Items</h3>
+                        {% if cart_items_names %}
+                            {% for name in cart_items_names %}
+                                <span class="chip">{{ name }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <p>No items in cart.</p>
+                        {% endif %}
+                    </div>
+                    <div class="card p-4 mt-4">
+                        <h4 class="mb-3">Shipping</h4>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="shipping" id="shipYes" value="yes">
+                            <label class="form-check-label" for="shipYes">Ship to address (+$5)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="shipping" id="shipNo" value="no" checked>
+                            <label class="form-check-label" for="shipNo">No Delivering (pickup)</label>
+                        </div>
+                        <div class="mt-2" id="chooseLocationWrap" style="display:none">
+                            <div id="locationPrompt">
+                              <button type="button" class="btn btn-outline-primary btn-sm" id="chooseLocationBtn">Choose location</button>
+                            </div>
+                            <div id="selectedLocation" style="display:none">
+                              <div><strong>Receiver name</strong></div>
+                              <div id="receiverNameText" class="text-muted"></div>
+                              <div class="mt-2"><strong>Address</strong></div>
+                              <div id="addressText" class="text-muted"></div>
+                              <button type="button" class="btn btn-link p-0 mt-2" id="changeLocationBtn">change location</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card p-4 mt-4">
+                        <h4 class="mb-3">Delivery Window</h4>
+                        <div class="row">
+                            <div class="col-md-7 mb-3">
+                                <div id="calendar" class="d-flex flex-wrap"></div>
+                            </div>
+                            <div class="col-md-5">
+                                <select id="deliverySlot" class="form-control"></select>
+                            </div>
+                        </div>
+                        <small class="text-muted d-block mt-2">Canada time (America/Toronto). Mon–Thu 08:00–20:00, Fri 08:00–16:00. Closed Sat–Sun.</small>
+                        <div id="slotError" class="text-danger mt-2" style="display:none;">No available time slots. Please try a different day.</div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card p-4">
+                        <h4 class="mb-3">Summary</h4>
+                        <div class="d-flex justify-content-between">
+                            <span>Items total</span>
+                            <span id="itemsTotal" class="total-box">${{ base_total }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>Delivery</span>
+                            <span id="shippingTotal" class="total-box">$0.00</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <span>Payable</span>
+                            <span id="payableTotal" class="total-box">${{ base_total }}</span>
+                        </div>
+                        <form method="post" id="step1Form">
+                            {% csrf_token %}
+                            <input type="hidden" name="delivery_slot" id="deliverySlotInput">
+                            <input type="hidden" name="shipping" id="shippingInput" value="no">
+                            <input type="hidden" name="location_id" id="locationIdInput">
+                            <div class="mt-3">
+                                <label for="discountCode" class="form-label">Discount code</label>
+                                <input type="text" id="discountCode" name="discount_code" class="form-control" placeholder="Enter your discount code">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block mt-3" id="nextBtn">Next</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal" tabindex="-1" role="dialog" id="locationModal" style="display:none; background:rgba(0,0,0,.4)">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header"><h5 class="modal-title">Choose Location</h5></div>
+          <div class="modal-body">
+            {% if locations %}
+              <ul class="list-group">
+                {% for loc in locations %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ loc.address_line }} ({{ loc.house_number }})</span>
+                    <button type="button" class="btn btn-sm btn-primary" data-location-id="{{ loc.id }}">Select</button>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <a href="{% url 'location_add' %}" class="btn btn-outline-secondary">+add</a>
+            {% endif %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" id="closeLocationModal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer-area bg-f">
+        <div class="copyright">
+            <div class="container">
+                <div class="row"><div class="col-lg-12"><p class="company-name">All Rights Reserved. &copy;2025 Fresh Bread Bakery</p></div></div>
+            </div>
+        </div>
+    </footer>
+
+<script>
+const deliverySlot = document.getElementById('deliverySlot');
+const slotError = document.getElementById('slotError');
+const nextBtn = document.getElementById('nextBtn');
+const deliverySlotInput = document.getElementById('deliverySlotInput');
+const shippingInput = document.getElementById('shippingInput');
+const locationIdInput = document.getElementById('locationIdInput');
+const shipYes = document.getElementById('shipYes');
+const shipNo = document.getElementById('shipNo');
+const chooseLocationWrap = document.getElementById('chooseLocationWrap');
+const chooseLocationBtn = document.getElementById('chooseLocationBtn');
+const locationPrompt = document.getElementById('locationPrompt');
+const selectedLocation = document.getElementById('selectedLocation');
+const changeLocationBtn = document.getElementById('changeLocationBtn');
+const receiverNameText = document.getElementById('receiverNameText');
+const addressText = document.getElementById('addressText');
+const locationModal = document.getElementById('locationModal');
+const itemsTotalEl = document.getElementById('itemsTotal');
+const shippingTotalEl = document.getElementById('shippingTotal');
+const payableTotalEl = document.getElementById('payableTotal');
+const baseTotal = parseFloat('{{ base_total }}');
+
+function tzParts(date) {
+    const fmt = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Toronto',
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit'
+    });
+    const parts = fmt.formatToParts(date);
+    const out = {};
+    for (const p of parts) out[p.type] = p.value;
+    return out;
+}
+
+function comparable(parts) {
+    return parseInt(parts.year + parts.month + parts.day + parts.hour + parts.minute);
+}
+
+// تابع ساخت تقویم
+function buildCalendar() {
+    const wrap = document.getElementById('calendar');
+    wrap.innerHTML = '';
+    const now = new Date();
+    const nowCmp = comparable(tzParts(now));
+
+    for (let d = 0; d < 10; d++) {
+        const day = new Date(now.getFullYear(), now.getMonth(), now.getDate() + d);
+        const weekday = day.getDay();
+        const closed = (weekday === 0 || weekday === 6);
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn btn-sm m-1 ' + (closed ? 'btn-secondary disabled' : 'btn-outline-primary');
+        btn.textContent = day.toLocaleDateString('en-CA', { timeZone: 'America/Toronto', weekday: 'short', month: 'short', day: 'numeric' });
+        btn.dataset.date = day.toISOString();
+
+        if (!closed) {
+            btn.addEventListener('click', () => selectDay(day));
+        }
+        wrap.appendChild(btn);
+    }
+
+    // انتخاب اولین روز فعال خودکار
+    const first = wrap.querySelector('button.btn-outline-primary');
+    if (first) first.click();
+}
+
+// تابع برای پر کردن deliverySlot بر اساس روز انتخاب شده
+function selectDay(day) {
+    const wrap = document.getElementById('calendar');
+    Array.from(wrap.querySelectorAll('button')).forEach(b => b.classList.remove('active'));
+    const btn = Array.from(wrap.querySelectorAll('button')).find(b => b.dataset.date === day.toISOString());
+    if (btn) btn.classList.add('active');
+
+    deliverySlot.innerHTML = '';
+    const now = new Date();
+    const nowCmp = comparable(tzParts(now));
+    const wd = day.getDay();
+
+    let start = 8, end = 20;
+    if (wd === 5) end = 16;
+
+    for (let h = start; h <= end; h++) {
+        const slot = new Date(day.getFullYear(), day.getMonth(), day.getDate(), h, 0);
+        const sp = tzParts(slot);
+        const cmp = comparable(sp);
+
+        const opt = document.createElement('option');
+        opt.value = JSON.stringify({ y: sp.year, m: sp.month, d: sp.day, h: sp.hour, min: sp.minute });
+        opt.textContent = slot.toLocaleString('en-CA', { timeZone: 'America/Toronto', weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        if (cmp <= nowCmp) opt.disabled = true;
+
+        deliverySlot.appendChild(opt);
+    }
+
+    const firstEnabled = Array.from(deliverySlot.options).find(o => !o.disabled);
+    if (firstEnabled) {
+        deliverySlot.value = firstEnabled.value;
+        slotError.style.display = 'none';
+        nextBtn.classList.remove('disabled');
+    } else {
+        slotError.style.display = 'block';
+        nextBtn.classList.add('disabled');
+    }
+}
+
+// بررسی تغییر deliverySlot
+deliverySlot.addEventListener('change', () => {
+    const opt = deliverySlot.options[deliverySlot.selectedIndex];
+    if (!opt || opt.disabled) {
+        slotError.style.display = 'block';
+        nextBtn.classList.add('disabled');
+    } else {
+        slotError.style.display = 'none';
+        nextBtn.classList.remove('disabled');
+    }
+});
+
+// submit فرم
+document.getElementById('step1Form').addEventListener('submit', function(e) {
+    const opt = deliverySlot.options[deliverySlot.selectedIndex];
+    if (!opt || opt.disabled) {
+        e.preventDefault();
+        slotError.style.display = 'block';
+        return;
+    }
+    if (shippingInput.value === 'yes' && !locationIdInput.value) {
+        e.preventDefault();
+        locationModal.style.display = 'block';
+        return;
+    }
+    deliverySlotInput.value = opt.value;
+});
+
+// اجرا در load صفحه
+buildCalendar();
+
+shipYes.addEventListener('change', function(){
+    if (shipYes.checked){
+        chooseLocationWrap.style.display = 'block';
+        shippingInput.value = 'yes';
+        shippingTotalEl.textContent = '$' + Number({{ shipping_charge }}).toFixed(2);
+        payableTotalEl.textContent = '$' + (baseTotal + Number({{ shipping_charge }})).toFixed(2);
+        nextBtn.classList.add('disabled');
+        nextBtn.disabled = true;
+    }
+});
+shipNo.addEventListener('change', function(){
+    if (shipNo.checked){
+        chooseLocationWrap.style.display = 'none';
+        shippingInput.value = 'no';
+        locationIdInput.value = '';
+        shippingTotalEl.textContent = '$0.00';
+        payableTotalEl.textContent = '$' + baseTotal.toFixed(2);
+        nextBtn.classList.remove('disabled');
+        nextBtn.disabled = false;
+        locationPrompt.style.display = 'block';
+        selectedLocation.style.display = 'none';
+    }
+});
+chooseLocationBtn && chooseLocationBtn.addEventListener('click', function(){
+    locationModal.style.display = 'block';
+});
+document.getElementById('closeLocationModal').addEventListener('click', function(){
+    locationModal.style.display = 'none';
+});
+locationModal.addEventListener('click', function(e){
+    const btn = e.target.closest('button[data-location-id]');
+    if (btn){
+        locationIdInput.value = btn.getAttribute('data-location-id');
+        const text = btn.parentElement.querySelector('span').textContent;
+        receiverNameText.textContent = (text || '').split('(')[0].trim();
+        addressText.textContent = text;
+        locationPrompt.style.display = 'none';
+        selectedLocation.style.display = 'block';
+        nextBtn.classList.remove('disabled');
+        nextBtn.disabled = false;
+        locationModal.style.display = 'none';
+    }
+});
+changeLocationBtn && changeLocationBtn.addEventListener('click', function(){
+    locationPrompt.style.display = 'block';
+    selectedLocation.style.display = 'none';
+    locationModal.style.display = 'block';
+});
+</script>
+
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>
+ 

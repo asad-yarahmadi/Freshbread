@@ -1,0 +1,268 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>reset password - Fresh Bread</title>
+<link rel="icon" type="image/png" href="{% static 'images/favicon.ico' %}" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+/* -------------------------------------- */
+/* GLOBAL */
+/* -------------------------------------- */
+* { box-sizing: border-box; font-family: "Roboto", sans-serif; }
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: radial-gradient(circle at top left, rgba(255,96,219,0.40), transparent 45%),
+                radial-gradient(circle at bottom right, rgba(86,191,255,0.40), transparent 45%),
+                linear-gradient(135deg, #142050, #1a2b63, #1f3a7a);
+    background-size: cover;
+    background-attachment: fixed;
+
+    overflow: hidden;
+}
+
+/* -------------------------------------- */
+/* LOGIN CARD (Glass UI) */
+/* -------------------------------------- */
+.login-card {
+    position: relative;
+    width: 420px;
+    padding: 45px 40px;
+    border-radius: 22px;
+
+    background: rgba(39, 44, 85, 0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.15);
+
+    box-shadow: 0 0 30px rgba(0,0,0,0.45),
+                inset 0 0 20px rgba(255,255,255,0.06);
+
+    animation: fadeIn 0.7s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(25px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------- */
+/* TITLE */
+/* -------------------------------------- */
+h2 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+
+    background: linear-gradient(90deg, #ff43c1, #7acbff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    margin-bottom: 25px;
+}
+
+/* -------------------------------------- */
+/* INPUTS */
+/* -------------------------------------- */
+.form-group {
+    position: relative;
+    margin-bottom: 22px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px 16px;
+
+    background: rgba(255,255,255,0.09);
+    border: none;
+    border-radius: 12px;
+
+    color: #fff;
+    font-size: 15px;
+
+    backdrop-filter: blur(6px);
+    transition: 0.25s;
+    outline: none;
+}
+
+.form-group input::placeholder {
+    color: #9fb2c6;
+}
+
+.form-group input:focus {
+    background: rgba(255,255,255,0.18);
+    box-shadow: 0 0 14px rgba(120,180,255,0.45);
+}
+
+/* -------------------------------------- */
+/* BUTTON */
+/* -------------------------------------- */
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    margin-top: 5px;
+
+    border: none;
+    border-radius: 14px;
+
+    background: linear-gradient(90deg, #ff45c4, #6bc7ff);
+    color: #fff;
+
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 1px;
+
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 0 15px rgba(255,255,255,0.25);
+}
+
+.btn-submit:hover {
+    filter: brightness(1.2);
+    transform: scale(1.03);
+}
+
+/* -------------------------------------- */
+/* DECORATIVE FLOATING DOTS */
+/* -------------------------------------- */
+.dot {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    filter: blur(4px);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-12px); }
+}
+
+.d1 { width: 80px; height: 80px; top: -40px;  left: -35px; }
+.d2 { width: 55px; height: 55px; bottom: -30px; right: -25px; }
+.d3 { width: 40px; height: 40px; top: 35%;   right: -20px; }
+
+/* -------------------------------------- */
+/* TIMER + OPTIONS */
+/* -------------------------------------- */
+.timer {
+    text-align: center;
+    color: #dfe4f1;
+    margin-top: 20px;
+    font-size: 15px;
+}
+
+.options {
+    margin-top: 18px;
+    display: flex;
+    gap: 15px;
+}
+
+.options .btn-submit {
+    flex: 1;
+    padding: 12px;
+    font-size: 15px;
+}
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+
+<body>
+
+{% if messages %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const msgs = [
+        {% for message in messages %}
+            { text: "{{ message|escapejs }}", tag: "{{ message.tags }}" },
+        {% endfor %}
+    ];
+
+    function styleFor(tag) {
+        switch (tag) {
+            case "success": return { bg:"#22c55e", text:"#fff", icon:"success" };
+            case "error":   return { bg:"#dc2626", text:"#fff", icon:"error" };
+            case "warning": return { bg:"#facc15", text:"#000", icon:"warning" };
+            default:        return { bg:"#2563eb", text:"#fff", icon:"info" };
+        }
+    }
+
+    function isMobile() { return innerWidth < 768; }
+
+    function show(i=0) {
+        if (i >= msgs.length) return;
+
+        const st = styleFor(msgs[i].tag);
+        const m  = isMobile();
+
+        Swal.fire({
+            title: msgs[i].text,
+            icon: st.icon,
+            background: st.bg,
+            color: st.text,
+
+            timer: 6500,
+            timerProgressBar: true,
+            showConfirmButton: false,
+
+            toast: !m,
+            position: m ? "center" : "top-end",
+
+            showClass: { popup: "animate__animated animate__fadeInDown" },
+            hideClass: { popup: "animate__animated animate__fadeOutUp" }
+        }).then(() => show(i+1));
+    }
+
+    show();
+});
+</script>
+{% endif %}
+
+
+<!-- ========================== -->
+<!-- CARD CONTENT -->
+<!-- ========================== -->
+<div class="login-card">
+
+    <div class="dot d1"></div>
+    <div class="dot d2"></div>
+    <div class="dot d3"></div>
+
+    <h2>Enter Verification Code</h2>
+
+    <form method="POST" action="{% url 'reset_password_step2' %}">
+        {% csrf_token %}
+
+        <input type="hidden" name="username" value="{{ request.GET.username }}">
+
+        <div class="form-group">
+            <input type="text" name="code" id="code" placeholder="Verification Code" required>
+        </div>
+
+        <button class="btn-submit" type="submit">Verify</button>
+    </form>
+
+    <div class="timer">Resend code in <span id="countdown">120</span>s</div>
+
+    <div class="options">
+        <button class="btn-submit" type="button">Resend Code</button>
+        <button class="btn-submit" type="button">Change Email</button>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>500 - Something Went Wrong - Fresh Bread</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #9c2c00;
+            --primary-dark: #7a2200;
+            --light: #fdfaf5;
+            --gray: #6c757d;
+            --dark: #1f2937;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--light) 0%, #fff8f0 100%);
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        .error-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 1rem 7rem;
+        }
+
+        .error-container {
+            background: white;
+            border-radius: 24px;
+            padding: 4.5rem 3.5rem;
+            max-width: 720px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 70px rgba(156,44,0,0.14);
+            border: 1px solid #f0e9e0;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .error-hat {
+            width: 190px;
+            height: 190px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            filter: drop-shadow(0 14px 28px rgba(156,44,0,0.35));
+        }
+
+        .error-hat svg {
+            width: 100%;
+            height: 100%;
+            animation: float 4s infinite ease-in-out;
+        }
+
+        .error-number {
+            font-size: 11rem;
+            font-weight: 900;
+            line-height: 0.8;
+            letter-spacing: -12px;
+            color: var(--primary);
+            margin: 0.4rem 0 0.6rem;
+        }
+
+        .error-heading {
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin: 0.6rem 0 1.2rem;
+            color: var(--dark);
+        }
+
+        .error-message {
+            font-size: 1.22rem;
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .error-message .friendly {
+            font-weight: 500;
+            color: var(--primary-dark);
+            display: block;
+            margin-top: 1rem;
+        }
+
+        .btn-home {
+            background: var(--primary);
+            color: white;
+            padding: 1.1rem 3rem;
+            font-size: 1.22rem;
+            font-weight: 600;
+            border-radius: 14px;
+            transition: all 0.35s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(156,44,0,0.3);
+        }
+
+        .btn-home:hover {
+            background: var(--primary-dark);
+            transform: translateY(-5px) scale(1.04);
+            box-shadow: 0 18px 40px rgba(156,44,0,0.45);
+        }
+
+        .extra-links {
+            margin-top: 3.8rem;
+            font-size: 1.1rem;
+        }
+
+        .extra-links a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 1.8rem;
+            transition: all 0.2s;
+        }
+
+        .extra-links a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50%      { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @media (max-width: 576px) {
+            .error-container { padding: 3.5rem 1.8rem; }
+            .error-number { font-size: 8.5rem; letter-spacing: -8px; }
+            .error-heading { font-size: 2.1rem; }
+            .error-hat { width: 150px; height: 150px; }
+            .btn-home { padding: 0.95rem 2.5rem; font-size: 1.1rem; }
+            .extra-links a { margin: 0 1rem; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+
+<div class="error-page">
+    <div class="error-container">
+        <div class="error-hat">
+            <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- کلاه واقعی‌تر، پررنگ، با بافت و جزئیات بیشتر + حس دود/خرابی -->
+                <defs>
+                    <radialGradient id="hatGrad" cx="50%" cy="30%" r="70%">
+                        <stop offset="0%" stop-color="#b83200"/>
+                        <stop offset="100%" stop-color="#9c2c00"/>
+                    </radialGradient>
+                </defs>
+
+                <!-- بدنه اصلی کلاه با گرادیانت برای عمق -->
+                <path d="M20 150 L180 150 L165 50 L35 50 Z" fill="url(#hatGrad)" stroke="#7a2200" stroke-width="8"/>
+
+                <!-- لبه پهن کلاه -->
+                <ellipse cx="100" cy="50" rx="130" ry="22" fill="#9c2c00" opacity="0.95" stroke="#7a2200" stroke-width="7"/>
+
+                <!-- نوار دور کلاه (پررنگ‌تر) -->
+                <rect x="30" y="45" width="140" height="14" rx="7" fill="#7a2200"/>
+
+                <!-- بافت پارچه (خطوط ساده برای حس واقعی‌تر) -->
+                <path d="M35 70 Q100 90 165 70" fill="none" stroke="#b83200" stroke-width="3" opacity="0.4"/>
+                <path d="M40 90 Q100 110 160 90" fill="none" stroke="#b83200" stroke-width="3" opacity="0.3"/>
+
+                <!-- دکمه بالای کلاه -->
+                <circle cx="100" cy="65" r="16" fill="#ffffff" stroke="#7a2200" stroke-width="6"/>
+
+                <!-- دود/بخار برای نشان دادن مشکل سرور -->
+                <path d="M60 30 Q80 0 100 35 Q120 5 140 30" fill="none" stroke="#9c2c00" stroke-width="12" opacity="0.7"/>
+                <path d="M75 15 Q95 -5 115 20" fill="none" stroke="#9c2c00" stroke-width="10" opacity="0.6"/>
+                <path d="M90 5 Q105 -10 120 10" fill="none" stroke="#9c2c00" stroke-width="8" opacity="0.5"/>
+
+                <!-- صورت ناراحت ساده روی کلاه (برای حس مشکل) -->
+                <circle cx="85" cy="80" r="7" fill="#7a2200"/>
+                <circle cx="115" cy="80" r="7" fill="#7a2200"/>
+                <path d="M75 105 Q100 125 125 105" fill="none" stroke="#7a2200" stroke-width="7" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <div class="error-number">500</div>
+
+        <h1 class="error-heading">Something Went Wrong</h1>
+
+        <p class="error-message">
+            Our servers are having a little trouble right now — we're baking up a fix!<br>
+            <span class="friendly">The oven's a bit too hot today... please try again soon. 🍞🔥</span>
+        </p>
+
+        <a href="{% url 'index' %}" class="btn-home">
+            <i class="fas fa-home me-2"></i> Back to Home
+        </a>
+
+        <div class="extra-links">
+            <a href="{% url 'index' %}">Home</a> •
+            <a href="{% url 'contact' %}">Contact Us</a> •
+            <a href="{% url 'tickets' %}">Support</a>
+        </div>
+    </div>
+</div>
+
+{% include 'freshbread/footer.html' %}
+
+<!-- Scripts -->
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+<script src="{% static 'js/images-loded.min.js' %}"></script>
+<script src="{% static 'js/isotope.min.js' %}"></script>
+<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+<script src="{% static 'js/form-validator.min.js' %}"></script>
+<script src="{% static 'js/contact-form-script.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+</html>

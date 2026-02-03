@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Add Product - Fresh Bread</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+	<!-- Styles -->
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+	<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+	<style>
+		.add-product-section {
+			padding: 100px 0;
+			background-color: #fafafa;
+		}
+		.add-product-form {
+			background: #fff;
+			border-radius: 20px;
+			padding: 40px;
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+			max-width: 700px;
+			margin: auto;
+		}
+		.add-product-form h2 {
+			text-align: center;
+			font-weight: 700;
+			margin-bottom: 30px;
+		}
+		.add-product-form input,
+		.add-product-form textarea,
+		.add-product-form select {
+			border-radius: 10px;
+			padding: 12px 15px;
+			margin-bottom: 20px;
+			border: 1px solid #ddd;
+			width: 100%;
+			font-size: 16px;
+		}
+		.add-product-form button {
+			width: 100%;
+			border-radius: 30px;
+			padding: 12px;
+			font-size: 18px;
+			font-weight: 600;
+		}
+		label {
+			font-weight: 600;
+		}
+	</style>
+</head>
+{% include 'freshbread/header.html' %}
+
+
+  </head>
+<body>
+
+
+<section class="add-product-section">
+	<div class="container">
+		<div class="add-product-form">
+			<h2>🧁 Add a New Product</h2>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">💾 Add Product</button>
+                <a href="{% url 'menu' %}" class="btn btn-secondary mt-2 w-100">Cancel</a>
+            </form>
+            <script>
+            document.addEventListener('DOMContentLoaded',function(){
+                var n=document.querySelector('input[name="name"]');
+                var s=document.querySelector('input[name="slug"]');
+                if(!n||!s) return;
+                s.readOnly=true;
+                function f(t){
+                    return t.toLowerCase().trim().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-');
+                }
+                function u(){ s.value=f(n.value); }
+                n.addEventListener('input',u);
+                u();
+            });
+            </script>
+        </div>
+    </section>
+
+	<!-- Start Contact info -->
+
+	<!-- End Contact info -->
+	
+	<!-- Start Footer -->
+{% include 'freshbread/footer.html' %}
+	<!-- End Footer -->
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

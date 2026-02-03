@@ -1,0 +1,387 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Blog - Fresh Bread</title>
+    <meta name="description" content="Discover fresh recipes, baking tips, and stories from Fresh Bread.">
+    <meta name="keywords" content="bread, baking, recipes, cake, fresh bread">
+
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary:    #e67e22;
+            --primary-dark:#d35400;
+            --light-bg:   #fdfaf5;
+            --card-bg:    white;
+            --text:       #2d2d2d;
+            --muted:      #6c757d;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .page-hero {
+            background: linear-gradient(135deg, #fff 0%, #fefaf5 100%);
+            padding: 4rem 0 3rem;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .page-title {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #222;
+        }
+
+        .search-form {
+            max-width: 620px;
+            margin: 1.8rem auto 0;
+        }
+
+        .search-input {
+            border-radius: 50px 0 0 50px;
+            border: 1px solid #ddd;
+            border-right: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .search-btn {
+            border-radius: 0 50px 50px 0;
+            padding: 0.75rem 1.8rem;
+            font-weight: 500;
+        }
+
+        .add-btn {
+            border-radius: 50px;
+            padding: 0.75rem 1.6rem;
+            font-weight: 500;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.07);
+            transition: all 0.28s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 18px 44px rgba(0,0,0,0.12);
+        }
+
+        .blog-img-wrapper {
+            position: relative;
+            overflow: hidden;
+            height: 240px;
+        }
+
+        .blog-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.45s ease;
+        }
+
+        .blog-card:hover .blog-img {
+            transform: scale(1.08);
+        }
+
+        .blog-content {
+            padding: 1.8rem 1.9rem 2.2rem;
+        }
+
+        .blog-title {
+            font-size: 1.38rem;
+            font-weight: 700;
+            margin: 0 0 0.9rem;
+            line-height: 1.32;
+        }
+
+        .blog-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .blog-title a:hover {
+            color: var(--primary);
+        }
+
+        .blog-meta {
+            color: var(--muted);
+            font-size: 0.94rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-meta span {
+            margin-right: 1.1rem;
+        }
+
+        .blog-excerpt {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.65;
+            margin-bottom: 1.3rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .tags {
+            margin-bottom: 1.4rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .tag {
+            background: #f8f9fa;
+            color: #555;
+            padding: 0.35rem 0.9rem;
+            border-radius: 50px;
+            font-size: 0.86rem;
+        }
+
+        .stats {
+            color: var(--muted);
+            font-size: 0.96rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .read-more:hover {
+            color: var(--primary-dark);
+            gap: 0.9rem;
+        }
+
+        .no-posts {
+            background: white;
+            border-radius: 16px;
+            padding: 5rem 2rem;
+            text-align: center;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+        }
+
+        @media (max-width: 576px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            .search-form {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .search-input {
+                border-radius: 50px;
+            }
+            .search-btn, .add-btn {
+                border-radius: 50px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+<h2></h2><br>
+<h2></h2><br>
+<div class="page-hero" style="
+    background: linear-gradient(135deg, #fffaf0 0%, #ffe8d6 40%, #ffccaa 70%, #ffb07c 100%);
+    padding: 5rem 0 4rem;
+    margin-bottom: 3.5rem;
+    border-bottom: 1px solid #f0d9c2;
+    position: relative;
+    overflow: hidden;
+">
+    <!-- optional subtle overlay for depth -->
+    <div style="
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.4) 0%, transparent 60%);
+        pointer-events: none;
+    "></div>
+
+    <div class="container text-center position-relative" style="z-index: 2;">
+        <h1 class="page-title display-4 mb-3" style="
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            color: #c2410c;
+            text-shadow: 
+                0 1px 0 #f97316,
+                0 2px 0 #ea580c,
+                0 3px 0 #c2410c,
+                0 4px 0 #9a3412,
+                0 5px 0 #7c2d12,
+                0 6px 0 #65251f,
+                0 7px 10px rgba(0,0,0,0.4),
+                0 12px 20px rgba(203, 72, 0, 0.3);
+            transform: perspective(800px) rotateX(8deg);
+            -webkit-transform: perspective(800px) rotateX(8deg);
+            line-height: 1.1;
+        ">
+            Our Blog
+        </h1>
+
+        <p class="lead text-muted mt-3 fw-medium" style="color: #5c4033; max-width: 680px; margin: 0 auto;">
+            Fresh ideas, recipes, tips & stories from the world of baking
+        </p>
+
+        <form method="get" class="search-form d-flex align-items-center justify-content-center mt-5" style="max-width: 620px; margin: 2.5rem auto 0;">
+            <input name="q" class="form-control search-input" placeholder="Search by title or #tag (e.g. #sourdough)" value="{{ q|default:'' }}" style="
+                border-radius: 50px 0 0 50px;
+                border: 2px solid #f97316;
+                border-right: none;
+                padding: 0.85rem 1.6rem;
+                font-size: 1.1rem;
+                box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+            ">
+            <button type="submit" class="btn btn-primary search-btn ms-0" style="
+                border-radius: 0 50px 50px 0;
+                background: #f97316;
+                border: none;
+                padding: 0.85rem 1.9rem;
+                font-size: 1.1rem;
+            ">
+                <i class="fas fa-search"></i>
+            </button>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'blog_add' %}" class="btn btn-success add-btn ms-3" style="
+                    border-radius: 50px;
+                    padding: 0.85rem 1.7rem;
+                    font-weight: 600;
+                ">
+                    <i class="fas fa-plus me-2"></i> New Post
+                </a>
+            {% else %}
+                <a href="{% url 'ru' %}" class="btn btn-outline-success add-btn ms-3" style="border-radius: 50px; padding: 0.85rem 1.7rem;">
+                    Login to Write
+                </a>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<div class="container pb-5">
+    {% if posts %}
+        <div class="blog-grid">
+            {% for p in posts %}
+            <article class="blog-card">
+                <div class="blog-img-wrapper">
+                    <img class="blog-img" src="{{ p.cover_list.url }}" alt="{{ p.title }}" loading="lazy">
+                </div>
+                <div class="blog-content">
+                    <h2 class="blog-title">
+                        <a href="{% url 'blog_details' slug=p.slug %}">{{ p.title }}</a>
+                    </h2>
+
+                    <div class="blog-meta">
+                        <span><i class="far fa-user me-1"></i> {{ p.author.username }}</span>
+                        <span><i class="far fa-calendar-alt me-1"></i> {{ p.created_at|date:"M d, Y" }}</span>
+                    </div>
+
+                    <p class="blog-excerpt">{{ p.excerpt|truncatewords:35 }}</p>
+
+                    {% if p.tag_list %}
+                    <div class="tags">
+                        {% for t in p.tag_list %}
+                            <span class="tag">#{{ t }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="stats d-flex gap-4">
+                        <span><i class="fas fa-heart text-danger"></i> {{ p.likes_count|default:0 }}</span>
+                        <span><i class="fas fa-eye"></i> {{ p.views_count|default:0 }}</span>
+                    </div>
+
+                    <a href="{% url 'blog_details' slug=p.slug %}" class="read-more">
+                        Read More <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+
+    {% else %}
+        <div class="no-posts mx-auto" style="max-width: 580px;">
+            <h3 class="mb-4">No posts found</h3>
+            <p class="text-muted mb-4">
+                {% if q %}No results for "{{ q }}". Try different keywords or tags.{% else %}Be the first to share your baking story!{% endif %}
+            </p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'blog_add' %}" class="btn btn-success btn-lg px-5 py-3">
+                    <i class="fas fa-pen me-2"></i> Create First Post
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+{% include 'freshbread/footer.html' %}
+
+<a href="#" id="back-to-top" title="Back to top" style="display: none;">↑</a>
+
+<!-- Scripts -->
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+<script src="{% static 'js/images-loded.min.js' %}"></script>
+<script src="{% static 'js/isotope.min.js' %}"></script>
+<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+<script src="{% static 'js/form-validator.min.js' %}"></script>
+<script src="{% static 'js/contact-form-script.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+<!-- Optional: lazy load + small image blur fix (modernized) -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.blog-img').forEach(img => {
+            img.addEventListener('load', () => {
+                if (img.naturalWidth < 400 || img.naturalHeight < 300) {
+                    img.style.filter = 'blur(1.5px) brightness(0.95)';
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

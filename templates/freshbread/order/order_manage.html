@@ -1,0 +1,557 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management - Fresh Bread</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <script src="https://kit.fontawesome.com/a2d9d5c01f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
+
+    <style>
+        body {
+            background: #f5f7fa;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: #ffffff;
+            border-right: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px 0;
+            flex-shrink: 0;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.06);
+        }
+
+        .sidebar h4 {
+            padding: 0 24px;
+            margin-bottom: 1.8rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: #374151;
+            text-decoration: none;
+            font-size: 0.97rem;
+            transition: all 0.2s;
+        }
+
+        .sidebar li a:hover,
+        .sidebar li a.active {
+            background: #eff6ff;
+            color: #2563eb;
+            font-weight: 500;
+        }
+
+        .sidebar li a i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 32px 40px;
+            background: #f9fafb;
+        }
+
+        .section-title {
+            font-size: 1.38rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 2.8rem 0 1.4rem;
+            padding-bottom: 0.7rem;
+            border-bottom: 2px solid #dbeafe;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 90px;
+            height: 2px;
+            background: #3b82f6;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+            transition: all 0.25s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.11);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .order-meta {
+            font-size: 0.94rem;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .btn-status {
+            padding: 9px 18px;
+            font-size: 0.92rem;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-status.pending    { background: #d97706; }
+        .btn-status.processing { background: #2563eb; }
+        .btn-status.cooking    { background: #7c3aed; }
+        .btn-status.queued     { background: #db2777; }
+        .btn-status.sending    { background: #ea580c; }
+        .btn-status.completed,
+        .btn-status.delivered  { background: #059669; cursor: default; }
+        .btn-status.cancelled  { background: #6b7280; cursor: default; }
+        .btn-status.ready      { background: #0ea5e9; }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover { color: #2563eb; transform: scale(1.15); }
+        .action-btn.cancel:hover { color: #dc2626; }
+
+        @media (max-width: 992px) {
+            .page-container { flex-direction: column; }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            .sidebar ul {
+                display: flex;
+                overflow-x: auto;
+                padding: 12px 0;
+            }
+            .sidebar li a {
+                padding: 10px 22px;
+                white-space: nowrap;
+            }
+        }
+
+    .form-select-lg, .form-control-lg {
+        font-size: 1.05rem;
+        padding: 0.75rem 1.25rem;
+    }
+
+    .form-select, .form-control {
+        transition: all 0.2s ease;
+    }
+
+    .form-select:focus, .form-control:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.18);
+    }
+
+    .input-group-text {
+        border-radius: 0.5rem 0 0 0.5rem !important;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        transform: translateY(-1px);
+    }
+
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(0,0,0,0.08) !important;
+    }
+.section-title {
+    scroll-margin-top: 120px;   /* یا 100px یا 140px — بسته به ارتفاع هدرت تنظیم کن */
+    scroll-behavior: smooth;    /* اسکرول نرم و زیبا */
+}
+
+/* اگر خواستی همه idها هم این رفتار رو داشته باشن */
+[id^="new-orders"],
+[id^="in-progress"],
+[id^="sent-delivered"],
+[id^="cancelled"] {
+    scroll-margin-top: 120px;
+    scroll-behavior: smooth;
+}
+</style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+<h2></h2><br>
+<h2></h2><br>
+<div class="page-container">
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <h4>Orders</h4>
+        <ul>
+            <li><a href="#new-orders"><i class="fas fa-bell"></i> New Requests</a></li>
+            <li><a href="#in-progress"><i class="fas fa-fire"></i> In Progress</a></li>
+            <li><a href="#sent-delivered"><i class="fas fa-truck"></i> Sent / Delivered</a></li>
+            <li><a href="#cancelled"><i class="fas fa-ban"></i> Cancelled</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <h2 class="text-center mb-5" style="color: #1e40af; font-weight: 700;">Manage Orders</h2>
+
+        <!-- Search & Filter Form -->
+<!-- Advanced Search & Filter -->
+<div class="card border-0 shadow-sm mb-5 mx-auto" style="max-width: 900px; border-radius: 16px; overflow: hidden;">
+    <div class="card-body p-4 p-md-5 bg-white">
+        <h5 class="mb-4 fw-semibold text-center text-muted" style="letter-spacing: 0.5px;">
+            Filter & Search Orders
+        </h5>
+
+        <form method="get" action="" class="row g-3 align-items-end">
+            <!-- Search Type -->
+            <div class="col-md-3 col-sm-6">
+                <label for="by" class="form-label fw-medium small mb-1">Search by</label>
+                <select name="by" id="by" class="form-select form-select-lg border-primary shadow-sm">
+                    <option value="">All fields</option>
+                    <option value="name"     {% if by == 'name'     %}selected{% endif %}>Customer Name</option>
+                    <option value="username" {% if by == 'username' %}selected{% endif %}>Username</option>
+                    <option value="code"     {% if by == 'code'     %}selected{% endif %}>Order Code</option>
+                </select>
+            </div>
+
+            <!-- Search Input -->
+            <div class="col-md-4 col-sm-6">
+                <label for="q" class="form-label fw-medium small mb-1">Keyword</label>
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-white border-primary border-end-0">
+                        <i class="fas fa-search text-primary"></i>
+                    </span>
+                    <input type="text" name="q" id="q" value="{{ q }}" 
+                           class="form-control border-primary border-start-0 shadow-sm" 
+                           placeholder="Name, username or order code..." 
+                           aria-label="Search">
+                </div>
+            </div>
+
+            <!-- Sort -->
+            <div class="col-md-3 col-sm-6">
+                <label for="sort" class="form-label fw-medium small mb-1">Sort by</label>
+                <select name="sort" id="sort" class="form-select form-select-lg border-primary shadow-sm">
+                    <option value="">Newest first</option>
+                    <option value="date_asc"   {% if sort == 'date_asc'   %}selected{% endif %}>Date ↑ (old → new)</option>
+                    <option value="date_desc"  {% if sort == 'date_desc'  %}selected{% endif %}>Date ↓ (new → old)</option>
+                    <option value="total_asc"  {% if sort == 'total_asc'  %}selected{% endif %}>Total ↑</option>
+                    <option value="total_desc" {% if sort == 'total_desc' %}selected{% endif %}>Total ↓</option>
+                </select>
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-md-2 col-sm-6 d-flex align-items-end gap-2">
+                <button class="btn btn-primary btn-lg w-100 shadow" type="submit">
+                    <i class="fas fa-filter me-2"></i>Apply
+                </button>
+                {% if by or q or sort %}
+                <a href="?reset=1" class="btn btn-outline-secondary btn-lg" title="Clear filters">
+                    <i class="fas fa-times"></i>
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Optional: extra style just for this search bar -->
+
+
+        <!-- New Orders (Pending) -->
+        <h3 class="section-title" id="new-orders">New Requests (Pending)</h3>
+        {% for order in orders %}
+            {% if order.status == "pending" %}
+                <div class="order-card">
+                    <div class="order-header">
+                        <h5>Order #{{ order.order_code }}</h5>
+                        <span class="badge bg-secondary">{{ order.get_status_display }}</span>
+                    </div>
+                    <div class="order-meta">
+                        👤 <strong>{{ order.user.first_name }} {{ order.user.last_name }}</strong><br>
+                        {% if order.deliver and order.delivery_location and order.delivery_location.receiver_phone %}
+                            ☎ {{ order.delivery_location.receiver_phone }}<br>
+                        {% endif %}
+                        💰 Total: ${{ order.total_price|floatformat:2 }}<br>
+                        {% if order.deliver %}🚚 Delivery requested{% endif %}
+                        {% if order.delivery_slot %}<br>🕒 Delivery slot: {{ order.delivery_slot }}{% endif %}
+                    </div>
+                    <div class="order-footer">
+                        <button class="btn-status pending" onclick="updateStatus('{{ order.id }}', 'processing', 'Set to Processing?')">Processing</button>
+                        <button class="action-btn info" title="View Details" onclick="viewInfo('{{ order.id }}')">
+                            <i class="fa fa-info-circle"></i>
+                        </button>
+                        {% if order.status not in "cancelled,delivered" %}
+                            <button class="action-btn cancel" title="Cancel Order" onclick="cancelOrder('{{ order.id }}')">
+                                <i class="fa fa-times-circle"></i>
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% empty %}
+            <p class="text-center text-muted py-5">No orders found.</p>
+        {% endfor %}
+
+        <!-- In Progress -->
+        <h3 class="section-title" id="in-progress">In Progress</h3>
+        {% for order in orders %}
+            {% if order.status in "processing,cooking,queued,sending,ready" %}
+                <div class="order-card">
+                    <div class="order-header">
+                        <h5>Order #{{ order.order_code }}</h5>
+                        <span class="badge bg-secondary">{{ order.get_status_display }}</span>
+                    </div>
+                    <div class="order-meta">
+                        👤 <strong>{{ order.user.first_name }} {{ order.user.last_name }}</strong><br>
+                        {% if order.deliver and order.delivery_location and order.delivery_location.receiver_phone %}
+                            ☎ {{ order.delivery_location.receiver_phone }}<br>
+                        {% endif %}
+                        💰 Total: ${{ order.total_price|floatformat:2 }}<br>
+                        {% if order.deliver %}🚚 Delivery requested{% endif %}
+                        {% if order.delivery_slot %}<br>🕒 Delivery slot: {{ order.delivery_slot }}{% endif %}
+                    </div>
+                    <div class="order-footer">
+                        {% if order.status == "processing" %}
+                            <button class="btn-status processing" onclick="updateStatus('{{ order.id }}', 'cooking', 'Start Cooking?')">Cooking</button>
+                        {% elif order.status == "cooking" %}
+                            <button class="btn-status cooking" onclick="updateStatus('{{ order.id }}', 'queued', 'Move to Queue?')">Queued</button>
+                        {% elif order.status == "queued" %}
+                            {% if order.deliver %}
+                                <button class="btn-status queued" onclick="updateStatus('{{ order.id }}', 'sending', 'Mark as Sending?')">Sending</button>
+                            {% else %}
+                                <button class="btn-status queued" onclick="updateStatus('{{ order.id }}', 'ready', 'Mark as Ready for Pickup?')">Ready for Pickup</button>
+                            {% endif %}
+                        {% elif order.status == "sending" %}
+                            <a class="btn-status sending" href="/orders/deliver_verify/{{ order.id }}/">Delivered</a>
+                        {% elif order.status == "ready" %}
+                            <a class="btn-status ready" href="/orders/deliver_verify/{{ order.id }}/">Delivered</a>
+                        {% endif %}
+                        <button class="action-btn info" title="View Details" onclick="viewInfo('{{ order.id }}')">
+                            <i class="fa fa-info-circle"></i>
+                        </button>
+                        {% if order.status not in "cancelled,delivered" %}
+                            <button class="action-btn cancel" title="Cancel Order" onclick="cancelOrder('{{ order.id }}')">
+                                <i class="fa fa-times-circle"></i>
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Sent / Delivered -->
+        <h3 class="section-title" id="sent-delivered">Sent / Delivered</h3>
+        {% for order in orders %}
+            {% if order.status == "delivered" %}
+                <div class="order-card">
+                    <div class="order-header">
+                        <h5>Order #{{ order.order_code }}</h5>
+                        <span class="badge bg-success">Delivered</span>
+                    </div>
+                    <div class="order-meta">
+                        👤 <strong>{{ order.user.first_name }} {{ order.user.last_name }}</strong><br>
+                        {% if order.deliver and order.delivery_location and order.delivery_location.receiver_phone %}
+                            ☎ {{ order.delivery_location.receiver_phone }}<br>
+                        {% endif %}
+                        💰 Total: ${{ order.total_price|floatformat:2 }}<br>
+                        {% if order.deliver %}🚚 Delivery requested{% endif %}
+                        {% if order.delivery_slot %}<br>🕒 Delivery slot: {{ order.delivery_slot }}{% endif %}
+                    </div>
+                    <div class="order-footer">
+                        <button class="btn-status delivered" disabled>Delivered</button>
+                        <button class="action-btn info" title="View Details" onclick="viewInfo('{{ order.id }}')">
+                            <i class="fa fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Cancelled -->
+        <h3 class="section-title" id="cancelled">Cancelled Orders</h3>
+        {% for order in orders %}
+            {% if order.status == "cancelled" %}
+                <div class="order-card">
+                    <div class="order-header">
+                        <h5>Order #{{ order.order_code }}</h5>
+                        <span class="badge bg-secondary">Cancelled</span>
+                    </div>
+                    <div class="order-meta">
+                        👤 <strong>{{ order.user.first_name }} {{ order.user.last_name }}</strong><br>
+                        {% if order.deliver and order.delivery_location and order.delivery_location.receiver_phone %}
+                            ☎ {{ order.delivery_location.receiver_phone }}<br>
+                        {% endif %}
+                        💰 Total: ${{ order.total_price|floatformat:2 }}<br>
+                        {% if order.deliver %}🚚 Delivery was requested{% endif %}
+                        {% if order.delivery_slot %}<br>🕒 Delivery slot: {{ order.delivery_slot }}{% endif %}
+                    </div>
+                    <div class="order-footer">
+                        <button class="btn-status cancelled" disabled>Cancelled</button>
+                        <button class="action-btn info" title="View Details" onclick="viewInfo('{{ order.id }}')">
+                            <i class="fa fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+    </main>
+</div>
+
+{% include 'freshbread/footer.html' %}
+
+<script>
+function updateStatus(orderId, newStatus, confirmText) {
+    Swal.fire({
+        title: confirmText,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/orders/update_order_status/${orderId}/${newStatus}/`)
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire("Success", "Order status updated.", "success")
+                        .then(() => location.reload());
+                } else {
+                    Swal.fire("Error", "Failed to update status.", "error");
+                }
+            }).catch(() => {
+                Swal.fire("Error", "Network error occurred.", "error");
+            });
+        }
+    });
+}
+
+function cancelOrder(orderId) {
+    Swal.fire({
+        title: "Cancel this order?",
+        text: "This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, cancel"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/orders/cancel_order/${orderId}/`)
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire("Cancelled", "Order has been cancelled.", "success")
+                        .then(() => location.reload());
+                }
+            }).catch(() => {
+                Swal.fire("Error", "Failed to cancel order.", "error");
+            });
+        }
+    });
+}
+
+function viewInfo(orderId) {
+    window.location.href = `/orders/order_info/${orderId}/`;
+}
+</script>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+<script>
+document.querySelectorAll('.sidebar a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+            const headerOffset = 120; // ارتفاع هدر ثابتت رو اینجا تنظیم کن (پیکسل)
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+
+            // اختیاری: هایلایت کردن لینک فعال
+            document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+            this.classList.add('active');
+        }
+    });
+});
+</script>
+</body>
+</html>

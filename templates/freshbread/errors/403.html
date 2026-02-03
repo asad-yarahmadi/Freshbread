@@ -1,0 +1,220 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>403 - Access Denied  - Fresh Bread</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #c53030;
+            --primary-dark: #9b2c2c;
+            --light: #fdfaf5;
+            --gray: #6c757d;
+            --dark: #1f2937;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--light) 0%, #fff8f0 100%);
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        .error-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 1rem 7rem;
+        }
+
+        .error-container {
+            background: white;
+            border-radius: 24px;
+            padding: 4.5rem 3.5rem;
+            max-width: 720px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 70px rgba(197,48,48,0.12);
+            border: 1px solid #f0e9e0;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .error-hat {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            filter: drop-shadow(0 12px 24px rgba(197,48,48,0.35));
+        }
+
+        .error-hat svg {
+            width: 100%;
+            height: 100%;
+            animation: float 3.8s infinite ease-in-out;
+        }
+
+        .error-number {
+            font-size: 11rem;
+            font-weight: 900;
+            line-height: 0.8;
+            letter-spacing: -12px;
+            color: var(--primary);
+            margin: 0.4rem 0 0.6rem;
+        }
+
+        .error-heading {
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin: 0.6rem 0 1.2rem;
+            color: var(--dark);
+        }
+
+        .error-message {
+            font-size: 1.22rem;
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+
+        .error-message .friendly {
+            font-weight: 500;
+            color: var(--primary-dark);
+            display: block;
+            margin-top: 1rem;
+        }
+
+        .btn-home {
+            background: var(--primary);
+            color: white;
+            padding: 1.1rem 3rem;
+            font-size: 1.22rem;
+            font-weight: 600;
+            border-radius: 14px;
+            transition: all 0.35s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(197,48,48,0.3);
+        }
+
+        .btn-home:hover {
+            background: var(--primary-dark);
+            transform: translateY(-5px) scale(1.04);
+            box-shadow: 0 18px 40px rgba(197,48,48,0.45);
+        }
+
+        .extra-links {
+            margin-top: 3.8rem;
+            font-size: 1.1rem;
+        }
+
+        .extra-links a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 1.8rem;
+            transition: all 0.2s;
+        }
+
+        .extra-links a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50%      { transform: translateY(-18px) rotate(4deg); }
+        }
+
+        @media (max-width: 576px) {
+            .error-container { padding: 3.5rem 1.8rem; }
+            .error-number { font-size: 8.5rem; letter-spacing: -8px; }
+            .error-heading { font-size: 2.1rem; }
+            .error-hat { width: 140px; height: 140px; }
+            .btn-home { padding: 0.95rem 2.5rem; font-size: 1.1rem; }
+            .extra-links a { margin: 0 1rem; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+
+<div class="error-page">
+    <div class="error-container">
+        <div class="error-hat">
+            <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- کلاه پخت واقعی با جزئیات بیشتر و پررنگ -->
+                <path d="M25 145 L175 145 L160 55 L40 55 Z" fill="#c53030" stroke="#9b2c2c" stroke-width="7"/>
+                <path d="M40 55 Q100 10 160 55" fill="none" stroke="#9b2c2c" stroke-width="10" stroke-linecap="round"/>
+                <!-- لبه‌های کلاه -->
+                <ellipse cx="100" cy="55" rx="120" ry="20" fill="#c53030" opacity="0.9" stroke="#9b2c2c" stroke-width="6"/>
+                <!-- نوار دور کلاه -->
+                <rect x="35" y="50" width="130" height="12" rx="6" fill="#9b2c2c"/>
+                <!-- دکمه تزئینی روی کلاه -->
+                <circle cx="100" cy="70" r="14" fill="white" stroke="#9b2c2c" stroke-width="5"/>
+                <!-- چشم‌ها و دهان برای حس قفل بودن -->
+                <circle cx="85" cy="65" r="6" fill="#9b2c2c"/>
+                <circle cx="115" cy="65" r="6" fill="#9b2c2c"/>
+                <path d="M80 85 Q100 100 120 85" fill="none" stroke="#9b2c2c" stroke-width="6" stroke-linecap="round"/>
+                <!-- علامت ممنوع روی کلاه -->
+                <circle cx="100" cy="120" r="28" fill="none" stroke="white" stroke-width="10"/>
+                <line x1="80" y1="102" x2="120" y2="138" stroke="white" stroke-width="10" stroke-linecap="round"/>
+                <line x1="80" y1="138" x2="120" y2="102" stroke="white" stroke-width="10" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <div class="error-number">403</div>
+
+        <h1 class="error-heading">Access Denied</h1>
+
+        <p class="error-message">
+            Sorry, you don't have permission to view this page.<br>
+            <span class="friendly">This oven is locked — fresh bread only for authorized bakers! 🔒🍞</span>
+        </p>
+
+        <a href="{% url 'index' %}" class="btn-home">
+            <i class="fas fa-home me-2"></i> Back to Home
+        </a>
+
+        <div class="extra-links">
+            <a href="{% url 'index' %}">Home</a> •
+            <a href="{% url 'contact' %}">Contact Us</a> •
+            <a href="{% url 'tickets' %}">Support</a>
+        </div>
+    </div>
+</div>
+
+{% include 'freshbread/footer.html' %}
+
+<!-- Scripts -->
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+<script src="{% static 'js/images-loded.min.js' %}"></script>
+<script src="{% static 'js/isotope.min.js' %}"></script>
+<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+<script src="{% static 'js/form-validator.min.js' %}"></script>
+<script src="{% static 'js/contact-form-script.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+</html>

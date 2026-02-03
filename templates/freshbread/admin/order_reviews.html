@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage Orders - Fresh Bread</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <!-- Bootstrap Icons (برای آیکون دکمه‌ها) -->
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .page-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 12px 12px 0 0;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .section-title {
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #dee2e6;
+    }
+    .pending-title {
+      color: #0d6efd;
+    }
+    .rejected-title {
+      color: #dc3545;
+    }
+    .order-card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+      overflow: hidden;
+    }
+    .order-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+    .avatar-img {
+      object-fit: cover;
+    }
+    .items-pre {
+      background: #f1f3f5;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+    .form-control-sm {
+      height: calc(1.5em + 0.5rem + 2px);
+    }
+  </style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+
+<div class="container py-5">
+<h2></h2><br>
+<h2></h2><br>
+  <div class="card mb-5">
+    <div class="page-header">
+      <h2 class="mb-0">Order Management Dashboard</h2>
+    </div>
+
+    <div class="card-body px-4 px-md-5 py-4">
+
+      <!-- Pending Requests -->
+      <h3 class="section-title pending-title">
+        <i class="bi bi-hourglass-split me-2"></i> Pending Requests
+      </h3>
+
+      <div class="row g-4">
+        {% for r in pending %}
+          <div class="col-lg-6 col-md-12">
+            <div class="order-card border-start border-4 border-primary">
+              <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                  <img src="{{ r.user.profile.avatar.url }}" alt="avatar" width="50" height="50" class="rounded-circle me-3 avatar-img">
+                  <div>
+                    <h5 class="mb-0">{{ r.user.username }}</h5>
+                    <small class="text-muted">{{ r.email }}</small>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <strong>Reference:</strong> {{ r.reference }}<br>
+                  <strong>Total:</strong> ${{ r.total_due }}<br>
+                  <strong>Deliver:</strong> {{ r.deliver|yesno:"Yes,No" }}
+                  {% if r.reason %}
+                    <br>
+                    {% if 'discount_code_id' in r.reason %}
+                      <span class="badge bg-success">Discount used</span>
+                      <small class="text-muted">{{ r.reason }}</small>
+                    {% else %}
+                      <small class="text-muted">{{ r.reason }}</small>
+                    {% endif %}
+                  {% endif %}
+                </div>
+
+                <div class="mb-3">
+                  <strong>Items:</strong>
+                  {% with items=r.items_snapshot|safe %}
+                    <div class="items-pre mt-2">{{ items }}</div>
+                  {% endwith %}
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                  <form method="post" action="{% url 'admin_order_accept' r.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-sm">
+                      <i class="bi bi-check-circle me-1"></i> Accept
+                    </button>
+                  </form>
+
+                  <form method="post" action="{% url 'admin_order_reject' r.id %}" class="d-flex flex-grow-1">
+                    {% csrf_token %}
+                    <input type="text" name="reason" class="form-control form-control-sm me-2" placeholder="Reason for rejection" required>
+                    <button type="submit" class="btn btn-danger btn-sm">
+                      <i class="bi bi-x-circle me-1"></i> Reject
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <div class="col-12">
+            <div class="alert alert-info text-center py-4">
+              No pending requests at the moment.
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Rejected Requests -->
+      <h3 class="section-title rejected-title mt-5">
+        <i class="bi bi-x-octagon me-2"></i> Rejected Requests
+      </h3>
+
+      <div class="row g-4">
+        {% for r in rejected %}
+          <div class="col-lg-6 col-md-12">
+            <div class="order-card border-start border-4 border-danger">
+              <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                  <img src="{{ r.user.profile.avatar.url }}" alt="avatar" width="50" height="50" class="rounded-circle me-3 avatar-img">
+                  <div>
+                    <h5 class="mb-0">{{ r.user.username }}</h5>
+                    <small class="text-muted">{{ r.email }}</small>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <strong>Reference:</strong> {{ r.reference }}<br>
+                  <strong>Total:</strong> ${{ r.total_due }}<br>
+                  <strong>Deliver:</strong> {{ r.deliver|yesno:"Yes,No" }}<br>
+                  <strong>Reason:</strong> <span class="text-danger">{{ r.reason }}</span>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                  <form method="post" action="{% url 'admin_order_accept' r.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-success btn-sm">
+                      <i class="bi bi-arrow-repeat me-1"></i> Accept Again
+                    </button>
+                  </form>
+
+                  <form method="post" action="{% url 'admin_order_rejected_delete' r.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                      <i class="bi bi-trash me-1"></i> Delete
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <div class="col-12">
+            <div class="alert alert-secondary text-center py-4">
+              No rejected requests.
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+{% include 'freshbread/footer.html' %}
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

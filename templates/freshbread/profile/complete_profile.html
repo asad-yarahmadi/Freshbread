@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Complete Profile - Fresh Bread</title>
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+* { box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+body { background: url("{% static 'css/images/bg/bs.jpg' %}") no-repeat center center fixed; background-size: cover; margin:0; padding:0; display:flex; flex-direction:column; align-items:center; min-height:100vh; padding-top:60px; }
+.signup-container { width:400px; background:#e0e5ec; border-radius:20px; padding:35px 25px; box-shadow:4px 4px 10px #bec5d1, -4px -4px 10px #ffffff; animation:fadeIn 1s ease-in-out; z-index:1; position:relative; }
+@keyframes fadeIn { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+h2 { text-align:center; margin-bottom:25px; color:#4a4a4a; font-weight:700; letter-spacing:1.2px; font-size:24px; }
+.form-group { margin-bottom:18px; position:relative; }
+.form-group i { position:absolute; top:50%; left:12px; transform:translateY(-50%); color:#a3b1c6; font-size:16px; }
+.form-group input { width:100%; padding:10px 10px 10px 40px; border-radius:10px; border:none; background:#e0e5ec; box-shadow:inset 6px 6px 8px #bec5d1, inset -6px -6px 8px #ffffff; font-size:14px; color:#555; }
+.form-group input:focus { outline:none; box-shadow: inset 4px 4px 6px #bec5d1, inset -4px -4px 6px #ffffff, 3px 3px 7px rgba(59,130,246,0.5); color:#222; }
+.form-group input::placeholder { color:#b0b8c1; font-style:italic; }
+.btn-submit { width:100%; padding:12px; margin-top:6px; border-radius:14px; border:none; background:#e0e5ec; box-shadow:6px 6px 8px #bec5d1, -6px -6px 8px #ffffff; font-size:16px; font-weight:700; color:#3b82f6; cursor:pointer; transition:all 0.3s ease; }
+.btn-submit:hover { box-shadow: inset 6px 6px 8px #bec5d1, inset -6px -6px 8px #ffffff; color:#1e40af; }
+#error-banner { color:#fff; background:#dc2626; padding:10px 18px; border-radius:12px; margin-bottom:18px; text-align:center; box-shadow:0 4px 12px rgba(220,38,38,0.4); }
+#map { height:300px; border-radius:15px; margin-top:15px; box-shadow:0 4px 12px rgba(0,0,0,0.1); position:relative; }
+.map-pin { position:absolute; top:50%; left:50%; width:30px; height:30px; transform:translate(-50%,-100%); z-index:999; pointer-events:none; }
+.map-pin img { width:30px; height:30px; }
+#location-status, #live-address { margin-top:10px; font-size:14px; color:#666; word-break: break-word; }
+.location-btn { margin-top:10px; background-color:#007bff; color:white; border:none; padding:8px 15px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s ease; }
+.location-btn:hover { background-color:#0056b3; }
+.decor-circle { position:absolute; border-radius:50%; background:#f0f5fa; box-shadow:10px 10px 20px #babecc, -10px -10px 20px #ffffff; opacity:0.6; animation:floatUp 6s ease-in-out infinite; }
+.circle1 {width:100px; height:100px; top:-50px; left:-50px;}
+.circle2 {width:80px; height:80px; bottom:-40px; right:-40px;}
+.circle3 {width:50px; height:50px; top:20%; right:-25px;}
+.circle4 {width:60px; height:60px; bottom:10%; left:-30px;}
+@keyframes floatUp {0%{transform:translateY(0);}50%{transform:translateY(-5px);}100%{transform:translateY(0);}}
+</style>
+</head>
+<body>
+
+{% if messages %}
+<div id="topErrorBanner" class="top-error-banner" role="alert" aria-live="assertive">
+      <i class="fa fa-exclamation-circle" aria-hidden="true"></i>  
+    {% for message in messages %}
+      <span>{{ message }}</span>
+    {% endfor %}
+  </div>
+{% endif %}
+<div class="signup-container">
+  <div class="decor-circle circle1"></div>
+  <div class="decor-circle circle2"></div>
+  <div class="decor-circle circle3"></div>
+  <div class="decor-circle circle4"></div>
+
+  <h2>Complete Your Profile</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-group"><i class="fa fa-user"></i><input type="text" name="first_name" placeholder="First Name" required></div>
+    <div class="form-group"><i class="fa fa-user"></i><input type="text" name="last_name" placeholder="Last Name" required></div>
+    <div class="form-group"><i class="fa fa-phone"></i><input type="number" name="phone" placeholder="Phone number" required></div>
+    <div class="form-group"><i class="fa fa-map-marker-alt"></i><input type="text" name="postalcode" placeholder="Postal code" required></div>
+    <div class="form-group"><i class="fa fa-gift"></i><input type="text" name="referral_code" placeholder="Referral code (optional) – if you don't have, leave empty"></div>
+
+    <!-- Map -->
+    <div class="form-group">
+      <label>Select Location (Ottawa Area Only)</label>
+      <button type="button" id="locateMe" class="location-btn">📍 Use My Location</button>
+      <div id="map"></div>
+      <p id="location-status">Move the map or use GPS to select your location...</p>
+      <p id="live-address"></p>
+
+      <!-- Hidden inputs -->
+      <input type="hidden" name="latitude" id="latitude">
+      <input type="hidden" name="longitude" id="longitude">
+      <input type="hidden" name="complete_address" id="complete_address">
+    </div>
+    <button type="submit" class="btn-submit">Continue</button>
+  </form>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+const ottawaCenter = [45.4215, -75.6993];
+const bounds = L.latLngBounds([45.2, -75.95], [45.55, -75.3]);
+
+// init map
+const map = L.map('map', {
+    center: ottawaCenter,
+    zoom: 13,
+    maxBounds: bounds,
+    maxBoundsViscosity: 1.0
+});
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// DOM refs
+const status = document.getElementById("location-status");
+const latInput = document.getElementById("latitude");
+const lngInput = document.getElementById("longitude");
+const addrInput = document.getElementById("complete_address");
+
+// marker
+let lastValidPos = ottawaCenter.slice();
+const marker = L.marker(ottawaCenter, { draggable: true }).addTo(map);
+
+// helper: set status
+function setStatus(text, color="#666") {
+    status.innerHTML = text;
+    status.style.color = color;
+}
+
+// check if marker is on a road using Nominatim
+async function validateLocation(lat, lng, showMessage=true) {
+    try {
+const res = await fetch(`/api/reverse-geocode?lat=${lat}&lon=${lng}`);
+const data = await res.json();
+
+        const addr = data.address || {};
+        const displayName = data.display_name || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+
+        if ((addr.road || addr.pedestrian || addr.cycleway || addr.footway) && addr.city === "Ottawa") {
+            lastValidPos = [lat, lng];
+            latInput.value = lat.toFixed(6);
+            lngInput.value = lng.toFixed(6);
+            addrInput.value = displayName;
+            setStatus(`📍 You selected: ${displayName}<br>Latitude: ${lat.toFixed(6)}, Longitude: ${lng.toFixed(6)}<br>Address: ${displayName}`, "#28a745");
+            return true;
+        } else {
+            if(showMessage) alert("⚠️ Marker must be placed on a street/road in Ottawa.");
+            marker.setLatLng(lastValidPos);
+            map.panTo(lastValidPos);
+            setStatus("Please place the marker on a street/road.", "red");
+            return false;
+        }
+    } catch(e) {
+        if(showMessage) alert("⚠️ Unable to verify location. Try again.");
+        marker.setLatLng(lastValidPos);
+        map.panTo(lastValidPos);
+        setStatus("Unable to verify location.", "red");
+        return false;
+    }
+}
+
+// marker drag
+marker.on('dragend', async e => {
+    const { lat, lng } = e.target.getLatLng();
+    await validateLocation(lat, lng);
+});
+
+// map click
+map.on('click', async e => {
+    const { lat, lng } = e.latlng;
+    marker.setLatLng([lat, lng]);
+    map.panTo([lat, lng]);
+    await validateLocation(lat, lng);
+});
+
+// GPS button
+document.getElementById("locateMe").addEventListener("click", () => {
+    if(!navigator.geolocation) return alert("⚠️ Geolocation not supported.");
+    setStatus("Getting your location...", "#f59e0b");
+    navigator.geolocation.getCurrentPosition(async pos => {
+        const { latitude, longitude } = pos.coords;
+        const current = L.latLng(latitude, longitude);
+        if(bounds.contains(current)) {
+            marker.setLatLng(current);
+            map.setView(current, 15);
+            await validateLocation(latitude, longitude);
+        } else {
+            alert("⚠️ Your location is outside Ottawa area.");
+            marker.setLatLng(ottawaCenter);
+            map.setView(ottawaCenter, 12);
+            await validateLocation(ottawaCenter[0], ottawaCenter[1], false);
+        }
+    }, () => {
+        alert("⚠️ Unable to access your location. Please allow GPS.");
+        setStatus("Unable to access your location.", "red");
+    });
+});
+
+// initial validation
+validateLocation(ottawaCenter[0], ottawaCenter[1], false);
+</script>
+
+</body>
+</html>

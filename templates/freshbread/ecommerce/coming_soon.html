@@ -1,0 +1,223 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+{% static 'images/coming-soon-bg.jpg' as bg_image %}
+<head>
+    <!-- Basic Page Needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Specific Meta
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Personal Portfolio is a modern presentation HTML5 Portfolio HTML Template.">
+    <meta name="keywords" content="HTML5, Template, Design, portfolio, Personal Portfolio, Single portfolio" />
+    <meta name="author" content="creative-wp">
+
+    <!-- Titles
+    ================================================== -->
+    <title>Coming soon - Fresh bread</title>
+
+    <!-- Favicons
+    ================================================== -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'css/images/android-icon-72x72.png' %}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'css/images/apple-icon-144x144.png' %}">
+
+    <!-- Custom Font
+    ================================================== -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,500i,600,700,800,900&display=swap" rel="stylesheet">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="{% static 'js/cs/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'js/cs/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'js/cs/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'js/cs/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'js/cs/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'js/cs/simple-scrollbar.css' %}">
+    <link rel="stylesheet" href="{% static 'js/cs/odometer-theme-default.css' %}">
+    <link rel="stylesheet" href="{% static 'js/cs/fontawesome.all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'js/cs/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'js/cs/style.css' %}">
+
+    <script src="{% static 'js/cs/modernizr.min.js' %}"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% if messages %}
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    const messages = [
+        {% for message in messages %}
+        {
+            text: "{{ message|escapejs }}",
+            tag: "{{ message.tags }}"
+        },
+        {% endfor %}
+    ];
+
+    // تابع تعیین رنگ و آیکن بر اساس نوع پیام
+    function getAlertColors(tag) {
+        switch (tag) {
+            case 'success':
+                return { bg: '#22c55e', text: '#fff', icon: 'success' }; // سبز
+            case 'error':
+                return { bg: '#dc2626', text: '#fff', icon: 'error' };   // قرمز
+            case 'warning':
+                return { bg: '#facc15', text: '#000', icon: 'warning' }; // زرد
+            default:
+                return { bg: '#facc15', text: '#000', icon: 'warning' };    // آبی
+        }
+    }
+
+    // تابع برای تشخیص موبایل
+    function isMobile() {
+        return window.innerWidth < 768;
+    }
+
+    // تابع نمایش پیام‌ها به ترتیب
+    function showNextMessage(index = 0) {
+        if (index >= messages.length) return;
+
+        const colors = getAlertColors(messages[index].tag);
+        const mobile = isMobile();
+
+        Swal.fire({
+            title: messages[index].text,
+            icon: colors.icon,
+            background: colors.bg,
+            color: colors.text,
+            timer: 7000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: !mobile, // در دسکتاپ toast باشه، در موبایل وسط صفحه
+            position: mobile ? 'center' : 'top-end',
+            customClass: {
+                popup: mobile ? 'swal-wide' : ''
+            },
+            showClass: { popup: 'animate__animated animate__fadeInDown' },
+            hideClass: { popup: 'animate__animated animate__fadeOutUp' },
+            didOpen: (popup) => {
+                popup.addEventListener('mouseenter', Swal.stopTimer);
+                popup.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        }).then(() => {
+            showNextMessage(index + 1);
+        });
+    }
+
+    showNextMessage();
+});
+</script>
+
+<style>
+/* برای موبایل، پنجره کمی بزرگ‌تر بشه */
+.swal-wide {
+    width: 90% !important;
+    font-size: 1.1rem !important;
+}
+</style>
+{% endif %}
+
+
+    <!--********************************************************-->
+    <!--********************* SITE CONTENT *********************-->
+    <!--********************************************************-->
+    <div class="site-content">
+        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            Start Coming Soon Block
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <div class="coming-soon-block ptb-100 bg-image bg-overlay-gradient" style="background-image: url('{{ bg_image }}')">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="coming-soon-content text-center">
+                            <div class="site-logo">
+                                <a href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}" alt="logo"></a>
+                            </div><!--~~./ site-logo ~~-->
+                            <h3 class="title">We are glad to see you, But please be patient, This page is under construcion.<br>(Tap on logo to redirect to index) </h3>
+                            <div class="countdown-area">
+                                <div id="countdown"></div>
+                            </div><!--~./ countdown-area ~-->
+                            
+                            <div class="social-media-area">
+                            </div>
+                        </div><!--~./ end coming soon content ~-->
+                    </div><!--./ col-lg-8 -->
+                </div><!--./ row -->
+            </div><!--./ container -->
+        </div><!--./ coming-soon-blcok -->
+    </div><!--~~./ end site content ~~-->
+
+    <!-- All The JS Files
+    ================================================== --> 
+    <script src="{% static 'js/cs/jquery.js' %}"></script>
+    <script src="{% static 'js/cs/popper.min.js' %}"></script>
+    <script src="{% static 'js/cs/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/cs/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/cs/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'js/cs/jquery-validate.bootstrap-tooltip.min.js' %}"></script>
+    <script src="{% static 'js/cs/SyoTimer.js' %}"></script>
+    <script src="{% static 'js/cs/theia-sticky-sidebar.min.js' %}"></script>
+    <script src="{% static 'js/cs/ResizeSensor.min.js' %}"></script>
+    <script src="{% static 'js/cs/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/cs/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/cs/packery-mode.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/cs/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'js/cs/simple-scrollbar.min.js' %}"></script>
+    <script src="{% static 'js/cs/scrolla.jquery.min.js' %}"></script>
+    <script src="{% static 'js/cs/odometer.min.js' %}"></script>
+    <script src="{% static 'js/cs/jquery.sticky.js' %}"></script>
+    <script src="{% static 'js/cs/jquery.nav.js' %}"></script>
+    <script src="{% static 'js/cs/rangeslider.min.js' %}"></script>
+    <script src="{% static 'js/cs/jquery.trackpad-scroll-emulator.min.js' %}"></script>
+    <script src="{% static 'js/cs/jquery.datetimepicker.full.min.js' %}"></script>
+    <script src="{% static 'js/cs/rater.min.js' %}"></script>
+    <script src="{% static 'js/cs/jquery-steps.min.js' %}"></script>
+    <script src="{% static 'js/cs/plugins.js' %}"></script>
+    <script src="{% static 'js/cs/main.js' %}"></script><!-- main-js -->
+    
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("{% url 'api_countdown' %}")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('خطا در گرفتن داده countdown');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // حالا SyoTimer رو با داده‌های سرور راه‌اندازی کن
+            $('#countdown').syotimer({
+                year: data.year,
+                month: data.month,
+                day: data.day,
+                hour: data.hour || 0,
+                minute: data.minute || 0,
+                second: data.second || 0,
+                layout: 'dhms',       // days hours minutes seconds
+                periodic: false,
+                // بقیه تنظیمات دلخواهت (مثل رنگ، متن و ...)
+            });
+        })
+        .catch(error => {
+            console.error('خطا:', error);
+            // fallback – تاریخ پیش‌فرض اگر API کار نکرد
+            $('#countdown').syotimer({
+                year: 2026,
+                month: 6,
+                day: 1,
+                hour: 0,
+                minute: 0
+            });
+        });
+});
+</script>
+</body>
+</html>

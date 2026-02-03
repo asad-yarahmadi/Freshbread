@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin - Ticket #{{ ticket.id }} - Fresh Bread</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --primary-soft: #e7f1ff;
+            --success: #198754;
+            --warning: #ffc107;
+            --gray: #6c757d;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+
+        body {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .ticket-header {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            margin-bottom: 2rem;
+        }
+
+        .ticket-subject {
+            font-weight: 700;
+            font-size: 1.6rem;
+            margin: 0;
+        }
+
+        .badge-status {
+            font-size: 0.95rem;
+            padding: 0.55em 1.1em;
+            border-radius: 50px;
+        }
+
+        .user-card,
+        .messages-card,
+        .reply-card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            margin-bottom: 1.5rem;
+            background: white;
+        }
+
+        .user-info-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .message-item {
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            background: var(--light);
+            position: relative;
+        }
+
+        .message-item.admin {
+            background: var(--primary-soft);
+            border-left: 4px solid var(--primary);
+        }
+
+        .message-meta {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 0.6rem;
+        }
+
+        .message-author {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .reply-box textarea {
+            border-radius: 12px;
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .btn-reply {
+            padding: 0.65rem 1.8rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 576px) {
+            .user-info-grid {
+                grid-template-columns: 1fr;
+            }
+            .ticket-header {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+<h2></h2><br>
+<h2></h2><br>
+<section class="py-5">
+    <div class="container">
+
+        <div class="ticket-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h3 class="ticket-subject mb-1">
+                    Ticket #{{ ticket.id }} – {{ ticket.subject }}
+                </h3>
+                <small class="text-muted">
+                    Created: {{ ticket.created_at|date:"Y-m-d H:i" }}
+                </small>
+            </div>
+            <div>
+                {% if ticket.status == 'open' %}
+                    <span class="badge-status bg-warning text-dark">Waiting for reply</span>
+                {% elif ticket.status == 'answered' %}
+                    <span class="badge-status bg-success text-white">Answered</span>
+                {% elif ticket.status == 'closed' %}
+                    <span class="badge-status bg-secondary text-white">Closed</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- User Information -->
+        <div class="user-card p-4">
+            <h5 class="mb-3 border-bottom pb-2">User Information</h5>
+            <div class="user-info-grid">
+                <div class="d-grid gap-2">
+                    <div><strong>Username:</strong> {{ user.username }}</div>
+                    <div><strong>Full Name:</strong> {{ user.first_name|default:"—" }} {{ user.last_name|default:"" }}</div>
+                    <div><strong>Email:</strong> {{ user.email|default:"Not provided" }}</div>
+                </div>
+                <div>
+                    <a href="{% url 'admin_user_detail' user.id %}"
+                       class="btn btn-sm btn-outline-primary">
+                        → Open User Panel
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="messages-card p-4">
+            <h5 class="mb-3 border-bottom pb-2">Conversation</h5>
+
+            {% for m in messages %}
+                <div class="message-item {% if m.is_admin %}admin{% endif %}">
+                    <div class="message-meta d-flex justify-content-between">
+                        <span class="message-author">
+                            {% if m.is_admin %}Admin{% else %}User{% endif %}
+                        </span>
+                        <span>{{ m.created_at|date:"Y-m-d H:i" }}</span>
+                    </div>
+                    <div class="message-content">
+                        {{ m.message|linebreaks }}
+                    </div>
+                </div>
+            {% empty %}
+                <div class="text-center py-5 text-muted">
+                    No messages yet.
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Reply / Actions -->
+        <div class="reply-card p-4">
+            {% if ticket.status != 'closed' %}
+                <form method="post" class="reply-box">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label fw-semibold">Your Reply</label>
+                        <textarea name="message" id="message" class="form-control" rows="5"
+                                  placeholder="Type your response here..." required></textarea>
+                    </div>
+
+                    <div class="d-flex gap-3 flex-wrap">
+                        <button type="submit" class="btn btn-primary btn-reply">
+                            Send Reply
+                        </button>
+
+                        <button type="submit" name="action" value="close"
+                                class="btn btn-outline-danger btn-reply">
+                            Close Ticket
+                        </button>
+
+                        <a href="{% url 'admin_tickets' %}" class="btn btn-link px-0">
+                            ← Back to list
+                        </a>
+                    </div>
+                </form>
+            {% else %}
+                <div class="text-center py-4">
+                    <p class="text-muted mb-3">This ticket is closed.</p>
+                    <a href="{% url 'admin_tickets' %}" class="btn btn-outline-secondary">
+                        ← Back to Tickets
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+	<!-- ALL JS FILES -->
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- ALL PLUGINS -->
+	
+	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+	<script src="{% static 'js/images-loded.min.js' %}"></script>
+	<script src="{% static 'js/isotope.min.js' %}"></script>
+	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+	<script src="{% static 'js/jquery.mapify.js' %}"></script>
+	<script src="{% static 'js/form-validator.min.js' %}"></script>
+    <script src="{% static 'js/contact-form-script.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+{% include 'freshbread/footer.html' %}
+
+</body>
+</html>

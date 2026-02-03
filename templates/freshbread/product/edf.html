@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Edit Product - Fresh Bread</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+	<!-- Styles -->
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+	<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+	<style>
+		.edit-product-section {
+			padding: 100px 0;
+			background-color: #fafafa;
+		}
+		.edit-product-form {
+			background: #fff;
+			border-radius: 20px;
+			padding: 40px;
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+			max-width: 700px;
+			margin: auto;
+		}
+		.edit-product-form h2 {
+			text-align: center;
+			font-weight: 700;
+			margin-bottom: 30px;
+		}
+		.edit-product-form input,
+		.edit-product-form textarea,
+		.edit-product-form select {
+			border-radius: 10px;
+			padding: 12px 15px;
+			margin-bottom: 20px;
+			border: 1px solid #ddd;
+			width: 100%;
+			font-size: 16px;
+		}
+		.edit-product-form button {
+			width: 100%;
+			border-radius: 30px;
+			padding: 12px;
+			font-size: 18px;
+			font-weight: 600;
+		}
+		label {
+			font-weight: 600;
+		}
+		.current-image {
+			text-align: center;
+			margin-bottom: 25px;
+		}
+		.current-image img {
+			max-width: 100%;
+			height: auto;
+			border-radius: 15px;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+		}
+	</style>
+  </head>
+<body>
+{% include 'freshbread/header.html' %}
+
+<!-- Start header -->
+
+
+
+<section class="edit-product-section">
+    <div class="container">
+        <div class="edit-product-form">
+            <h2>✏️ Edit Product: {{ product.name }}</h2>
+
+            {% if product.menu_image %}
+            <div class="current-image">
+                <p><strong>Current Image:</strong></p>
+                <img src="{{ product.menu_image.url }}" alt="{{ product.name }}">
+            </div>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                
+
+                <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                <a href="{% url 'menu' %}" class="btn btn-secondary mt-2 w-100">Cancel</a>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+	<!-- Start Contact info -->
+
+	<!-- End Contact info -->
+	
+	<!-- Start Footer -->
+{% include 'freshbread/footer.html' %}
+	<!-- End Footer -->
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

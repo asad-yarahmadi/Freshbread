@@ -1,0 +1,513 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ post.title }}  - Fresh Bread Blog</title>
+    <meta name="description" content="{{ post.seo_keywords|default:post.title }}">
+    <meta name="author" content="{{ post.author.username }}">
+
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+
+    <!-- Bootstrap + Icons + Fonts -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+
+    <style>
+        :root {
+            --primary: #e67e22;
+            --primary-dark: #d35400;
+            --light: #fdfaf5;
+            --gray: #6c757d;
+            --dark: #1f2937;
+            --soft-gray: #f3f4f6;
+        }
+
+        body {
+            background: var(--light);
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            color: #2d3748;
+            line-height: 1.75;
+        }
+
+        .blog-hero {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+            margin: 2.5rem 0 5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-hero:hover {
+            transform: translateY(-4px);
+        }
+
+        .blog-cover img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .date-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 16px rgba(230,126,34,0.35);
+            z-index: 10;
+        }
+
+        .blog-header {
+            padding: 3rem 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .blog-header h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin: 0 0 1rem;
+            color: var(--dark);
+            line-height: 1.2;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem 1.8rem;
+            color: var(--gray);
+            font-size: 1.05rem;
+            margin: 1.4rem 0 2.2rem;
+        }
+
+        .blog-meta li {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .blog-content {
+            padding: 3rem 4rem 4rem;
+            font-size: 1.15rem;
+            color: #374151;
+        }
+
+        .content {
+            line-height: 1.9;
+        }
+
+        .content p {
+            margin-bottom: 1.6rem;
+        }
+
+        .tags {
+            margin: 3rem 0 4rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+        }
+
+        .badge-tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 0.65rem 1.3rem;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .badge-tag:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ── Related Posts ── */
+        .related-section {
+            margin: 5rem 0;
+        }
+
+        .related-section h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.9rem;
+            border-bottom: 3px solid var(--primary);
+            display: inline-block;
+        }
+
+        .related-card {
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            transition: all 0.28s ease;
+            height: 100%;
+        }
+
+        .related-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+        }
+
+        .related-card .card-body {
+            padding: 1.6rem 1.8rem;
+        }
+
+        .related-card .card-title {
+            font-size: 1.22rem;
+            font-weight: 700;
+            margin-bottom: 0.9rem;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .related-meta {
+            font-size: 0.92rem;
+            color: var(--gray);
+        }
+
+        /* ── Reviews ── */
+        .reviews-section {
+            margin-top: 5rem;
+            padding-top: 3rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .review-item {
+            background: #fafafa;
+            padding: 1.8rem;
+            border-radius: 16px;
+            margin-bottom: 1.6rem;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+
+        .review-item:hover {
+            background: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        }
+
+        .stars {
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            margin-bottom: 0.8rem;
+        }
+
+        .star-filled { color: #fbbf24; }
+        .star-empty  { color: #e5e7eb; }
+
+        .btn-warning {
+            background: var(--primary);
+            border-color: var(--primary);
+            padding: 0.8rem 2.2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .btn-warning:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        @media (max-width: 992px) {
+            .blog-header, .blog-content {
+                padding-left: 2.5rem;
+                padding-right: 2.5rem;
+            }
+            .blog-header h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .blog-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .blog-header h1 {
+                font-size: 1.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+<h2></h2><br>
+<h2></h2><br>
+<div class="container">
+    <div class="blog-hero">
+        <div class="position-relative">
+            <img class="img-fluid" src="{{ post.cover_single.url }}" alt="{{ post.title }}">
+            <div class="date-badge">
+                {{ post.created_at|date:"M d" }}
+            </div>
+        </div>
+
+        <div class="blog-header">
+            <h1>{{ post.title }}</h1>
+            {% if post.seo_keywords %}
+                <p class="text-muted lead mt-3">{{ post.seo_keywords }}</p>
+            {% endif %}
+        </div>
+
+        <div class="blog-content">
+            <ul class="blog-meta list-unstyled">
+                <li><i class="zmdi zmdi-account"></i> {{ post.author.username }}</li>
+                <li>•</li>
+                <li><i class="zmdi zmdi-calendar"></i> {{ post.created_at|date:"F d, Y • H:i" }}</li>
+                <li>•</li>
+                <li>❤️ <span id="likes-count">{{ post.likes_count }}</span></li>
+                <li>•</li>
+                <li>👁️ <span id="views-count">{{ post.views_count }}</span></li>
+            </ul>
+
+            <div class="content mb-5">
+                {{ post.content|safe }}
+            </div>
+
+            <div class="tags">
+                {% for t in post.tag_list %}
+                    <span class="badge-tag">#{{ t }}</span>
+                {% empty %}
+                    <small class="text-muted">No tags added yet</small>
+                {% endfor %}
+            </div>
+
+            <!-- Like Button -->
+            <!-- Like Section -->
+<div class="text-center my-5 py-3">
+    <button id="like-btn" class="btn-like" aria-label="Like / Unlike post" style="background:none; border:none; padding:0; cursor:pointer;">
+        <i id="like-icon" 
+           class="zmdi zmdi-favorite{% if not is_liked %}-outline{% endif %} like-heart"
+           style="font-size: 4.8rem; color: {% if is_liked %}#ef4444{% else %}#9ca3af{% endif %}; transition: all 0.25s ease;">
+        </i>
+    </button>
+    <div class="mt-2">
+        <span id="likes-count" class="fs-4 fw-bold text-dark">{{ post.likes_count }}</span>
+        <span class="text-muted ms-1">like this post. Do you like it?</span>
+    </div>
+</div>
+
+<style>
+    .like-heart {
+        transition: transform 0.2s ease, color 0.25s ease;
+    }
+    #like-btn:hover .like-heart {
+        transform: scale(1.15);
+    }
+    #like-btn:active .like-heart {
+        transform: scale(0.92);
+    }
+</style>
+
+            <!-- Related Posts -->
+            <div class="row g-4 related-section">
+                <div class="col-lg-6">
+                    <h4>Recent Posts Today</h4>
+                    <div class="row g-4">
+                        {% for r in recent %}
+                        <div class="col-12">
+                            <div class="related-card">
+                                <div class="card-body">
+                                    <a href="{% url 'blog_details' slug=r.slug %}" class="text-decoration-none">
+                                        <h5 class="card-title text-dark">{{ r.title }}</h5>
+                                    </a>
+                                    <div class="related-meta d-flex gap-4 flex-wrap">
+                                        <span>❤️ {{ r.likes_count }} </span>
+                                        <span>‌ | 👁️ {{ r.views_count }} | ‌</span>
+                                        <span>{{ r.created_at|date:"d M" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <div class="alert alert-light text-center py-4 rounded-3">
+                                No posts published today.
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <h4>Readers Also Viewed</h4>
+                    <div class="row g-4">
+                        {% for p in popular %}
+                        <div class="col-12">
+                            <div class="related-card">
+                                <div class="card-body">
+                                    <a href="{% url 'blog_details' slug=p.slug %}" class="text-decoration-none">
+                                        <h5 class="card-title text-dark">{{ p.title }}</h5>
+                                    </a>
+                                    <div class="related-meta d-flex gap-4 flex-wrap">
+                                        <span>❤️ {{ p.likes_count }} | ‌</span>
+                                        <span>👁️ {{ p.views_count }} | ‌</span>
+                                        <span>{{ p.created_at|date:"d M" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <div class="alert alert-light text-center py-4 rounded-3">
+                                No popular posts yet.
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="reviews-section">
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                    <h3 class="mb-0">Reader Reviews</h3>
+                    <div class="fs-5">
+                        Average rating: <strong class="text-warning">{{ avg|default:"0.0" }}</strong> / 5
+                    </div>
+                </div>
+
+                {% for r in reviews %}
+                <div class="review-item">
+                    <div class="d-flex justify-content-between mb-3 flex-wrap gap-2">
+                        <h5 class="mb-0">{{ r.first_name }} {{ r.last_name }}</h5>
+                        <small class="text-muted">{{ r.created_at|date:"M d, Y • H:i" }}</small>
+                    </div>
+                    <div class="stars mb-3">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= r.rating %}
+                                <span class="star-filled">★</span>
+                            {% else %}
+                                <span class="star-empty">★</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p class="mb-0">{{ r.comment }}</p>
+                </div>
+                {% empty %}
+                    <div class="text-center py-5 text-muted">
+                        <p class="lead">No reviews yet.</p>
+                        <p>Be the first to share your thoughts!</p>
+                    </div>
+                {% endfor %}
+
+                {% if user.is_authenticated %}
+                <div class="mt-5 pt-5 border-top">
+                    <h4 class="mb-4">Write Your Review</h4>
+                    <form method="post" action="{% url 'blog_add_review' slug=post.slug %}">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Your Rating</label>
+                            <div class="star-rating d-flex gap-1">
+                                {% for i in "54321" %}
+                                    <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" required>
+                                    <label for="star{{ i }}" class="fs-1">★</label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="comment" class="form-label fw-semibold">Your Thoughts</label>
+                            <textarea class="form-control" id="comment" name="comment" rows="5" placeholder="What did you think about this post?" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-warning btn-lg px-5">Submit Review</button>
+                    </form>
+                </div>
+                {% else %}
+                    <div class="alert alert-light text-center mt-5 py-4 rounded-3">
+                        Please <a href="{% url 'ru' %}?next={{ request.path }}" class="alert-link fw-bold">sign in</a> to write a review.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'freshbread/footer.html' %}
+
+<a href="#" id="back-to-top" title="Back to top" style="display: none;">↑</a>
+
+<!-- Scripts -->
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+<script src="{% static 'js/images-loded.min.js' %}"></script>
+<script src="{% static 'js/isotope.min.js' %}"></script>
+<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+<script src="{% static 'js/form-validator.min.js' %}"></script>
+<script src="{% static 'js/contact-form-script.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const likeBtn  = document.getElementById('like-btn');
+    const likeIcon = document.getElementById('like-icon');
+    const countEl  = document.getElementById('likes-count');
+
+    if (!likeBtn) return;
+
+    likeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        fetch('{% url "blog_like" slug=post.slug %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data && typeof data.liked !== 'undefined') {
+                // تغییر ظاهر قلب
+                if (data.liked) {
+                    likeIcon.classList.remove('zmdi-favorite-outline');
+                    likeIcon.classList.add('zmdi-favorite');
+                    likeIcon.style.color = '#ef4444';
+                } else {
+                    likeIcon.classList.remove('zmdi-favorite');
+                    likeIcon.classList.add('zmdi-favorite-outline');
+                    likeIcon.style.color = '#9ca3af';
+                }
+
+                // به‌روزرسانی تعداد
+                countEl.textContent = data.likes;
+            }
+        })
+        .catch(err => {
+            console.error('Like error:', err);
+            // می‌تونی اینجا alert ساده بذاری اگر خواستی
+        });
+    });
+});
+</script>
+
+</body>
+</html>

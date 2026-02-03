@@ -1,0 +1,363 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Verify Email - Fresh bread</title>
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+  <!-- اگه فونت awesome داری: -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background: url("{% static 'images/bs.jpg' %}") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Roboto', sans-serif;
+    }
+    .verify-container {
+      width: 400px;
+      background: #e0e5ec;
+      border-radius: 20px;
+      padding: 35px 25px;
+      box-shadow: 4px 4px 10px #bec5d1, -4px -4px 10px #ffffff;
+      animation: fadeIn 1s ease-in-out;
+    }
+    h2 {
+      text-align: center;
+      color: #4a4a4a;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .form-group i {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      color: #a3b1c6;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 10px 10px 10px 40px;
+      border-radius: 10px;
+      border: none;
+      background: #e0e5ec;
+      box-shadow: inset 6px 6px 8px #bec5d1, inset -6px -6px 8px #ffffff;
+      font-size: 14px;
+      color: #555;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 14px;
+      border: none;
+      background: #e0e5ec;
+      box-shadow: 6px 6px 8px #bec5d1, -6px -6px 8px #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      color: #3b82f6;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn:hover:enabled {
+      box-shadow: inset 6px 6px 8px #bec5d1, inset -6px -6px 8px #ffffff;
+      color: #1e40af;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .link-btn {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 15px;
+    }
+    .link-btn a {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .link-btn a:hover {
+      text-decoration: underline;
+    }
+  .decor-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: #f0f5fa;
+    box-shadow: 10px 10px 20px #babecc, -10px -10px 20px #ffffff;
+    opacity: 0.6;
+}
+.circle1 {width: 100px; height: 100px; top: -50px; left: -50px;}
+.circle2 {width: 80px; height: 80px; bottom: -40px; right: -40px;}
+.circle3 {width: 50px; height: 50px; top: 20%; right: -25px;}
+.circle4 {width: 60px; height: 60px; bottom: 10%; left: -30px;}
+
+/* ================== Responsive ================== */
+@media (max-width: 600px) {
+    .container {
+        padding: 30px 20px;
+    }
+    input {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+    button {
+        padding: 12px;
+        font-size: 16px;
+    }
+}
+
+/* ================== Extra Animations ================== */
+@keyframes floatUp {
+    0% {transform: translateY(0);}
+    50% {transform: translateY(-5px);}
+    100% {transform: translateY(0);}
+}
+.decor-circle {
+    animation: floatUp 6s ease-in-out infinite;
+}
+.top-error-banner {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 420px;
+  padding: 14px 25px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: 40px;
+  box-shadow: 0 8px 15px rgba(220, 38, 38, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0;
+  z-index: 10000;
+  cursor: default;
+  font-family: 'Roboto', sans-serif;
+  animation: slideDownUp 7s ease-in-out forwards;
+}
+
+.top-error-banner i {
+  font-size: 22px;
+  animation: shakeIcon 1s infinite, glowIcon 2s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 5px #fff);
+  user-select: none;
+}
+
+.top-error-banner .progress-bar {
+  position: absolute;
+  bottom: 6px;
+  left: 10px;
+  right: 10px;
+  height: 5px;
+  background-color: #f87171;
+  border-radius: 30px;
+  animation: shrinkProgress 6s linear forwards;
+  box-shadow: 0 0 8px #f87171;
+}
+
+@keyframes shakeIcon {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-2px); }
+  40%, 80% { transform: translateX(2px); }
+}
+
+@keyframes glowIcon {
+  0% { filter: drop-shadow(0 0 5px #fff); }
+  100% { filter: drop-shadow(0 0 15px #ff7f7f); }
+}
+
+@keyframes shrinkProgress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+@keyframes slideDownUp {
+  0% { top: -80px; opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  15% { top: 0px; opacity: 1; transform: translateX(-50%) translateY(0); }
+  85% { top: 0px; opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { top: -80px; opacity: 0; transform: translateX(-50%) translateY(-20px); }
+}
+
+</style>
+
+  <div class="verify-container">
+    <div class="decor-circle circle1"></div>
+    <div class="decor-circle circle2"></div>
+    <div class="decor-circle circle3"></div>
+    <div class="decor-circle circle4"></div>
+    <h2>Email Verification</h2>
+    <p style="text-align:center; color:#666; margin-bottom: 25px;">
+      We've sent a 6-digit code to your email address.
+    </p>
+
+    <!-- فرم ورود کد -->  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% if messages %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const messages = [
+        {% for message in messages %}
+        {
+            text: "{{ message|escapejs }}",
+            tag: "{{ message.tags }}"
+        },
+        {% endfor %}
+    ];
+
+    // تابع تعیین رنگ و آیکن بر اساس نوع پیام
+    function getAlertColors(tag) {
+        switch (tag) {
+            case 'success':
+                return { bg: '#22c55e', text: '#fff', icon: 'success' }; // سبز
+            case 'error':
+                return { bg: '#dc2626', text: '#fff', icon: 'error' };   // قرمز
+            case 'warning':
+                return { bg: '#facc15', text: '#000', icon: 'warning' }; // زرد
+            default:
+                return { bg: '#facc15', text: '#000', icon: 'warning' };    // آبی
+        }
+    }
+
+    // تابع برای تشخیص موبایل
+    function isMobile() {
+        return window.innerWidth < 768;
+    }
+
+    // تابع نمایش پیام‌ها به ترتیب
+    function showNextMessage(index = 0) {
+        if (index >= messages.length) return;
+
+        const colors = getAlertColors(messages[index].tag);
+        const mobile = isMobile();
+
+        Swal.fire({
+            title: messages[index].text,
+            icon: colors.icon,
+            background: colors.bg,
+            color: colors.text,
+            timer: 7000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: !mobile, // در دسکتاپ toast باشه، در موبایل وسط صفحه
+            position: mobile ? 'center' : 'top-end',
+            customClass: {
+                popup: mobile ? 'swal-wide' : ''
+            },
+            showClass: { popup: 'animate__animated animate__fadeInDown' },
+            hideClass: { popup: 'animate__animated animate__fadeOutUp' },
+            didOpen: (popup) => {
+                popup.addEventListener('mouseenter', Swal.stopTimer);
+                popup.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        }).then(() => {
+            showNextMessage(index + 1);
+        });
+    }
+
+    showNextMessage();
+});
+</script>
+
+<style>
+/* برای موبایل، پنجره کمی بزرگ‌تر بشه */
+.swal-wide {
+    width: 90% !important;
+    font-size: 1.1rem !important;
+}
+</style>
+{% endif %}
+    <form method="post" action="{% url 'verify_email' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <i class="fa fa-key"></i>
+        <input type="text" name="code" placeholder="Enter your code" maxlength="6" required autofocus />
+      </div>
+      <button type="submit" name="action" value="verify" class="btn">Verify Code</button>
+    </form>
+
+    <!-- فرم درخواست ارسال مجدد کد -->
+    <form method="post" action="{% url 'verify_email' %}">
+      {% csrf_token %}
+      <button id="resendBtn" type="submit" name="action" value="resend" class="btn" disabled>Resend Code (2:00)</button>
+    </form>
+
+    <div class="link-btn">
+      Wrong email? <a href="{% url 'su' %}">Change Email</a>
+    </div>
+  </div>
+	<!-- ALL JS FILES -->
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- ALL PLUGINS -->
+	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+	<script src="{% static 'js/images-loded.min.js' %}"></script>
+	<script src="{% static 'js/isotope.min.js' %}"></script>
+	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+	<script src="{% static 'js/form-validator.min.js' %}"></script>
+    <script src="{% static 'js/contact-form-script.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+  <script>
+    let resendBtn = document.getElementById("resendBtn");
+    let countdown = 120; // 2 دقیقه
+
+    function formatTime(seconds) {
+      let m = Math.floor(seconds / 60);
+      let s = seconds % 60;
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function updateButton() {
+      if (countdown <= 0) {
+        resendBtn.disabled = false;
+        resendBtn.textContent = "Resend Code";
+      } else {
+        resendBtn.textContent = `Resend Code (${formatTime(countdown)})`;
+        countdown--;
+        setTimeout(updateButton, 1000);
+      }
+    }
+
+    // شروع تایمر وقتی صفحه لود شد
+    document.addEventListener("DOMContentLoaded", updateButton);
+  document.addEventListener('DOMContentLoaded', () => {
+  const banner = document.getElementById('topErrorBanner');
+  if (banner) {
+    // بعد 6 ثانیه، کلاس انیمیشن خروج رو اضافه کن
+    setTimeout(() => {
+      banner.classList.add('slide-up');
+    }, 6000);
+
+    // بعد از پایان انیمیشن خروج، بنر رو حذف کن
+    banner.addEventListener('animationend', (event) => {
+      if (event.animationName === 'slideUpBanner') {
+        banner.remove();
+      }
+    });
+  }
+});
+
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,312 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Login - Fresh Bread</title>
+<link rel="icon" type="image/png" href="{% static 'images/favicon.ico' %}" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+    * { box-sizing: border-box; font-family: "Roboto", sans-serif; }
+
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+background: radial-gradient(
+                circle at top left,
+                rgba(255, 96, 219, 0.40),   /* قبلاً 0.25 بود → روشن‌تر */
+                transparent 45%
+            ),
+            radial-gradient(
+                circle at bottom right,
+                rgba(86, 191, 255, 0.40),  /* قبلاً 0.25 بود → روشن‌تر */
+                transparent 45%
+            ),
+            linear-gradient(
+                135deg,
+                #142050,   /* روشن‌تر از #0a0f2a */
+                #1a2b63,   /* روشن‌تر از #0d173b */
+                #1f3a7a    /* روشن‌تر از #10204d */
+            );
+background-size: cover;
+background-attachment: fixed;
+
+        overflow: hidden;
+    }
+
+    /* ---------- FUTURE GLASS CARD ---------- */
+    .login-card {
+        position: relative;
+        width: 420px;
+        padding: 45px 40px;
+        border-radius: 22px;
+        background: rgba(39, 44, 85, 0.5);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.15);
+        box-shadow: 0 0 30px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.05);
+        animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(25px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 25px;
+        letter-spacing: 1px;
+        background: linear-gradient(90deg, #ff43c1, #7acbff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* ---------- INPUTS ---------- */
+    .form-group {
+        position: relative;
+        margin-bottom: 22px;
+    }
+
+    .form-group i {
+        position: absolute;
+        top: 50%;
+        left: 16px;
+        transform: translateY(-50%);
+        color: #c8d2e0;
+        font-size: 17px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 15px 16px 15px 48px;
+        background: rgba(255,255,255,0.08);
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        color: #fff;
+        outline: none;
+        transition: 0.25s;
+        backdrop-filter: blur(6px);
+    }
+
+    .form-group input::placeholder {
+        color: #a9b3c6;
+    }
+
+    .form-group input:focus {
+        background: rgba(255,255,255,0.18);
+        box-shadow: 0 0 12px rgba(110,180,255,0.45);
+    }
+
+    /* ---------- BUTTON ---------- */
+    .btn-submit {
+        width: 100%;
+        padding: 15px;
+        margin-top: 5px;
+        border-radius: 14px;
+        border: none;
+        background: linear-gradient(90deg, #ff45c4, #6bc7ff);
+        color: #fff;
+        font-size: 17px;
+        font-weight: 700;
+        cursor: pointer;
+        letter-spacing: 1px;
+        box-shadow: 0 0 15px rgba(255,255,255,0.25);
+        transition: 0.3s;
+    }
+
+    .btn-submit:hover {
+        filter: brightness(1.2);
+        transform: scale(1.03);
+    }
+
+    /* ---------- SOCIAL ---------- */
+    .social-section {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .social-section p {
+        color: #d5d8e1;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+    }
+
+    .icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        color: #fff;
+        cursor: pointer;
+        transition: 0.3s;
+        backdrop-filter: blur(4px);
+        box-shadow: 0 0 12px rgba(255,255,255,0.15);
+    }
+
+    .icon:hover {
+        transform: scale(1.15);
+        box-shadow: 0 0 20px rgba(255,255,255,0.35);
+    }
+
+    .google   { background: #db4437; }
+    .x        { background: #000;    }
+
+    /* ---------- FOOTER ---------- */
+    .footer-text {
+        margin-top: 28px;
+        text-align: center;
+        font-size: 14px;
+        color: #d2d6df;
+    }
+
+    .footer-text a {
+        color: #7acbff;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .footer-text a:hover {
+        text-decoration: underline;
+    }
+
+    /* ---------- FLOATING DECOR ---------- */
+    .dot {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+        filter: blur(4px);
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%,100% { transform: translateY(0); }
+        50%     { transform: translateY(-12px); }
+    }
+
+    .d1 { width: 80px; height: 80px; top: -40px; left: -35px; }
+    .d2 { width: 55px; height: 55px; bottom: -30px; right: -25px; }
+    .d3 { width: 40px; height: 40px; top: 35%; right: -20px; }
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+
+{% if messages %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const messages = [
+        {% for message in messages %}
+        { text: "{{ message|escapejs }}", tag: "{{ message.tags }}" },
+        {% endfor %}
+    ];
+
+    function getAlertColors(tag) {
+        switch (tag) {
+            case 'success': return { bg:'#22c55e', text:'#fff', icon:'success' };
+            case 'error':   return { bg:'#dc2626', text:'#fff', icon:'error' };
+            case 'warning': return { bg:'#facc15', text:'#000', icon:'warning' };
+            default:        return { bg:'#2563eb', text:'#fff', icon:'info' };
+        }
+    }
+
+    function isMobile() { return window.innerWidth < 768; }
+
+    function showNext(index = 0) {
+        if (index >= messages.length) return;
+
+        const style = getAlertColors(messages[index].tag);
+        const mobile = isMobile();
+
+        Swal.fire({
+            title: messages[index].text,
+            icon: style.icon,
+            background: style.bg,
+            color: style.text,
+            timer: 6500,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: !mobile,
+            position: mobile ? 'center' : 'top-end',
+            showClass: { popup: 'animate__animated animate__fadeInDown' },
+            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+        }).then(() => showNext(index + 1));
+    }
+
+    showNext();
+});
+</script>
+{% endif %}
+
+
+<div class="login-card">
+
+    <div class="dot d1"></div>
+    <div class="dot d2"></div>
+    <div class="dot d3"></div>
+
+    <h2>LOGIN</h2>
+
+    <form action="{% url 'Login' %}" method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <i class="fa fa-envelope"></i>
+            <input type="text" name="username" placeholder="Username or Email" required />
+        </div>
+
+        <div class="form-group">
+            <i class="fa fa-lock"></i>
+            <input type="password" name="password" placeholder="Password" required />
+        </div>
+
+        <button type="submit" class="btn-submit">Login</button>
+
+        <div class="social-section">
+            <p>Or Login With</p>
+
+            <div class="social-icons">
+                <a href="{% url 'social:begin' 'github' %}" class="icon x">
+                    <i class="fab fa-github"></i>
+                </a>
+
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="icon google">
+                    <i class="fab fa-google"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-text">
+            Forgot your password?
+            <a href="{% url 'reset_password_step1' %}">Reset</a><br>
+            Don’t have an account?
+            <a href="{% url 'su' %}">Register</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

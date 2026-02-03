@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en"><!-- Basic -->
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+     <!-- Site Metas -->
+    <title>Contact - Fresh Bread</title>  
+    <meta name="keywords" content="Contact Fresh Bread Bakery, Kanata bakery contact, Ottawa bakery phone, bakery email, local bakery">
+    <meta name="description" content="Get in touch with Fresh Bread Bakery in Kanata. Call, email, or visit us for inquiries, orders, and reservations.">
+    <meta name="author" content="Fresh Bread Bakery">
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">    
+	<!-- Site CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact Fresh Bread Bakery",
+      "url": "{{ request.build_absolute_uri }}"
+    }
+    </script>
+
+  </head>
+<body>
+{% include 'freshbread/header.html' %}
+
+<!-- Start header -->
+
+
+	
+	<!-- Start All Pages -->
+	<div class="all-page-title page-breadcrumb">
+		<div class="container text-center">
+			<div class="row">
+				<div class="col-lg-12">
+                    <h1>Contact Fresh Bread Bakery</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End All Pages -->
+	
+	<!-- Start Contact -->
+	<!-- <div class="map-full"></div> -->
+	<div class="contact-box">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="heading-title text-center">
+                        <h2>Contact Fresh Bread Bakery</h2>
+                        <p>Fresh Bread Bakery welcomes your questions, feedback, and special requests. You can contact us by phone, email, or visit our bakery in Kanata, Ontario. Whether you need catering, custom cakes, or reservation details, our team is happy to assist you. We value our customers and aim to respond promptly to all inquiries.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+			  <div class="col-md-6 mb-4">
+				<div class="card p-4" style="border-radius:16px;">
+				  <h4 class="mb-3">Contact Information</h4>
+				  <p class="mb-2"><i class="fa fa-volume-control-phone me-2"></i><strong>Phone:</strong> <a href="tel:+1(514)984-4773">+1 (514) 984 4773</a></p>
+				  <p class="mb-2"><i class="fa fa-envelope me-2"></i><strong>Email:</strong> <a href="mailto:order.freshBread911@gmail.com">order.freshBread911@gmail.com</a></p>
+				  <p class="mb-2"><i class="fa fa-map-marker me-2"></i><strong>Location:</strong> <a href="https://maps.app.goo.gl/hHe9y7EuLpefrsAK7">68 McBrien St, Kanata, ON K2W 1H1، ON, Canada</a></p>
+				  <div class="mt-3">
+					<h5>Opening Hours</h5>
+					<p><span class="text-color">Monday:</span> 8:AM - 8:PM</p>
+					<p><span class="text-color">Tuesday:</span> 8:AM - 8:PM</p>
+					<p><span class="text-color">Wednesday:</span> 8:AM - 8:PM</p>
+					<p><span class="text-color">Friday:</span> Closed</p>
+					<p><span class="text-color">Saturday:</span> Closed</p>
+					<p><span class="text-color">Sunday:</span> 8:AM - 5:PM</p>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-md-6 mb-4">
+				<div class="card p-4" style="border-radius:16px;">
+				  <h4 class="mb-3">Need Help?</h4>
+				  <p class="text-muted">Create a support ticket and our admins will reply via the ticket and email.</p>
+				  <a href="{% url 'ticket_new' %}" class="btn btn-primary">Open Support Ticket</a>
+				  <a href="{% url 'tickets' %}" class="btn btn-outline-secondary ms-2">My Tickets</a>
+				</div>
+			  </div>
+			</div>
+		</div>
+	</div>
+	<!-- End Contact -->
+	
+	<!-- Start Contact info -->
+
+	<!-- End Contact info -->
+	
+	<!-- Start Footer -->
+{% include 'freshbread/footer.html' %}
+	<!-- End Footer -->
+	
+	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+
+	<!-- ALL JS FILES -->
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- ALL PLUGINS -->
+	
+	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+	<script src="{% static 'js/images-loded.min.js' %}"></script>
+	<script src="{% static 'js/isotope.min.js' %}"></script>
+	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+	<script src="{% static 'js/jquery.mapify.js' %}"></script>
+	<script src="{% static 'js/form-validator.min.js' %}"></script>
+    <script src="{% static 'js/contact-form-script.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_NEW_API_KEY&callback=initMap" async defer></script>
+
+	<script>
+		$('.map-full').mapify({
+			points: [
+				{
+					lat: 40.7143528,
+					lng: -74.0059731,
+					marker: true,
+					title: 'Marker title',
+					infoWindow: 'Fresh bread bakery'
+				}
+			]
+		});	
+	</script>
+</body>
+</html>
