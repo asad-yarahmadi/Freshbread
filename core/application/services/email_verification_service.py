@@ -141,9 +141,9 @@ class EmailVerificationService:
                     to=temp_user.email,
                     html_message=(
                         f"Hi {request.session.get('signup_username', '')},<br>"
-                        "Your email was successfully verified. Welcome to Fresh Bread Bakery! Explore daily specials, schedule pickups, and enjoy warm, freshly baked bread made with care."
+                        "Your email was successfully verified. Welcome to Kingfood! Explore daily specials, schedule pickups, and enjoy warm, freshly baked bread made with care."
                     ),
-                    title="Welcome to Fresh Bread Bakery",
+                    title="Welcome to Kingfood",
                     cta_text="Get Started",
                     action_url=action_url,
                     wrap=True,

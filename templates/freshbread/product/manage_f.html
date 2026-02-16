@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Manage Products - Fresh Bread</title>
+  <title>Manage Products - Kingfood</title>
   <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
   
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -210,7 +210,8 @@
                     <i class="bi bi-pencil me-1"></i> Edit
                   </a>
                   <button class="btn btn-outline-danger action-btn" 
-                          data-bs-toggle="modal" data-bs-target="#deleteModal{{ product.id }}">
+                          data-bs-toggle="modal" data-toggle="modal"
+                          data-bs-target="#deleteModal{{ product.id }}" data-target="#deleteModal{{ product.id }}">
                     <i class="bi bi-trash me-1"></i> Delete
                   </button>
                 </div>
@@ -218,12 +219,14 @@
             </div>
 
             <!-- Delete Modal -->
-            <div class="modal fade" id="deleteModal{{ product.id }}" tabindex="-1">
+            <div class="modal fade" id="deleteModal{{ product.id }}" tabindex="-1" role="dialog" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                   <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title">Confirm Deletion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
                   </div>
                   <div class="modal-body text-center">
                     <p>Are you sure you want to delete the product</p>
@@ -233,8 +236,8 @@
                     {% endif %}
                   </div>
                   <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
-                    <form action="{% url 'delete_product' product.slug %}" method="POST" class="d-inline">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal" data-dismiss="modal">Cancel</button>
+                    <form action="{% url 'delete_product' slug=product.slug %}" method="POST" class="d-inline">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-danger px-4">Yes, Delete</button>
                     </form>
@@ -259,6 +262,35 @@
 {% include 'freshbread/footer.html' %}
 
 <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script>
+  (function(){
+    const forms = document.querySelectorAll('form[action*="/product/"][action$="/delete/"]');
+    forms.forEach(function(form){
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const url = form.action;
+        const tokenInput = form.querySelector('input[name="csrfmiddlewaretoken"]');
+        const token = tokenInput ? tokenInput.value : '';
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Deleting...'; }
+        fetch(url, {
+          method: 'POST',
+          headers: { 'X-CSRFToken': token },
+          body: new FormData(form),
+          redirect: 'follow'
+        }).then(function(resp){
+          if (resp.redirected) { window.location.href = resp.url; return; }
+          return resp.text();
+        }).then(function(){
+          window.location.href = '{% url "manage" %}';
+        }).catch(function(){
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Yes, Delete'; }
+        });
+      });
+    });
+  })();
+</script>
 </body>
 </html>

@@ -23,7 +23,7 @@ def signup_view(request):
                 ip=get_client_ip(request),
                 request=request,   # برای session
             )
-            return render(request, "freshbread/signup/verify_email.html")
+            return render(request, "freshbread/verify_email.html")
 
         except Exception as e:
             messages.error(request, str(e))

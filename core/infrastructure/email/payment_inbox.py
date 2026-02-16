@@ -10,7 +10,7 @@ logger = logging.getLogger("payment_inbox")
 class PaymentInbox:
     def __init__(self):
         self.host = os.environ.get('EMAIL_INBOX_IMAP_HOST', 'imap.gmail.com')
-        self.username = getattr(settings, 'PAYMENT_INBOX_USERNAME', None) or os.environ.get('EMAIL_INBOX_USERNAME', 'order.freshbread911@gmail.com')
+        self.username = getattr(settings, 'PAYMENT_INBOX_USERNAME', None) or os.environ.get('EMAIL_INBOX_USERNAME', 'kingfoodca@gmail.com')
         self.password = getattr(settings, 'PAYMENT_INBOX_PASSWORD', None) or os.environ.get('EMAIL_INBOX_PASSWORD', 'jmwr jxhb rgnt npbq')
         self.mailbox = os.environ.get('EMAIL_INBOX_MAILBOX', 'INBOX')
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Checkout – Step 2 - Fresh Bread</title>
+    <title>Checkout – Step 2 - Kingfood</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
 
@@ -24,12 +24,12 @@
                 <h4 class="mb-3">How to use</h4>
                 <ol>
                   <li>Make sure your Interac e-Transfer email matches your site account email. You can update it <a href="{% url 'edit_profile' %}">here</a>.</li>
-                  <li>Send the payment to <strong>order.freshbread911@gmail.com</strong>.</li>
+                  <li>Send the payment to <strong>kingfoodca@gmail.com</strong>.</li>
                   <li>After paying, note the Reference Number shown by the payment app.</li>
                   <li>Click “I've payed” to verify your payment.</li>
                 </ol>
                 <div class="quiet-box mb-3">Total: <strong>${{ payable }}</strong></div>
-                <div class="big-email">order.freshbread911@gmail.com</div>
+                <div class="big-email">kingfoodca@gmail.com</div>
                 <div class="mt-4 d-flex justify-content-center">
                     <button class="btn btn-success mx-2" id="paidBtn" disabled>I've payed</button>
                     <a href="{% url 'checkout_cancel' %}" class="btn btn-outline-danger mx-2" id="cancelBtn" disabled>cancel</a>

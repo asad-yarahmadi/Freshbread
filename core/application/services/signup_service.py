@@ -78,7 +78,7 @@ class SignupService:
             to=email,
             html_message=(
                 f"Hi {username},<br>"
-                "Thanks for signing up for Fresh Bread Bakery. Please confirm your email address to secure your account and start enjoying fresh-baked goodness every day.<br><br>"
+                "Thanks for signing up for Kingfood. Please confirm your email address to secure your account and start enjoying fresh-baked goodness every day.<br><br>"
                 f"Verification Code: <strong>{code}</strong>"
             ),
             title="Confirm Your Email",

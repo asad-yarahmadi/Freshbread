@@ -29,9 +29,22 @@ class SocialAuthService:
             defaults={"provider": provider}
         )
 
-        if profile.user and profile.profile_completed and profile.acc_prpo:
-            login(request, profile.user, backend='django.contrib.auth.backends.ModelBackend')
-            return "index"
+        # Link SocialProfile to existing user to avoid duplicate accounts
+        if not profile.user:
+            u = request.user
+            if not getattr(u, "email", None):
+                u = User.objects.filter(email__iexact=email).first()
+            if u:
+                profile.user = u
+                profile.save(update_fields=["user"]) 
+
+        # If the linked user's regular Profile is already complete, skip social form
+        if profile.user:
+            from core.infrastructure.models import Profile as UserProfile
+            up = UserProfile.objects.filter(user=profile.user).first()
+            if up and up.profile_completed and up.acc_prpo:
+                login(request, profile.user, backend='django.contrib.auth.backends.ModelBackend')
+                return "index"
 
         logout(request)
         request.session["social_email"] = profile.email

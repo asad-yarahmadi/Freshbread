@@ -87,7 +87,7 @@ def deliver_verify(request, order_id):
                         User = get_user_model()
                         owner = User.objects.get(id=oid)
                         if owner.email:
-                            reason_text = "Thank you for sharing Fresh Bread with friends."
+                            reason_text = "Thank you for sharing Kingfood with friends."
                             reason_text += " You earned a $50 discount because your referrals completed their orders."
                             html_msg = f"<p>{reason_text}</p><p>Your discount code: <strong>{code}</strong></p><p>This code expires in 14 days.</p>"
                             email_sender.send(
@@ -390,14 +390,14 @@ def admin_order_reject(request, review_id):
         review.reason = reason
         review.save()
         try:
-            from django.core.mail import send_mail
             if review.email:
-                send_mail(
+                from core.infrastructure.email.email_sender import email_sender
+                email_sender.send(
                     subject='Order Rejected',
                     message=f'Your order was rejected. Reason: {reason}. You can try again. If something is wrong contact support.',
-                    from_email=None,
-                    recipient_list=[review.email],
-                    fail_silently=True,
+                    to=review.email,
+                    title='Order Rejected',
+                    wrap=True,
                 )
         except Exception:
             pass

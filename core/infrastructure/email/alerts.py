@@ -3,7 +3,7 @@ from django.core.mail import send_mail, mail_admins
 class EmailAlertSender:
 
     ADMINS = [
-        'order.freshbread911@gmail.com',
+        'kingfoodca@gmail.com',
         'programing.mahdi@gmail.com',
         'parsafahhim1390@gmail.com',
     ]
@@ -13,7 +13,7 @@ class EmailAlertSender:
             send_mail(
                 subject,
                 message,
-                'order.freshbread911@gmail.com',
+                'kingfoodca@gmail.com',
                 self.ADMINS,
                 fail_silently=False,
             )

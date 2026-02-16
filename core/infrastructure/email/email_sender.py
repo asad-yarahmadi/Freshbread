@@ -5,12 +5,12 @@ from django.utils.html import strip_tags
 class EmailSender:
     def _base_subject(self, base_subject: str) -> str:
         base_subject = base_subject or ""
-        suffix = " - Fresh Bread Bakery"
+        suffix = " - Kingfood"
         return base_subject[:-len(suffix)] if base_subject.endswith(suffix) else base_subject
 
     def _final_subject(self, base_subject: str) -> str:
         base_subject = base_subject or ""
-        suffix = " - Fresh Bread Bakery"
+        suffix = " - Kingfood"
         return base_subject if base_subject.endswith(suffix) else base_subject + suffix
 
     def _wrap_html(
@@ -18,8 +18,9 @@ class EmailSender:
         *,
         title: str,
         body_html: str,
-        brand_color: str = "#C47A3A",
-        logo_url: str = "https://res.cloudinary.com/dyx2ri33o/image/upload/v1767000009/logo_fcrm1r.png",
+        brand_color: str = "#FF0000",
+
+        logo_url: str = "https://res.cloudinary.com/dyx2ri33o/image/upload/v1770275451/logo_ozaicn.png",
         cta_text: str | None = None,
         action_url: str | None = None,
     ) -> str:
@@ -63,7 +64,7 @@ class EmailSender:
 <!-- Logo -->
 <tr>
 <td align="center" style="padding:28px 0 12px 0;">
-<img src="{logo_url}" width="160" alt="Fresh Bread Bakery"
+<img src="{logo_url}" width="160" alt="Kingfood"
      style="display:block; border:0;">
 </td>
 </tr>
@@ -117,7 +118,7 @@ class EmailSender:
            text-align:center;">
 Please don't reply here.<br>
 Best regards,<br>
-<strong><span style="color: {brand_color};">Fresh Bread</span> Team</strong><br>
+<strong><span style="color: {brand_color};">Kingfood</span> Team</strong><br>
 kingfood.ca
     </td>
     </tr>
@@ -155,7 +156,7 @@ kingfood.ca
         send_mail(
             final_subject,
             message or "",
-            "order.freshbread911@gmail.com",
+            "kingfoodca@gmail.com",
             [to],
             fail_silently=False,
             html_message=html_body,

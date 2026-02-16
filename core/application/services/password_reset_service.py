@@ -13,6 +13,7 @@ from django.utils import timezone
 
 from ...domain.utils.verification_code import generate_verification_code
 from ...infrastructure.repositories.user_repository import UserRepository
+from ...infrastructure.email.email_sender import email_sender
 
 
 class PasswordResetException(Exception):
@@ -203,17 +204,16 @@ class PasswordResetService:
             code: کد تایید
         """
         try:
-            send_mail(
-                subject="Password Reset Verification Code - Fresh Bread Bakery",
+            email_sender.send(
+                subject="Password Reset Verification Code",
                 message=(
                     f"Hello {username},\n\n"
-                    f"🔸 Verification Code: {code}\n\n"
-                    "This code will expire in 5 minutes.\n\n"
-                    "Fresh Bread Bakery Team\nhttp://127.0.0.1:8000"
+                    f"Verification Code: {code}\n\n"
+                    "This code will expire in 5 minutes."
                 ),
-                from_email="order.freshbread911@gmail.com",
-                recipient_list=[email],
-                fail_silently=False,
+                to=email,
+                title="Password Reset",
+                wrap=True,
             )
         except Exception as e:
             raise PasswordResetException(
@@ -230,17 +230,16 @@ class PasswordResetService:
             email: آدرس ایمیل
         """
         try:
-            send_mail(
-                subject="Password changed - Fresh Bread Bakery",
+            email_sender.send(
+                subject="Password changed",
                 message=(
                     f"Hello {username},\n\n"
                     "Your account password has been changed.\n\n"
-                    "If you did not do this, please contact us.\n\n"
-                    "Fresh Bread Bakery Team\nhttp://127.0.0.1:8000"
+                    "If you did not do this, please contact us."
                 ),
-                from_email="order.freshbread911@gmail.com",
-                recipient_list=[email],
-                fail_silently=False,
+                to=email,
+                title="Password Changed",
+                wrap=True,
             )
         except Exception:
             # اگر ایمیل ارسال نشد، نباید مانع موفقیت ریست شود

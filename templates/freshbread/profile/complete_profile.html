@@ -3,90 +3,289 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Complete Profile - Fresh Bread</title>
-  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-
-<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+<title>Complete Profile - Kingfood</title>
+<link rel="icon" type="image/png" href="{% static 'images/favicon.ico' %}" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 <style>
-* { box-sizing: border-box; font-family: 'Roboto', sans-serif; }
-body { background: url("{% static 'css/images/bg/bs.jpg' %}") no-repeat center center fixed; background-size: cover; margin:0; padding:0; display:flex; flex-direction:column; align-items:center; min-height:100vh; padding-top:60px; }
-.signup-container { width:400px; background:#e0e5ec; border-radius:20px; padding:35px 25px; box-shadow:4px 4px 10px #bec5d1, -4px -4px 10px #ffffff; animation:fadeIn 1s ease-in-out; z-index:1; position:relative; }
-@keyframes fadeIn { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
-h2 { text-align:center; margin-bottom:25px; color:#4a4a4a; font-weight:700; letter-spacing:1.2px; font-size:24px; }
-.form-group { margin-bottom:18px; position:relative; }
-.form-group i { position:absolute; top:50%; left:12px; transform:translateY(-50%); color:#a3b1c6; font-size:16px; }
-.form-group input { width:100%; padding:10px 10px 10px 40px; border-radius:10px; border:none; background:#e0e5ec; box-shadow:inset 6px 6px 8px #bec5d1, inset -6px -6px 8px #ffffff; font-size:14px; color:#555; }
-.form-group input:focus { outline:none; box-shadow: inset 4px 4px 6px #bec5d1, inset -4px -4px 6px #ffffff, 3px 3px 7px rgba(59,130,246,0.5); color:#222; }
-.form-group input::placeholder { color:#b0b8c1; font-style:italic; }
-.btn-submit { width:100%; padding:12px; margin-top:6px; border-radius:14px; border:none; background:#e0e5ec; box-shadow:6px 6px 8px #bec5d1, -6px -6px 8px #ffffff; font-size:16px; font-weight:700; color:#3b82f6; cursor:pointer; transition:all 0.3s ease; }
-.btn-submit:hover { box-shadow: inset 6px 6px 8px #bec5d1, inset -6px -6px 8px #ffffff; color:#1e40af; }
-#error-banner { color:#fff; background:#dc2626; padding:10px 18px; border-radius:12px; margin-bottom:18px; text-align:center; box-shadow:0 4px 12px rgba(220,38,38,0.4); }
-#map { height:300px; border-radius:15px; margin-top:15px; box-shadow:0 4px 12px rgba(0,0,0,0.1); position:relative; }
-.map-pin { position:absolute; top:50%; left:50%; width:30px; height:30px; transform:translate(-50%,-100%); z-index:999; pointer-events:none; }
-.map-pin img { width:30px; height:30px; }
-#location-status, #live-address { margin-top:10px; font-size:14px; color:#666; word-break: break-word; }
-.location-btn { margin-top:10px; background-color:#007bff; color:white; border:none; padding:8px 15px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s ease; }
-.location-btn:hover { background-color:#0056b3; }
-.decor-circle { position:absolute; border-radius:50%; background:#f0f5fa; box-shadow:10px 10px 20px #babecc, -10px -10px 20px #ffffff; opacity:0.6; animation:floatUp 6s ease-in-out infinite; }
-.circle1 {width:100px; height:100px; top:-50px; left:-50px;}
-.circle2 {width:80px; height:80px; bottom:-40px; right:-40px;}
-.circle3 {width:50px; height:50px; top:20%; right:-25px;}
-.circle4 {width:60px; height:60px; bottom:10%; left:-30px;}
-@keyframes floatUp {0%{transform:translateY(0);}50%{transform:translateY(-5px);}100%{transform:translateY(0);}}
+    * { box-sizing: border-box; font-family: "Roboto", sans-serif; }
+
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(
+                circle at top left,
+                rgba(255, 96, 219, 0.40),
+                transparent 45%
+            ),
+            radial-gradient(
+                circle at bottom right,
+                rgba(86, 191, 255, 0.40),
+                transparent 45%
+            ),
+            linear-gradient(
+                135deg,
+                #142050,
+                #1a2b63,
+                #1f3a7a
+            );
+        background-size: cover;
+        background-attachment: fixed;
+        overflow: hidden;
+        padding-top: 40px; /* کمی فاصله از بالا برای موبایل */
+    }
+
+    /* Glassmorphism card */
+    .profile-card {
+        position: relative;
+        width: 440px;
+        max-width: 92%;
+        padding: 45px 35px;
+        border-radius: 22px;
+        background: rgba(39, 44, 85, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.15);
+        box-shadow: 0 0 30px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.05);
+        animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+        background: linear-gradient(90deg, #ff43c1, #7acbff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 22px;
+    }
+
+    .form-group i {
+        position: absolute;
+        top: 50%;
+        left: 16px;
+        transform: translateY(-50%);
+        color: #c8d2e0;
+        font-size: 17px;
+        z-index: 1;
+    }
+
+    .form-group input,
+    .form-group input[type="number"] {
+        width: 100%;
+        padding: 15px 16px 15px 48px;
+        background: rgba(255,255,255,0.08);
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        color: #fff;
+        outline: none;
+        transition: 0.25s;
+        backdrop-filter: blur(6px);
+    }
+
+    .form-group input::placeholder {
+        color: #a9b3c6;
+    }
+
+    .form-group input:focus {
+        background: rgba(255,255,255,0.18);
+        box-shadow: 0 0 12px rgba(110,180,255,0.45);
+    }
+
+    /* Map container */
+    .map-wrapper {
+        margin: 10px 0 20px;
+    }
+
+    .map-wrapper label {
+        display: block;
+        color: #d5d8e1;
+        font-weight: 500;
+        margin-bottom: 10px;
+        font-size: 15px;
+    }
+
+    #map {
+        height: 260px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        background: rgba(0,0,0,0.2);
+    }
+
+    #location-status, #live-address {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #c8d2e0;
+        line-height: 1.5;
+    }
+
+    .location-btn {
+        margin: 12px 0 18px;
+        width: 100%;
+        padding: 13px;
+        border-radius: 12px;
+        border: none;
+        background: rgba(255,255,255,0.1);
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        backdrop-filter: blur(6px);
+        transition: 0.3s;
+        border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .location-btn:hover {
+        background: rgba(255,255,255,0.18);
+        box-shadow: 0 0 15px rgba(110,180,255,0.4);
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 14px;
+        border: none;
+        background: linear-gradient(90deg, #ff45c4, #6bc7ff);
+        color: #fff;
+        font-size: 17px;
+        font-weight: 700;
+        cursor: pointer;
+        letter-spacing: 1px;
+        box-shadow: 0 0 15px rgba(255,255,255,0.25);
+        transition: 0.3s;
+    }
+
+    .btn-submit:hover {
+        filter: brightness(1.15);
+        transform: scale(1.02);
+    }
+
+    /* Floating decor dots */
+    .dot {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+        filter: blur(4px);
+        animation: float 7s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%,100% { transform: translateY(0); }
+        50%     { transform: translateY(-14px); }
+    }
+
+    .d1 { width: 90px;  height: 90px;  top: -45px; left: -40px; animation-delay: 0s; }
+    .d2 { width: 60px;  height: 60px;  bottom: -35px; right: -30px; animation-delay: 2s; }
+    .d3 { width: 45px;  height: 45px;  top: 40%; right: -25px; animation-delay: 4s; }
+
+    /* Error / status */
+    #error-banner, .top-error-banner {
+        background: rgba(220,38,38,0.85);
+        backdrop-filter: blur(8px);
+        color: white;
+        padding: 14px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 15px;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
 </style>
+
 </head>
 <body>
 
 {% if messages %}
-<div id="topErrorBanner" class="top-error-banner" role="alert" aria-live="assertive">
-      <i class="fa fa-exclamation-circle" aria-hidden="true"></i>  
+<div id="topErrorBanner" class="top-error-banner" role="alert">
+    <i class="fa fa-exclamation-circle"></i>
     {% for message in messages %}
-      <span>{{ message }}</span>
+        <span>{{ message }}</span>
     {% endfor %}
-  </div>
+</div>
 {% endif %}
-<div class="signup-container">
-  <div class="decor-circle circle1"></div>
-  <div class="decor-circle circle2"></div>
-  <div class="decor-circle circle3"></div>
-  <div class="decor-circle circle4"></div>
 
-  <h2>Complete Your Profile</h2>
+<div class="profile-card">
 
-  <form method="POST">
-    {% csrf_token %}
-    <div class="form-group"><i class="fa fa-user"></i><input type="text" name="first_name" placeholder="First Name" required></div>
-    <div class="form-group"><i class="fa fa-user"></i><input type="text" name="last_name" placeholder="Last Name" required></div>
-    <div class="form-group"><i class="fa fa-phone"></i><input type="number" name="phone" placeholder="Phone number" required></div>
-    <div class="form-group"><i class="fa fa-map-marker-alt"></i><input type="text" name="postalcode" placeholder="Postal code" required></div>
-    <div class="form-group"><i class="fa fa-gift"></i><input type="text" name="referral_code" placeholder="Referral code (optional) – if you don't have, leave empty"></div>
+    <div class="dot d1"></div>
+    <div class="dot d2"></div>
+    <div class="dot d3"></div>
 
-    <!-- Map -->
-    <div class="form-group">
-      <label>Select Location (Ottawa Area Only)</label>
-      <button type="button" id="locateMe" class="location-btn">📍 Use My Location</button>
-      <div id="map"></div>
-      <p id="location-status">Move the map or use GPS to select your location...</p>
-      <p id="live-address"></p>
+    <h2>COMPLETE PROFILE</h2>
 
-      <!-- Hidden inputs -->
-      <input type="hidden" name="latitude" id="latitude">
-      <input type="hidden" name="longitude" id="longitude">
-      <input type="hidden" name="complete_address" id="complete_address">
-    </div>
-    <button type="submit" class="btn-submit">Continue</button>
-  </form>
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <i class="fa fa-user"></i>
+            <input type="text" name="first_name" placeholder="First Name" required>
+        </div>
+
+        <div class="form-group">
+            <i class="fa fa-user"></i>
+            <input type="text" name="last_name" placeholder="Last Name" required>
+        </div>
+
+        <div class="form-group">
+            <i class="fa fa-phone"></i>
+            <input type="number" name="phone" placeholder="Phone number" required>
+        </div>
+
+        <div class="form-group">
+            <i class="fa fa-map-marker-alt"></i>
+            <input type="text" name="postalcode" placeholder="Postal code" required>
+        </div>
+
+        <div class="form-group">
+            <i class="fa fa-gift"></i>
+            <input type="text" name="referral_code" placeholder="Referral code (optional)">
+        </div>
+
+        <!-- Map Section -->
+        <div class="map-wrapper">
+            <label>Select Location (Ottawa Area Only)</label>
+            <button type="button" id="locateMe" class="location-btn">📍 Use My Location</button>
+            <div id="map"></div>
+            <p id="location-status">Move the map or use GPS to select your location...</p>
+            <p id="live-address"></p>
+
+            <!-- Hidden fields -->
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+            <input type="hidden" name="complete_address" id="complete_address">
+        </div>
+
+        <button type="submit" class="btn-submit">Continue</button>
+    </form>
+
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
+// همان کد جاوااسکریپت قبلی شما بدون تغییر (فقط استایل عوض شده)
 const ottawaCenter = [45.4215, -75.6993];
 const bounds = L.latLngBounds([45.2, -75.95], [45.55, -75.3]);
 
-// init map
 const map = L.map('map', {
     center: ottawaCenter,
     zoom: 13,
@@ -95,30 +294,26 @@ const map = L.map('map', {
 });
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
+    attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// DOM refs
 const status = document.getElementById("location-status");
 const latInput = document.getElementById("latitude");
 const lngInput = document.getElementById("longitude");
 const addrInput = document.getElementById("complete_address");
 
-// marker
 let lastValidPos = ottawaCenter.slice();
 const marker = L.marker(ottawaCenter, { draggable: true }).addTo(map);
 
-// helper: set status
-function setStatus(text, color="#666") {
+function setStatus(text, color="#c8d2e0") {
     status.innerHTML = text;
     status.style.color = color;
 }
 
-// check if marker is on a road using Nominatim
 async function validateLocation(lat, lng, showMessage=true) {
     try {
-const res = await fetch(`/api/reverse-geocode?lat=${lat}&lon=${lng}`);
-const data = await res.json();
+        const res = await fetch(`/api/reverse-geocode?lat=${lat}&lon=${lng}`);
+        const data = await res.json();
 
         const addr = data.address || {};
         const displayName = data.display_name || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
@@ -128,31 +323,29 @@ const data = await res.json();
             latInput.value = lat.toFixed(6);
             lngInput.value = lng.toFixed(6);
             addrInput.value = displayName;
-            setStatus(`📍 You selected: ${displayName}<br>Latitude: ${lat.toFixed(6)}, Longitude: ${lng.toFixed(6)}<br>Address: ${displayName}`, "#28a745");
+            setStatus(`📍 Selected: ${displayName}<br>Lat: ${lat.toFixed(6)} • Lng: ${lng.toFixed(6)}`, "#7acbff");
             return true;
         } else {
-            if(showMessage) alert("⚠️ Marker must be placed on a street/road in Ottawa.");
+            if(showMessage) alert("⚠️ Please place the marker on a street/road in Ottawa.");
             marker.setLatLng(lastValidPos);
             map.panTo(lastValidPos);
-            setStatus("Please place the marker on a street/road.", "red");
+            setStatus("Place marker on a valid Ottawa street.", "#ff6b6b");
             return false;
         }
     } catch(e) {
-        if(showMessage) alert("⚠️ Unable to verify location. Try again.");
+        if(showMessage) alert("⚠️ Cannot verify location right now.");
         marker.setLatLng(lastValidPos);
         map.panTo(lastValidPos);
-        setStatus("Unable to verify location.", "red");
+        setStatus("Location verification failed.", "#ff6b6b");
         return false;
     }
 }
 
-// marker drag
 marker.on('dragend', async e => {
     const { lat, lng } = e.target.getLatLng();
     await validateLocation(lat, lng);
 });
 
-// map click
 map.on('click', async e => {
     const { lat, lng } = e.latlng;
     marker.setLatLng([lat, lng]);
@@ -160,10 +353,9 @@ map.on('click', async e => {
     await validateLocation(lat, lng);
 });
 
-// GPS button
 document.getElementById("locateMe").addEventListener("click", () => {
-    if(!navigator.geolocation) return alert("⚠️ Geolocation not supported.");
-    setStatus("Getting your location...", "#f59e0b");
+    if(!navigator.geolocation) return alert("Geolocation not supported.");
+    setStatus("Fetching your location...", "#facc15");
     navigator.geolocation.getCurrentPosition(async pos => {
         const { latitude, longitude } = pos.coords;
         const current = L.latLng(latitude, longitude);
@@ -172,18 +364,18 @@ document.getElementById("locateMe").addEventListener("click", () => {
             map.setView(current, 15);
             await validateLocation(latitude, longitude);
         } else {
-            alert("⚠️ Your location is outside Ottawa area.");
+            alert("Your location is outside Ottawa area.");
             marker.setLatLng(ottawaCenter);
             map.setView(ottawaCenter, 12);
             await validateLocation(ottawaCenter[0], ottawaCenter[1], false);
         }
     }, () => {
-        alert("⚠️ Unable to access your location. Please allow GPS.");
-        setStatus("Unable to access your location.", "red");
+        alert("Cannot access location. Please allow GPS.");
+        setStatus("Location access denied.", "#ff6b6b");
     });
 });
 
-// initial validation
+// شروع اولیه
 validateLocation(ottawaCenter[0], ottawaCenter[1], false);
 </script>
 
