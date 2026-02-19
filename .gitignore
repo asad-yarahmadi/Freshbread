@@ -1,5 +1,5 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
+freshbread/__pycache__/
 *.py[codz]
 *$py.class
 
@@ -135,7 +135,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env.example
+.env
 .envrc
 .venv
 env/
