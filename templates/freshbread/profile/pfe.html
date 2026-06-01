@@ -110,7 +110,7 @@
 	<div class="container">
 		<div class="profile-card">
             <div class="profile-img">
-                <img id="avatarPreview" src="{{ profile.avatar.url }}" alt="User Profile" style="border-radius:50%; width:130px; height:130px; object-fit:cover; border:4px solid #28a745; box-shadow:0 4px 10px rgba(0,0,0,0.2)" onerror="this.onerror=null;this.src='{% static 'images/def.jpg' %}'">
+                <img id="avatarPreview" src="{% if profile.avatar and profile.avatar.name and profile.avatar.name != 'default_avatar.png' %}{{ profile.avatar.url }}{% else %}{% static 'images/def.jpg' %}{% endif %}" alt="User Profile" style="border-radius:50%; width:130px; height:130px; object-fit:cover; border:4px solid #28a745; box-shadow:0 4px 10px rgba(0,0,0,0.2)" onerror="this.onerror=null;this.src='{% static 'images/def.jpg' %}'">
                 <div class="mt-2">
                     <button type="button" class="btn btn-warning btn-sm" id="changePhotoBtn">Change Photo</button>
                 </div>

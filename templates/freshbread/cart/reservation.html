@@ -391,6 +391,18 @@
                 </div>
               </div>
             </div>
+
+            {% else %}
+                        <div class="alert alert-warning" role="alert" style="border-radius:12px;">
+              <div class="d-flex align-items-start">
+                <i class="fa fa-lightbulb-o me-2" aria-hidden="true" style="margin-right:8px"></i>
+                <div>
+                  <strong>Pro tip:</strong> Share your code <a href="{% url 'ru' %}">Login in to check!</a>. <br>
+                  For every 7 people who order using your code, you’ll receive a $50 discount code. <br>
+                    <div class="mt-1">Completed referral orders: <strong><a href="{% url 'ru' %}">Login in to check!</a></strong></div>
+                </div>
+              </div>
+            </div>
             {% endif %}
             <p>Original Total: <strong id="original-total">${{ original_total|floatformat:2 }}</strong></p>
             <p id="savings-row" {% if savings <= 0 %}style="display:none;"{% endif %}>

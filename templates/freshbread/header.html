@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function() {
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <header class="top-navbar">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
               <a class="dropdown-item" href="{% url 'stuff' %}">Stuff</a>
               <a class="dropdown-item" href="{% url 'gallery' %}">Gallery</a>
               <a class="dropdown-item" href="{% url 'about' %}">About</a>
-              <a class="dropdown-item" href="{% url 'coming_soon' %}">Coming soon</a>
+              <a class="dropdown-item" href="{% url 'tickets' %}">Support</a>
 
             </div>
           </li>
@@ -135,12 +135,13 @@ document.addEventListener("DOMContentLoaded", function() {
             <div class="dropdown-menu" aria-labelledby="dropdown-admin">
               <a class="dropdown-item" href="{% url 'manage' %}">Manage Foods</a>
               <a class="dropdown-item" href="{% url 'review_check' %}">Review Check</a>
-              <a class="dropdown-item" href="{% url 'admin_email' %}">Email Sender</a>
+              <a class="dropdown-item" href="{% url 'admin_email' %}">Massage Sender</a>
               <a class="dropdown-item" href="{% url 'admin_order_reviews' %}">Order check</a>
               <a class="dropdown-item" href="{% url 'manage_orders' %}">Orders manage</a>
               <a class="dropdown-item" href="/admin_adminali_admin/infrastructure/galleryimage/">Manage Gallery</a>
               <a class="dropdown-item" href="{% url 'admin_users' %}">Users manage</a>
               <a class="dropdown-item" href="{% url 'admin_tickets' %}">Tickets manage</a>
+              <a class="dropdown-item text-danger" href="{% url 'admin_security' %}">Security</a>
               
             </div>
           </li>

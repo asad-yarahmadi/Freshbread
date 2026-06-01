@@ -33,10 +33,10 @@ class PasswordResetService:
     """
     
     # ثابت‌های محدودیت
-    MAX_FAILURES_PER_IP = 3
+    MAX_FAILURES_PER_IP = 5
     FAILURE_BAN_DURATION = 60 * 60 * 30  # 30 ساعت
     CODE_EXPIRY_SECONDS = 300  # 5 دقیقه (نه 2 دقیقه)
-    MAX_RESETS_PER_30_HOURS = 2
+    MAX_RESETS_PER_30_HOURS = 4
     STEP_COMPLETION_TIMEOUT = 600  # 10 دقیقه
     
     @classmethod
@@ -66,7 +66,7 @@ class PasswordResetService:
             ban_key = f"ban_{ip}"
             cache.set(ban_key, True, cls.FAILURE_BAN_DURATION)
             raise RateLimitedException(
-                "⛔ شما برای 30 ساعت محدود شده‌اید."
+                "You have been limited for 30 Hours⛔"
             )
         
         # گرفتن کاربر
@@ -75,7 +75,7 @@ class PasswordResetService:
             failures += 1
             cache.set(failure_key, failures, cls.FAILURE_BAN_DURATION)
             raise PasswordResetException(
-                "❌ نام کاربری و ایمیل تطابق ندارند."
+                "❌ Invalid information. Please check your username and email."
             )
         
         # تولید کد و ذخیره در cache
@@ -120,11 +120,11 @@ class PasswordResetService:
                 ban_key = f"ban_{ip}"
                 cache.set(ban_key, True, cls.FAILURE_BAN_DURATION)
                 raise RateLimitedException(
-                    "⛔ شما برای 30 ساعت محدود شده‌اید."
+                    "⛔ You have been banned for 12 hours."
                 )
             
             raise PasswordResetException(
-                "❌ کد تایید اشتباه است."
+                "❌ Invalid verification code. Please check your email."
             )
         
         # علامت‌گذاری مرحله 2 به عنوان تکمیل شده
@@ -162,7 +162,7 @@ class PasswordResetService:
         user = UserRepository.get_user_by_username(username)
         if not user:
             raise PasswordResetException(
-                "❌ کاربر پیدا نشد."
+                "❌ User not found."
             )
         
         # بررسی محدودیت ریست (2 بار در 30 ساعت)
@@ -178,7 +178,7 @@ class PasswordResetService:
         
         if len(reset_times) >= cls.MAX_RESETS_PER_30_HOURS:
             raise RateLimitedException(
-                "⛔ شما فقط می‌توانید در 30 ساعت 2 بار پسورد خود را تغییر دهید."
+                "⛔ You can change your password only twice per 30 hours!"
             )
         
         # بروزرسانی پسورد
@@ -217,7 +217,7 @@ class PasswordResetService:
             )
         except Exception as e:
             raise PasswordResetException(
-                f"❌ خطا در ارسال ایمیل: {str(e)}"
+                f"❌ Fali in sending Email: {str(e)}"
             )
     
     @staticmethod

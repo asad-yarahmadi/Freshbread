@@ -4,7 +4,7 @@ from django.utils.text import slugify
 class Product(models.Model):
     CATEGORY_CHOICES = [
         ('fastfood', 'Fast Food'),
-        ('slowfood', 'Slow Food'),
+        ('iranianfood', 'Iranian food'),
         ('bread', 'Bread'),
     ]
 

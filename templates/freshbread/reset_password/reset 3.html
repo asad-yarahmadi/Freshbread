@@ -4,199 +4,339 @@
 <head>
 <meta charset="UTF-8" />
 <title>Reset Password - Kingfood</title>
-
 <link rel="icon" type="image/png" href="{% static 'images/favicon.ico' %}" />
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
-    * { box-sizing: border-box; font-family: "Roboto", sans-serif; }
+* { box-sizing: border-box; font-family: "Roboto", sans-serif; }
 
-    body {
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+body {
+    margin: 0; padding: 0; min-height: 100vh;
+    display: flex; justify-content: center; align-items: center;
+    background: radial-gradient(circle at top left, rgba(255, 96, 219, 0.40), transparent 45%),
+                radial-gradient(circle at bottom right, rgba(86, 191, 255, 0.40), transparent 45%),
+                linear-gradient(135deg, #142050, #1a2b63, #1f3a7a);
+    background-size: cover; background-attachment: fixed; overflow: hidden;
+}
 
-        background: radial-gradient(circle at top left, rgba(255, 96, 219, 0.40), transparent 45%),
-                    radial-gradient(circle at bottom right, rgba(86, 191, 255, 0.40), transparent 45%),
-                    linear-gradient(135deg, #142050, #1a2b63, #1f3a7a);
-        background-size: cover;
-        background-attachment: fixed;
-    }
+/* Progress Bar */
+#progress-bar {
+    position: fixed; top: 0; left: 0; width: 0%; height: 3px;
+    background: linear-gradient(90deg, #ff45c4, #6bc7ff);
+    z-index: 10000; box-shadow: 0 0 8px rgba(255, 69, 196, 0.6);
+    transition: width 0.4s ease;
+}
 
-    .login-card {
-        position: relative;
-        width: 420px;
-        padding: 45px 40px;
-        border-radius: 22px;
-        background: rgba(39, 44, 85, 0.5);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255,255,255,0.15);
-        box-shadow: 0 0 30px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.05);
-        animation: fadeIn 0.7s ease;
-    }
+/* Return to Home */
+.return-home {
+    position: absolute; top: 20px; left: 20px;
+    display: flex; align-items: center; gap: 8px;
+    color: #fff; background: rgba(255,255,255,0.1);
+    padding: 10px 16px; border-radius: 50px; text-decoration: none;
+    font-size: 14.5px; backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: 0.3s; z-index: 100;
+}
+.return-home:hover { background: rgba(255,255,255,0.25); transform: translateX(-5px); }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(25px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
+@media (max-width: 576px) {
+    .return-home { padding: 12px; border-radius: 50%; }
+    .return-home span { display: none; }
+}
 
-    h2 {
-        text-align: center;
-        font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 25px;
-        background: linear-gradient(90deg, #ff43c1, #7acbff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+/* Card */
+.login-card {
+    position: relative; width: 100%; max-width: 420px; padding: 45px 40px;
+    border-radius: 22px; background: rgba(39, 44, 85, 0.5);
+    backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 0 30px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.05);
+    animation: fadeIn 0.7s ease; margin: 20px;
+}
 
-    .form-group {
-        margin-bottom: 22px;
-    }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
 
-    .form-group input {
-        width: 100%;
-        padding: 15px 16px;
-        background: rgba(255,255,255,0.08);
-        border: none;
-        border-radius: 12px;
-        font-size: 15px;
-        color: #fff;
-        outline: none;
-        transition: 0.25s;
-        backdrop-filter: blur(6px);
-    }
+h2 {
+    text-align: center; font-size: 28px; font-weight: 700; margin-bottom: 30px;
+    background: linear-gradient(90deg, #ff43c1, #7acbff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
 
-    .form-group input::placeholder {
-        color: #a9b3c6;
-    }
+/* Inputs */
+.form-group { position: relative; margin-bottom: 22px; }
+.form-group i {
+    position: absolute; top: 50%; left: 16px; transform: translateY(-50%);
+    color: #c8d2e0; font-size: 17px; transition: all 0.3s ease;
+}
+.form-group input {
+    width: 100%; padding: 15px 16px 15px 48px;
+    background: rgba(255,255,255,0.08); border: none;
+    border-radius: 12px; font-size: 15px; color: #fff; outline: none;
+}
+.form-group input:focus {
+    background: rgba(255,255,255,0.18);
+    box-shadow: 0 0 12px rgba(110,180,255,0.45);
+}
 
-    .form-group input:focus {
-        background: rgba(255,255,255,0.18);
-        box-shadow: 0 0 12px rgba(110,180,255,0.45);
-    }
+/* Password Strength */
+.password-strength-container {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.45s ease;
+}
+.password-strength-container.show {
+    opacity: 1;
+    max-height: 55px;
+}
+#password-strength {
+    flex: 1; height: 6px; border-radius: 10px; background: #333; overflow: hidden;
+}
+.strength-bar {
+    height: 100%; width: 0%; transition: width 0.4s ease, background-color 0.3s ease;
+}
+.strength-text {
+    font-size: 13.5px; font-weight: 500; color: #c8d2e0;
+    min-width: 130px; white-space: nowrap;
+}
 
-    .btn-submit {
-        width: 100%;
-        padding: 15px;
-        margin-top: 5px;
-        border-radius: 14px;
-        border: none;
-        background: linear-gradient(90deg, #ff45c4, #6bc7ff);
-        color: #fff;
-        font-size: 17px;
-        font-weight: 700;
-        cursor: pointer;
-        letter-spacing: 1px;
-        box-shadow: 0 0 15px rgba(255,255,255,0.25);
-        transition: 0.3s;
-    }
+/* Button */
+.btn-submit {
+    width: 100%; padding: 15px; margin-top: 12px; border-radius: 14px;
+    border: none; background: linear-gradient(90deg, #ff45c4, #6bc7ff);
+    color: #fff; font-size: 17px; font-weight: 700; cursor: pointer;
+    position: relative; overflow: hidden; display: flex;
+    align-items: center; justify-content: center; gap: 10px;
+    opacity: 0.6; pointer-events: none;
+}
+.btn-submit.active {
+    opacity: 1; pointer-events: auto;
+}
+.btn-submit:hover { filter: brightness(1.15); transform: scale(1.03); }
+.btn-submit.loading { pointer-events: none; filter: brightness(0.95); }
+.btn-submit .spinner {
+    width: 23px; height: 23px; border: 3.5px solid rgba(255,255,255,0.35);
+    border-top-color: #fff; border-radius: 50%; animation: spin 0.75s linear infinite;
+    display: none;
+}
+.btn-submit.loading .spinner { display: block; }
+.btn-submit.loading span { opacity: 0; visibility: hidden; width: 0; }
 
-    .btn-submit:hover {
-        transform: scale(1.03);
-        filter: brightness(1.2);
-    }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Floating decoration dots */
-    .dot {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.08);
-        filter: blur(4px);
-        animation: float 6s ease-in-out infinite;
-    }
-
-    @keyframes float {
-        0%,100% { transform: translateY(0); }
-        50%     { transform: translateY(-12px); }
-    }
-
-    .d1 { width: 80px; height: 80px; top: -40px; left: -35px; }
-    .d2 { width: 55px; height: 55px; bottom: -30px; right: -25px; }
-    .d3 { width: 40px; height: 40px; top: 35%; right: -20px; }
+/* Floating Dots */
+.dot {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    filter: blur(4px);
+    animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-12px); }
+}
+.d1 { width: 80px; height: 80px; top: -40px; left: -35px; }
+.d2 { width: 55px; height: 55px; bottom: -30px; right: -25px; }
+.d3 { width: 40px; height: 40px; top: 35%; right: -20px; }
 </style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </head>
 <body>
 
-{% if messages %}
-<script>
-document.addEventListener("DOMContentLoaded", function() {
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
 
-    const messages = [
-        {% for message in messages %}
-        { text: "{{ message|escapejs }}", tag: "{{ message.tags }}" },
-        {% endfor %}
-    ];
-
-    function getAlertColors(tag) {
-        switch (tag) {
-            case 'success': return { bg:'#22c55e', text:'#fff', icon:'success' };
-            case 'error':   return { bg:'#dc2626', text:'#fff', icon:'error' };
-            case 'warning': return { bg:'#facc15', text:'#000', icon:'warning' };
-            default:        return { bg:'#2563eb', text:'#fff', icon:'info' };
-        }
-    }
-
-    function isMobile() { return window.innerWidth < 768; }
-
-    function showNext(index = 0) {
-        if (index >= messages.length) return;
-
-        const style = getAlertColors(messages[index].tag);
-        const mobile = isMobile();
-
-        Swal.fire({
-            title: messages[index].text,
-            icon: style.icon,
-            background: style.bg,
-            color: style.text,
-            timer: 6500,
-            timerProgressBar: true,
-            showConfirmButton: false,
-            toast: !mobile,
-            position: mobile ? 'center' : 'top-end',
-            showClass: { popup: 'animate__animated animate__fadeInDown' },
-            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
-        }).then(() => showNext(index + 1));
-    }
-
-    showNext();
-});
-</script>
-{% endif %}
+<!-- Return to Home -->
+<a href="{% url 'index' %}" class="return-home">
+    <i class="fas fa-arrow-left"></i>
+    <span>Return to Home</span>
+</a>
 
 <div class="login-card">
-
     <div class="dot d1"></div>
     <div class="dot d2"></div>
     <div class="dot d3"></div>
 
     <h2>Set Your Password</h2>
 
-    <form method="POST" action="{% url 'reset_password_step3' %}">
+    <form id="reset-form" method="POST" action="{% url 'reset_password_step3' %}">
         {% csrf_token %}
-        
+
         <div class="form-group">
-            <input type="password" name="npassword" placeholder="New Password" required>
+            <i class="fa fa-lock" id="lock-icon"></i>
+            <input type="password" id="npassword" name="npassword" placeholder="New Password" required />
+            
+            <div class="password-strength-container" id="strength-container">
+                <div id="strength-text" class="strength-text"></div>
+                <div id="password-strength"><div class="strength-bar" id="strength-bar"></div></div>
+            </div>
         </div>
 
         <div class="form-group">
-            <input type="password" name="npassword_confirm" placeholder="Confirm New Password" required>
+            <i class="fa fa-lock"></i>
+            <input type="password" id="npassword_confirm" name="npassword_confirm" placeholder="Confirm New Password" required />
         </div>
 
-        <button type="submit" class="btn-submit">Continue</button>
+        <button type="submit" id="submit-btn" class="btn-submit">
+            <span>Continue</span>
+            <div class="spinner"></div>
+        </button>
     </form>
-
 </div>
+
+<script>
+// Progress Bar
+const progressBar = document.getElementById('progress-bar');
+function startProgress() {
+    progressBar.style.width = '0%';
+    setTimeout(() => progressBar.style.width = '95%', 50);
+}
+document.querySelectorAll('a').forEach(link => link.addEventListener('click', startProgress));
+
+// Password Strength Logic
+const passwordInput = document.getElementById('npassword');
+const lockIcon = document.getElementById('lock-icon');
+const strengthContainer = document.getElementById('strength-container');
+const strengthBar = document.getElementById('strength-bar');
+const strengthText = document.getElementById('strength-text');
+const submitBtn = document.getElementById('submit-btn');
+let hasFocused = false;
+
+function containsNonEnglish(text) {
+    return /[^\x00-\x7F]/.test(text);
+}
+
+function checkPasswordStrength(password) {
+    if (password === '') {
+        strengthBar.style.width = "0%";
+        if (hasFocused) {
+            strengthText.textContent = "Upper • Lower • Number • Symbol";
+            strengthText.style.color = "#c8d2e0";
+        }
+        submitBtn.classList.remove('active');
+        return;
+    }
+
+    if (containsNonEnglish(password)) {
+        strengthText.textContent = "Only English characters allowed";
+        strengthText.style.color = "#ff4444";
+        strengthBar.style.width = "0%";
+        submitBtn.classList.remove('active');
+        return;
+    }
+
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+
+    const width = (score / 5) * 100;
+    strengthBar.style.width = width + '%';
+
+    const colors = ['#ff4444', '#ffaa00', '#ffdd00', '#44ff88'];
+    strengthBar.style.backgroundColor = colors[Math.min(score-1, 3)];
+
+    if (score <= 2) {
+        strengthText.textContent = "Weak";
+        strengthText.style.color = "#ff4444";
+        submitBtn.classList.remove('active');
+    } else if (score === 3) {
+        strengthText.textContent = "Medium";
+        strengthText.style.color = "#ffdd00";
+        submitBtn.classList.remove('active');
+    } else if (score === 4) {
+        strengthText.textContent = "Strong";
+        strengthText.style.color = "#44ff88";
+        submitBtn.classList.add('active');
+    } else  {
+        strengthText.textContent = "Very Strong";
+        strengthText.style.color = "#44ff88";
+        submitBtn.classList.add('active');
+    }
+}
+
+// Events
+passwordInput.addEventListener('focus', () => {
+    hasFocused = true;
+    strengthContainer.classList.add('show');
+    lockIcon.style.transform = 'translateY(-8px)';
+    strengthText.textContent = "Upper • Lower • Number • Symbol";
+    strengthText.style.color = "#c8d2e0";
+});
+
+passwordInput.addEventListener('input', () => {
+    checkPasswordStrength(passwordInput.value);
+});
+
+passwordInput.addEventListener('blur', () => {
+    lockIcon.style.transform = 'translateY(0)';
+});
+
+// Form Submit
+const form = document.getElementById('reset-form');
+let isSubmitting = false;
+
+form.addEventListener('submit', function(e) {
+    if (isSubmitting) {
+        e.preventDefault();
+        return;
+    }
+    if (!submitBtn.classList.contains('active')) {
+        e.preventDefault();
+        Swal.fire({
+            title: "Weak Password!",
+            text: "Password must be Strong and only contain English characters.",
+            icon: "warning",
+            confirmButtonColor: "#ff45c4"
+        });
+        return;
+    }
+
+    isSubmitting = true;
+    submitBtn.classList.add('loading');
+});
+
+// SweetAlert
+{% if messages %}
+document.addEventListener("DOMContentLoaded", function() {
+    const messages = [{% for message in messages %}{ text: "{{ message|escapejs }}", tag: "{{ message.tags }}" },{% endfor %}];
+    function getAlertColors(tag) {
+        switch(tag) {
+            case 'success': return { bg:'#22c55e', icon:'success' };
+            case 'error':   return { bg:'#dc2626', icon:'error' };
+            case 'warning': return { bg:'#facc15', icon:'warning' };
+            default: return { bg:'#3b82f6', icon:'info' };
+        }
+    }
+    function showNext(index = 0) {
+        if (index >= messages.length) return;
+        const style = getAlertColors(messages[index].tag);
+        Swal.fire({
+            title: messages[index].text,
+            icon: style.icon,
+            background: style.bg,
+            color: '#fff',
+            timer: 6000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: window.innerWidth < 768,
+            position: window.innerWidth < 768 ? 'center' : 'top-end',
+        }).then(() => showNext(index + 1));
+    }
+    showNext();
+});
+{% endif %}
+</script>
 
 </body>
 </html>

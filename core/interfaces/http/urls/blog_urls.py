@@ -6,6 +6,7 @@ urlpatterns = [
     path('add/', blog_add, name='blog_add'),
     path('manage/', blog_manage, name='blog_manage'),
     path('<slug:slug>/review/add/', blog_add_review, name='blog_add_review'),
+    path('review/<int:review_id>/reply/', blog_reply_review, name='blog_reply_review'),
     path('<slug:slug>/like/', blog_like, name='blog_like'),
     path('<slug:slug>/edit/', blog_edit, name='blog_edit'),
     path('<slug:slug>/delete/', blog_delete, name='blog_delete'),

@@ -6,6 +6,7 @@ def signup_view(request):
     from core.application.services.signup_service import signup_service
     from core.application.security.ddos_checker import ddos_checker
     from core.interfaces.http.utils.ip import get_client_ip
+    from core.application.security.suspicious_recorder import mark_form_render, record_failure
 
     blocked = ddos_checker.check(request)
     if blocked:
@@ -26,6 +27,10 @@ def signup_view(request):
             return render(request, "freshbread/verify_email.html")
 
         except Exception as e:
+            uname = (request.POST.get("username") or "").strip()
+            mail = (request.POST.get("email") or "").strip()
+            record_failure(request, "signup_failed", meta_text=f"user={uname} email={mail}")
             messages.error(request, str(e))
 
+    mark_form_render(request, "signup_failed")
     return render(request, "freshbread/signup/su.html")

@@ -4,1627 +4,897 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ product.name }} - Kingfood</title>
+<title>{{ product.name }} – Kingfood</title>
 <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-
-<!-- Styles -->
 <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
 <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-<style>/* ===== Food Details ===== */
-.food-details {
-  padding: 90px 0 60px;
+<style>
+:root {
+  --bg: #f6f3ef;
+  --card: #ffffff;
+  --ink: #1a1410;
+  --ink-2: #57504a;
+  --ink-3: #a09890;
+  --border: #eae5df;
+  --orange: #e85c1c;
+  --orange-light: #fdf1eb;
+  --orange-mid: #f6a882;
+  --green: #1a8a52;
+  --green-light: #e6f7ef;
+  --red: #c42828;
+  --red-light: #fbeaea;
+  --gold: #d4a017;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow: 0 2px 24px rgba(26,20,16,0.09);
 }
 
-.food-image {
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ── PAGE ── */
+.kf-page { max-width: 1060px; margin: 0 auto; padding: 40px 20px 80px; }
+
+/* ── PRODUCT HERO ── */
+.kf-product-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+@media (max-width: 768px) { .kf-product-grid { grid-template-columns: 1fr; } }
+
+/* ── IMAGE SIDE ── */
+.kf-img-wrap {
   position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  cursor: zoom-in;
 }
-
-.food-image img {
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  display: block;
+.kf-img-wrap.discounted {
+  outline: 3px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px var(--orange), var(--shadow);
+}
+#mainProductImage {
   width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
 }
+.kf-img-wrap:hover #mainProductImage { transform: scale(1.04); }
 
-.small-gallery img {
+.kf-discount-badge {
+  position: absolute;
+  top: 14px; left: 14px;
+  background: var(--orange);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 100px;
+  letter-spacing: 0.03em;
+  animation: badgePop 0.4s ease;
+  z-index: 2;
+}
+@keyframes badgePop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.kf-gallery {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.kf-gallery img {
+  width: 60px; height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid var(--border);
   cursor: pointer;
-  border-radius: 8px;
-  width: 60px;
-  transition: transform 0.2s, border 0.2s;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.kf-gallery img:hover { border-color: var(--orange); transform: scale(1.08); }
+
+/* ── INFO SIDE ── */
+.kf-info-side {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 32px 28px;
+}
+.kf-product-name {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+.kf-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.kf-stars { color: var(--gold); font-size: 16px; letter-spacing: 1px; }
+.kf-stars .empty { color: var(--border); }
+.kf-rating-val { font-weight: 700; color: var(--ink); }
+
+.kf-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.kf-price-original {
+  font-size: 15px;
+  color: var(--ink-3);
+  text-decoration: line-through;
+  font-family: 'JetBrains Mono', monospace;
+}
+.kf-price-final {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--green);
+  font-family: 'JetBrains Mono', monospace;
+}
+.kf-discount-pill {
+  background: var(--orange-light);
+  color: var(--orange);
+  border: 1px solid var(--orange-mid);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+.kf-price-single {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--green);
+  font-family: 'JetBrains Mono', monospace;
 }
 
-.small-gallery img:hover {
-  transform: scale(1.2);
-  border: 2px solid #28a745;
+.kf-desc {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.75;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
 }
 
-/* ===== ZOOM BOX ===== */
+/* ── CART CONTROLS ── */
+.kf-cart-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.kf-btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.18s, transform 0.18s;
+}
+.kf-btn-add:hover { opacity: 0.9; transform: translateY(-2px); }
+
+.kf-qty-control {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 4px 6px;
+}
+.kf-qty-control button {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: var(--card);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.kf-qty-control button:hover { background: var(--orange); color: #fff; }
+.kf-qty-num {
+  font-size: 17px;
+  font-weight: 800;
+  min-width: 32px;
+  text-align: center;
+}
+.kf-btn-view {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 100px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.18s;
+}
+.kf-btn-view:hover { opacity: 0.85; color: #fff; }
+.kf-btn-continue {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--border);
+  padding: 11px 20px;
+  border-radius: 100px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.kf-btn-continue:hover { border-color: var(--ink); color: var(--ink); }
+
+.kf-total-line {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.kf-total-line strong { color: var(--green); font-size: 16px; font-family: 'JetBrains Mono', monospace; }
+
+/* ── ZOOM BOX ── */
 #zoomBox {
   position: fixed;
-  right: 40px;
-  top: 140px;
-  width: 420px;
-  height: 420px;
-  border: 2px solid #28a745;
-  background-repeat: no-repeat;
-  background-size: 200%;
-  display: none;
+  right: 32px; top: 120px;
+  width: 400px; height: 400px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 2px solid var(--orange);
+  background: var(--card);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  display: none; opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.25s, transform 0.25s;
   z-index: 9999;
-  border-radius: 12px;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+#zoomBox img {
+  width: 200%; height: 200%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1);
+  transform-origin: 50% 50%;
+  transition: transform-origin 0.06s linear;
 }
 
-/* ===== Product Info ===== */
-.food-info h1 {
-  font-size: 36px;
-  font-weight: 700;
-  margin: 20px 0 15px;
+/* ── REVIEWS SECTION ── */
+.kf-reviews-section {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 36px 32px;
+  margin-bottom: 24px;
 }
+@media (max-width: 580px) { .kf-reviews-section { padding: 24px 16px; } }
 
-.food-info h4 {
-  color: #28a745;
-  font-weight: 600;
-  font-size: 22px;
-  margin-bottom: 20px;
-}
-
-.food-info p.lead {
-  font-size: 17px;
-  color: #555;
-  line-height: 1.8;
-}
-
-.food-info .rating {
-  font-size: 20px;
-  color: #ffc107;
-}
-
-/* ===== Add to Cart ===== */
-.add-to-cart {
+.kf-section-head {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-top: 25px;
-  min-height: 60px;
-}
-
-.add-to-cart button {
-  border-radius: 30px;
-  padding: 10px 25px;
-  font-size: 16px;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-.add-to-cart button:hover {
-  transform: scale(1.05);
-}
-
-/* ===== Quantity Control ===== */
-.quantity-control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  min-height: 50px;
-}
-
-.quantity-control button:hover {
-  transform: scale(1.1);
-}
-
-.quantity {
-  min-width: 35px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-/* ===== Reviews Section ===== */
-.reviews-section {
-  padding: 60px 0 80px;
-  background-color: #fafafa;
-}
-
-.reviews-header {
-  text-align: center;
-  margin-bottom: 50px;
-}
-
-.reviews-header h3 {
-  font-weight: 700;
-  font-size: 28px;
-  margin-bottom: 15px;
-}
-
-.review-summary {
-  font-size: 18px;
-  color: #555;
-}
-
-.review-summary strong {
-  color: #28a745;
-  font-size: 22px;
-}
-
-.review-item {
-  background: #fff;
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
-}
-
-.review-item:hover {
-  transform: translateY(-3px);
-}
-
-.review-rating {
-  font-size: 20px;
-  color: #ffc107;
-  margin-bottom: 8px;
-}
-
-.review-user h5 {
-  margin-bottom: 3px;
-  font-weight: 600;
-}
-
-.review-user small {
-  color: #999;
-}
-
-/* ===== Star Rating ===== */
-.star-rating {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-end;
-  gap: 5px;
-}
-
-.star-rating input {
-  display: none;
-}
-
-.star-rating label {
-  font-size: 26px;
-  color: #ccc;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.star-rating input:checked ~ label,
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-  color: #ffc107;
-}
-
-/* ===== Review Gallery ===== */
-.review-gallery {
-  display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.kf-section-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.kf-avg-block {
+  display: flex;
+  align-items: center;
   gap: 8px;
+}
+.kf-avg-num {
+  font-size: 22px;
+  font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--ink);
+}
+.kf-avg-label { font-size: 13px; color: var(--ink-3); }
+
+/* ── REVIEW CARD ── */
+.kf-review {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+.kf-review:last-of-type { border-bottom: none; }
+
+.kf-review-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 10px;
 }
-
-.review-gallery img.review-thumb {
-  width: 65px;
-  height: 65px;
+.kf-review-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
   object-fit: cover;
-  border-radius: 8px;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+}
+.kf-review-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.kf-review-name a { color: var(--orange); }
+.kf-review-date { font-size: 12px; color: var(--ink-3); }
+.kf-review-stars { font-size: 15px; color: var(--gold); margin-bottom: 8px; }
+.kf-review-body { font-size: 14px; color: var(--ink-2); line-height: 1.7; }
+
+.kf-badge-admin {
+  display: inline-block;
+  background: var(--red-light);
+  color: var(--red);
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 100px;
+  margin-left: 6px;
+  letter-spacing: 0.04em;
+}
+
+/* ── REPLY ── */
+.kf-reply-form { margin-top: 12px; }
+.kf-reply-form textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--bg);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.18s;
+}
+.kf-reply-form textarea:focus { border-color: var(--orange); }
+.kf-reply-btn {
+  margin-top: 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 7px 18px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-2);
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: border-color 0.15s, color 0.15s;
+}
+.kf-reply-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+/* ── NESTED REPLIES ── */
+.kf-thread {
+  margin-top: 14px;
+  margin-left: 20px;
+  padding-left: 16px;
+  border-left: 2px solid var(--border);
 }
 
-.review-gallery img.review-thumb:hover {
-  transform: scale(1.25);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+/* ── REVIEW FORM ── */
+.kf-write-review {
+  background: var(--bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 28px 28px;
+  margin-top: 8px;
 }
+@media (max-width: 580px) { .kf-write-review { padding: 20px 16px; } }
+.kf-write-title { font-size: 17px; font-weight: 800; margin-bottom: 18px; }
 
-/* ===== Review Image Modal ===== */
+.kf-star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+.kf-star-rating input { display: none; }
+.kf-star-rating label {
+  font-size: 28px;
+  color: var(--border);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.kf-star-rating input:checked ~ label,
+.kf-star-rating label:hover,
+.kf-star-rating label:hover ~ label { color: var(--gold); }
+
+.kf-form-field {
+  margin-bottom: 14px;
+}
+.kf-form-field label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-2);
+  display: block;
+  margin-bottom: 6px;
+}
+.kf-form-field textarea,
+.kf-form-field input[type="file"] {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.18s;
+}
+.kf-form-field textarea:focus { border-color: var(--orange); }
+.kf-submit-btn {
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 100px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.18s, transform 0.18s;
+}
+.kf-submit-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+/* ── TOAST ── */
+.kf-toast {
+  position: fixed;
+  right: 20px; top: 20px;
+  z-index: 99999;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: 'Outfit', sans-serif;
+  color: #fff;
+  pointer-events: none;
+  animation: toastIn 2s ease forwards;
+}
+@keyframes toastIn {
+  0%   { opacity: 0; transform: translateY(-14px); }
+  10%  { opacity: 1; transform: translateY(0); }
+  80%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+.kf-toast.success { background: var(--green); }
+.kf-toast.error   { background: var(--red); }
+
+/* ── MODAL ── */
 #reviewImageModal {
   display: none;
   position: fixed;
+  inset: 0;
   z-index: 99999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(3px);
+  background: rgba(0,0,0,0.82);
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 16px;
 }
-
+#reviewImageModal.open { display: flex; }
 #reviewImageModal img {
-  max-width: 80%;
-  max-height: 70vh;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-  animation: fadeZoom 0.3s ease forwards;
-}
-
-@keyframes fadeZoom {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-#reviewImageModal .info-box {
-  color: #fff;
-  text-align: center;
-  max-width: 80%;
-}
-
-#reviewImageModal .info-box h5 {
-  margin-bottom: 8px;
-  font-size: 20px;
-}
-
-#reviewImageModal .info-box p {
-  font-size: 16px;
-  color: #ddd;
-  line-height: 1.6;
-}
-
-#reviewImageModal .close-btn {
-  position: absolute;
-  top: 25px;
-  right: 35px;
-  color: white;
-  font-size: 40px;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-#reviewImageModal .close-btn:hover {
-  color: #ff5555;
-}
-
-/* ===== Stars Average ===== */
-.stars-avg {
-  color: #ffc107;
-  font-size: 1.2rem;
-}
-
-.stars-avg .empty {
-  color: #ddd;
-}
-
-/* ===== Cart Popup ===== */
-#cartPopup {
-  display: none;
-  position: fixed;
-  right: 30px;
-  bottom: 30px;
-  width: 360px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  z-index: 10000;
-  padding: 20px;
-  opacity: 0;
-  transform: translateY(50px);
-  transition: all 0.35s ease;
-}
-
-#cartPopup.show {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-#cartPopup h4 {
-  font-size: 20px;
-  margin-bottom: 15px;
-  color: #28a745;
-}
-
-#cartPopup ul {
-  list-style: none;
-  padding: 0;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-#cartPopup ul li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-}
-
-#cartPopup .cart-total {
-  font-weight: 700;
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-#cartPopup button.close-cart {
-  background: #28a745;
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 15px;
-  width: 100%;
-  font-weight: 600;
-  transition: all 0.25s ease;
-}
-
-#cartPopup button.close-cart:hover {
-  background: #218838;
-}
-/* علامت درصد سه‌بعدی بالا سمت راست */
-.discount-symbol-3d {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 40px;
-    font-weight: 900;
-    color: white;
-    text-shadow:
-        1px 1px 0 #a00000,
-        2px 2px 0 #760000,
-        4px 4px 5px rgba(0, 0, 0, 0.45);
-    transform: rotateX(15deg) rotateY(-15deg);
-    animation: percentJump 1.4s infinite ease-in-out;
-}
-
-@keyframes percentJump {
-    0%   { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-    50%  { transform: translateY(-8px) rotateX(10deg) rotateY(-10deg); }
-    100% { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-}
-
-/* درصد تخفیف کنار قیمت (همیشه نمایش داده شود) */
-.discount-amount.show {
-    margin-left: 8px;
-    font-weight: bold;
-    color: #b30000;
-    background: #ffe6e6;
-    padding: 3px 8px;
-    border-radius: 6px;
-    border: 1px solid #ff4d4d;
-    font-size: 14px;
-    box-shadow: 0 1px 4px rgba(255, 0, 0, 0.25);
-    opacity: 1; /* همیشه دیده شود */
-    transform: translateX(0); /* بدون انیمیشن hover */
-}
-
-/* ===== قاب تصویر با نوار رنگی در حالت تخفیف ===== */
-.twisted-border {
-    position: relative;
-    display: inline-block;
-    border-radius: 12px;
-    padding: 0;
-    overflow: visible;
-    pointer-events: none;
-}
-
-.twisted-border::before {
-    content: "";
-    position: absolute;
-    inset: -4px; /* ضخامت نوار */
-    border-radius: 14px;
-    background: repeating-linear-gradient(
-        45deg,
-        #ff3b3b 0 6px,
-        #ff9900 6px 12px
-    );
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
-    padding: 4px;
-}
-
-.twisted-border img {
-    display: block;
-    border-radius: 12px;
-    pointer-events: auto; /* ✅ فقط خود تصویر موس رو بگیره */
-}
-
-
-/* ===== علامت درصد سه‌بعدی بالا روی تصویر ===== */
-.discount-symbol-3d {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 40px;
-    font-weight: 900;
-    color: #ffffff;
-    text-shadow:
-        1px 1px 0 #a00000,
-        2px 2px 0 #760000,
-        4px 4px 5px rgba(0, 0, 0, 0.45);
-    transform: rotateX(15deg) rotateY(-15deg);
-    animation: percentJump 1.4s infinite ease-in-out;
-    pointer-events: none; /* ✅ موس از این عبور می‌کنه */
-}
-
-
-/* انیمیشن بالا–پایین درصد */
-@keyframes percentJump {
-    0%   { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-    50%  { transform: translateY(-8px) rotateX(10deg) rotateY(-10deg); }
-    100% { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-}
-
-/* ===== باکس تخفیف کنار قیمت ===== */
-.discount-amount {
-    margin-left: 8px;
-    font-weight: bold;
-    color: #b30000;
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: 0.25s;
-    background: #ffe6e6;
-    padding: 3px 8px;
-    border-radius: 6px;
-    border: 1px solid #ff4d4d;
-    font-size: 14px;
-    box-shadow: 0 1px 4px rgba(255, 0, 0, 0.25);
-}
-
-/* فعال شدن باکس تخفیف هنگام hover کارت */
-.food-info:hover .discount-amount {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-/* ===== ریسپانسیو ===== */
-@media (max-width: 576px) {
-    .discount-symbol-3d {
-        font-size: 26px;
-        top: 5px;
-        right: 6px;
-    }
-    .discount-amount {
-        font-size: 12px;
-        padding: 2px 6px;
-    }
-}
-/* === 🛒 Modern Cart Dropdown with Smooth Transition & Backdrop === */
-.cart-count {
-  position: absolute;
-  top: 0;
-  right: -5px;
-  background: #dc3545;
-  color: #fff;
-  font-size: 13px;
-  border-radius: 50%;
-  padding: 2px 7px;
-  font-weight: 600;
-  display: inline-block;
-  box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
-}
-
-#cart-menu { position: relative; display:inline-block; }
-.cart-count {
-  position: absolute; top: -6px; right: -10px;
-  background:#e60023;color:#fff;font-size:11px;padding:2px 6px;border-radius:12px;font-weight:700;
-}
-
-/* popup */
-.cart-popup {
-  position: absolute;
-  top: 120%;
-  right: 0;
-  width: 360px;
-  background: rgba(255,255,255,0.95);
+  max-width: 80vw; max-height: 68vh;
   border-radius: 14px;
-  padding: 14px;
-  box-shadow: 0 12px 36px rgba(0,0,0,0.16);
-  display: none;
-  z-index: 1200;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  animation: modalZoom 0.3s ease;
 }
-#cart-menu:hover .cart-popup { display:block; }
-
-/* tag */
-.cart-tag {
-  display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(0,0,0,0.06);font-weight:600;margin-bottom:10px;
+@keyframes modalZoom { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+#reviewImageModal .modal-info { color: #fff; text-align: center; max-width: 80%; }
+#reviewImageModal .modal-info h5 { font-size: 18px; margin-bottom: 6px; }
+#reviewImageModal .modal-info p  { font-size: 14px; color: #ccc; }
+#reviewImageModal .modal-close {
+  position: absolute; top: 20px; right: 28px;
+  font-size: 36px; color: #fff; cursor: pointer; line-height: 1;
+  transition: color 0.18s;
 }
+#reviewImageModal .modal-close:hover { color: var(--orange); }
 
-/* items */
-.cart-items { max-height:320px; overflow-y:auto; padding-right:6px; margin-bottom:10px; }
-.cart-item { display:flex; gap:12px; align-items:flex-start; padding:8px 4px; border-radius:10px; }
-.cart-img { width:64px;height:64px;object-fit:cover;border-radius:8px; flex-shrink:0; }
-.item-info { flex:1; min-width:0; }
-
-/* name */
-.item-info .name { margin:0 0 6px 0; font-weight:600; font-size:0.95rem; color:#111; }
-
-/* price + discount */
-.price-final { margin:0; font-weight:700; color:#1aa34a; font-size:1rem; }
-.discount-label { margin:4px 0 0 0; font-size:0.85rem; color:#d40000; opacity:0.95; }
-
-/* qty */
-.quantity-control { display:flex; align-items:center; gap:8px; margin-top:8px; }
-.quantity-control button {
-  width:30px;height:30px;border-radius:8px;border:1px solid #e0e0e0;background:#fafafa; cursor:pointer;
-  font-size:18px; font-weight:700; line-height:1;
-}
-.quantity { min-width:26px; text-align:center; font-weight:700; }
-
-/* footer */
-.cart-total-row { display:flex; justify-content:space-between; font-weight:700; padding-top:8px; border-top:1px solid #eee; margin-top:8px; }
-.btn-continue { width:100%; margin-top:8px; padding:10px 0; border-radius:10px; border:none; background:linear-gradient(135deg,#007bff,#0056d6); color:#fff; font-weight:700; cursor:pointer; }
-.btn-continue:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(0,86,214,0.18); }
-
-/* scrollbar */
-.cart-items::-webkit-scrollbar{ width:6px; }
-.cart-items::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.12); border-radius:8px; }
-
-.item-info {
-  flex: 1;
-}
-
-.name {
-  font-weight: 500;
-  margin: 0;
-  font-size: 0.95rem;
-}
-
-.price {
-  font-weight: 600;
-  margin: 2px 0;
-}
-
-.original-price {
-  font-size: 0.8rem;
-}
-
-.quantity-control {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 5px;
-}
-
-.quantity-control button {
-  width: 25px;
-  height: 25px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #f5f5f5;
-  cursor: pointer;
-  font-weight: bold;
-  line-height: 1;
-}
-
-.quantity {
-  min-width: 20px;
-  text-align: center;
-}
-
-
-
-/* NAME */
-.info .name {
-    font-weight: 600;
-    font-size: 14px;
-    margin: 0 0 4px 0;
-}
-
-/* PRICE — NO DISCOUNT */
-.price-normal {
-    font-size: 14px;
-    font-weight: 700;
-    color: #28a745;
-    margin: 0;
-}
-
-/* PRICE — DISCOUNTED (RED STRIKED) */
-.price-discount {
-    color: #d40000;
-    font-size: 13px;
-    font-weight: 600;
-    margin: 0;
-    text-decoration: line-through;
-    opacity: 0.8;
-}
-
-/* PRICE — FINAL (GREEN) */
-.price-final {
-    color: #1aa34a;
-    font-size: 15px;
-    font-weight: 700;
-    margin: 2px 0 0 0;
-}
-
-/* TOTAL */
-.cart-total-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 8px 0;
-    border-top: 1px solid #ececec;
-    margin-bottom: 12px;
-}
-
-/* CONTINUE BUTTON */
-.btn-continue {
-    width: 100%;
-    padding: 11px;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-continue:hover {
-    background: #0056b3;
-}
-
-/* === Item Info === */
-.item-info {
-  flex: 1;
-}
-
-.item-info .name {
-  margin: 0;
-  font-weight: 600;
-  font-size: 15px;
-  color: #333;
-}
-
-.item-info .price {
-  margin: 3px 0 0;
-  color: #28a745;
-  font-size: 14px;
-}
-
-/* === Quantity Control === */
-.quantity-control {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.quantity-control button {
-  border: none;
-  background: #e9ecef;
-  color: #333;
-  border-radius: 6px;
-  padding: 3px 8px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.quantity-control button:hover {
-  background: #007bff;
-  color: #fff;
-  transform: translateY(-1px);
-}
-/* موقعیت صحیح کنار آیکن */
-/* کانتینر اصلی */
-#cart-menu {
-    position: relative;
-    display: inline-block;
-}
-
-/* پاپ‌آپ کارت */
-#cart-menu .cart-popup {
-    position: absolute;
-    top: 130%;
-    right: 0;
-    width: 340px;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-radius: 18px;
-    padding: 16px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
-    border: 1px solid rgba(255,255,255,0.4);
-    
-    display: none;
-    z-index: 999;
-
-    /* انیمیشن */
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.25s ease-out;
-}
-
-/* نمایش با Hover */
-#cart-menu:hover .cart-popup {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* آیتم‌ها */
-.cart-items {
-    max-height: 260px;
-    overflow-y: auto;
-    padding-right: 6px;
-    margin-bottom: 14px;
-}
-
-/* اسکرول شیک */
-.cart-items::-webkit-scrollbar {
-    width: 6px;
-}
-.cart-items::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.3);
-    border-radius: 10px;
-}
-.cart-items::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.2);
-    border-radius: 10px;
-}
-
-/* هر آیتم */
-.cart-items .item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 6px;
-    margin-bottom: 8px;
-    background: rgba(255,255,255,0.55);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-/* فوتر */
-.cart-popup-footer a {
-    display: block;
-    text-align: center;
-    padding: 12px;
-    background: linear-gradient(135deg, #007bff, #0056d6);
-    color: white !important;
-    border-radius: 14px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 15px;
-    transition: 0.25s;
-}
-
-.cart-popup-footer a:hover {
-    background: linear-gradient(135deg, #0056d6, #003c9f);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
-}
-
-
-/* ===== نوار دور تصویر وقتی تخفیف دارد ===== */
-.discount-border {
-    position: relative;
-    display: inline-block;
-    border-radius: 12px;
-    padding: 0; /* نوار کاملاً چسبیده به تصویر */
-
-    border: 3px solid transparent;
-    background: linear-gradient(#ffffff, #ffffff) padding-box,
-                linear-gradient(45deg, #ff4d4d, #ff9900, #ff4d4d) border-box;
-}
-
-.discount-border img {
-    border-radius: 12px;
-}
-
-
-/* ===== علامت درصد سه‌بعدی بالا ===== */
-.discount-symbol-3d {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 45px;
-    font-weight: 900;
-    color: #ffffff;
-
-    text-shadow: 
-        1px 1px 0 #990000,
-        2px 2px 0 #770000,
-        3px 3px 0 #550000,
-        4px 4px 5px rgba(0,0,0,0.45);
-
-    transform: rotateX(15deg) rotateY(-15deg);
-    animation: percentJump 1.4s infinite ease-in-out;
-}
-
-/* انیمیشن بالا–پایین درصد */
-@keyframes percentJump {
-    0%   { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-    50%  { transform: translateY(-8px) rotateX(10deg) rotateY(-10deg); }
-    100% { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-}
-
-
-/* ===== باکس تخفیف که با hover ظاهر می‌شود ===== */
-.discount-amount {
-    margin-left: 8px;
-    font-weight: bold;
-    color: #ffffff;
-
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: 0.25s;
-
-    background: #ff0000;
-    padding: 3px 8px;
-    border-radius: 6px;
-    border: 1px solid #ff0000;
-    font-size: 14px;
-    box-shadow: 0 1px 4px rgba(255, 0, 0, 0.25);
-}
-
-/* فعال شدن باکس تخفیف هنگام hover کارت */
-.product-card:hover .discount-amount {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-
-/* ===== ظاهر کلی کارت ===== */
-.product-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-}
-
-.product-card img {
-    border-radius: 12px;
-    width: 100%;
-}
-
-
-
-/* ===== هماهنگی ریسپانسیو (اختیاری) ===== */
-@media (max-width: 576px) {
-    .discount-symbol-3d {
-        font-size: 26px;
-        top: 5px;
-        right: 6px;
-    }
-    .discount-amount {
-        font-size: 12px;
-        padding: 2px 6px;
-    }
-}
-
-
-
-.discount-border img {
-    border-radius: 12px;
-}
-/* ===== نوار مارپیچی دور تصویر فقط در حالت تخفیف ===== */
-.twisted-border {
-    position: relative;
-    display: inline-block;
-    border-radius: 12px;
-    padding: 0;
-    overflow: visible;
-}
-
-/* ساخت نوار طنابی با pseudo-element */
-.twisted-border::before {
-    content: "";
-    position: absolute;
-    inset: -4px; /* ضخامت نوار */
-    border-radius: 14px;
-
-    background: repeating-linear-gradient(
-        45deg,
-        #ff3b3b 0 6px,
-        #ff9900 6px 12px
-    );
-
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
-
-    padding: 4px;
-}
-
-/* تصویر داخل نوار */
-.twisted-border img {
-    display: block;
-    border-radius: 12px;
-}
-
-
-/* ===== درصد سه‌بعدی بالا ===== */
-.discount-symbol-3d {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 40px;
-    font-weight: 900;
-    color: white;
-
-    text-shadow:
-        1px 1px 0 #a00000,
-        2px 2px 0 #760000,
-        4px 4px 5px rgba(0, 0, 0, 0.45);
-
-    transform: rotateX(15deg) rotateY(-15deg);
-    animation: percentJump 1.4s infinite ease-in-out;
-}
-
-/* انیمیشن بالا پایین درصد */
-@keyframes percentJump {
-    0%   { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-    50%  { transform: translateY(-8px) rotateX(10deg) rotateY(-10deg); }
-    100% { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-}
-
-
-/* ===== باکس تخفیف Hover ===== */
-.discount-amount {
-    margin-left: 8px;
-    font-weight: bold;
-    color: #b30000;
-
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: 0.25s;
-
-    background: #ffe6e6;
-    padding: 3px 8px;
-    border-radius: 6px;
-    border: 1px solid #ff4d4d;
-    font-size: 14px;
-    box-shadow: 0 1px 4px rgba(255, 0, 0, 0.25);
-}
-
-.product-card:hover .discount-amount {
-    opacity: 1;
-    transform: translateX(0);
-}
-
+.d-none { display: none !important; }
 </style>
-
 </head>
 
 <body>
 
 {% include 'freshbread/header.html' %}
+<h2></h2><br>
+<h2></h2><br>
+<div class="kf-page">
 
-<section class="food-details">
-<div class="container">
-<div class="row align-items-center">
+  <!-- ═══ PRODUCT HERO ═══ -->
+  <div class="kf-product-grid">
 
-<div class="col-lg-6 col-md-12 food-image mb-4 mb-lg-0">
-    <div class="{% if product.discount_percent %}twisted-border{% endif %}">
-        <img id="mainProductImage" src="{{ product.menu_image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
-
+    <!-- IMAGE -->
+    <div>
+      <div class="kf-img-wrap {% if product.discount_percent %}discounted{% endif %}" id="imgWrap">
         {% if product.discount_percent %}
-        <div class="discount-symbol-3d">%</div>
+          <div class="kf-discount-badge">{{ product.discount_percent }}% OFF</div>
         {% endif %}
-    </div>
+        <img id="mainProductImage" src="{{ product.menu_image.url }}" alt="{{ product.name }}">
+      </div>
 
-    <div id="zoomBox"></div>
-
-    {% if product.gallery_images.all %}
-    <div class="d-flex flex-wrap gap-2 mt-2">
+      {% if product.gallery_images.all %}
+      <div class="kf-gallery">
         {% for img in product.gallery_images.all %}
-            <img src="{{ img.image.url }}" class="img-thumbnail small-gallery" onclick="document.getElementById('mainProductImage').src='{{ img.image.url }}'">
+          <img src="{{ img.image.url }}" alt="" onclick="document.getElementById('mainProductImage').src='{{ img.image.url }}'">
         {% endfor %}
-    </div>
-    {% endif %}
-</div>
-
-
-<!-- Product Info -->
-<div class="col-lg-6 col-md-12 food-info">
-<h1>{{ product.name }}</h1>
-<p class="review-summary"> 
-  <span class="stars-avg">
-    {% for _ in "12345" %}
-      {% if forloop.counter <= avg_rating %}
-        ★
-      {% else %}
-        <span class="empty">★</span>
+      </div>
       {% endif %}
-    {% endfor %}
-  </span>
-  <strong>({{ avg_rating }})</strong> — Based on {{ approved_reviews_count }} reviews
-</p>
-<h4>
-  {% if product.discount_percent %}
-    <span class="text-muted"><del>${{ product.original_price }}</del></span>
-    <span class="text-success fw-bold ms-2">${{ product.price }}</span>
-    <!-- درصد تخفیف همیشه نمایش داده شود -->
-    <span class="discount-amount show">{{ product.discount_percent }}%</span>
-  {% else %}
-    <span class="text-success">${{ product.price }}</span>
-  {% endif %}
-</h4>
+    </div>
 
+    <!-- INFO -->
+    <div class="kf-info-side">
+      <h1 class="kf-product-name">{{ product.name }}</h1>
 
-<p class="lead">{{ product.description }}</p>
+      <div class="kf-rating-row">
+        <span class="kf-stars">
+          {% for i in "12345" %}
+            {% if forloop.counter <= avg_rating %}★{% else %}<span class="empty">★</span>{% endif %}
+          {% endfor %}
+        </span>
+        <span class="kf-rating-val">{{ avg_rating }}</span>
+        <span>· {{ approved_reviews_count }} review{{ approved_reviews_count|pluralize }}</span>
+      </div>
 
+      <div class="kf-price-row">
+        {% if product.discount_percent %}
+          <span class="kf-price-original">${{ product.original_price }}</span>
+          <span class="kf-price-final">${{ product.price }}</span>
+          <span class="kf-discount-pill">{{ product.discount_percent }}% off</span>
+        {% else %}
+          <span class="kf-price-single">${{ product.price }}</span>
+        {% endif %}
+      </div>
 
-<!-- Add to Cart -->
-<div class="add-to-cart" data-product-slug="{{ product.slug }}">
-  <!-- کنترل تعداد -->
-  <div class="quantity-control {% if cart_quantity == 0 %}d-none{% endif %}">
-    <button class="btn btn-outline-danger btn-sm decrease" title="Decrease">−</button>
-    <span class="quantity fs-5 fw-bold">
-      {% if cart_quantity == 0 %}Item deleted{% else %}{{ cart_quantity }}{% endif %}
-    </span>
-    <button class="btn btn-outline-success btn-sm increase" title="Increase">+</button>
+      <p class="kf-desc">{{ product.description }}</p>
+
+      <!-- CART -->
+      <div class="kf-cart-row add-to-cart" data-product-slug="{{ product.slug }}">
+        <div class="kf-qty-control quantity-control {% if cart_quantity == 0 %}d-none{% endif %}">
+          <button class="decrease" title="Remove one">−</button>
+          <span class="kf-qty-num quantity">{{ cart_quantity }}</span>
+          <button class="increase" title="Add one">+</button>
+        </div>
+
+        <button class="kf-btn-add btn-add {% if cart_quantity > 0 %}d-none{% endif %}">
+          <i class="bi bi-bag-plus-fill"></i> Add to Cart
+        </button>
+
+        <a href="{% url 'reservation' %}" class="kf-btn-view btn-view-cart {% if cart_quantity == 0 %}d-none{% endif %}">
+          <i class="bi bi-bag-check-fill"></i> View Cart
+        </a>
+
+        <a href="{% url 'menu' %}" class="kf-btn-continue">
+          <i class="bi bi-arrow-left"></i> Menu
+        </a>
+      </div>
+
+      <div class="kf-total-line" id="totalLine" style="{% if cart_quantity == 0 %}display:none{% endif %}">
+        Subtotal: <strong id="totalAmt">${{ cart_quantity|default:0 }}</strong>
+      </div>
+    </div>
+
+  </div><!-- /.kf-product-grid -->
+
+  <!-- ZOOM BOX (injected by JS) -->
+  <div id="zoomBox"><img id="zoomedImg" src="" alt=""></div>
+
+  <!-- ═══ REVIEWS ═══ -->
+  <div class="kf-reviews-section">
+    <div class="kf-section-head">
+      <span class="kf-section-title">Customer Reviews</span>
+      <div class="kf-avg-block">
+        <span class="kf-stars">
+          {% for i in "12345" %}
+            {% if forloop.counter <= avg_rating %}★{% else %}<span class="empty">★</span>{% endif %}
+          {% endfor %}
+        </span>
+        <span class="kf-avg-num">{{ avg_rating }}</span>
+        <span class="kf-avg-label">/ 5 · {{ approved_reviews_count }} review{{ approved_reviews_count|pluralize }}</span>
+      </div>
+    </div>
+
+    {% if approved_reviews %}
+      {% for r0 in approved_reviews %}
+      <div class="kf-review">
+        <div class="kf-review-header">
+          <img class="kf-review-avatar"
+               src="{% if r0.user and r0.user.profile and r0.user.profile.avatar and r0.user.profile.avatar.name != 'default_avatar.png' %}{{ r0.user.profile.avatar.url }}{% else %}{% static 'images/profile-7.jpg' %}{% endif %}"
+               alt="{{ r0.first_name }}"
+               onerror="this.onerror=null;this.src='{% static 'images/profile-7.jpg' %}'">
+          <div>
+            <div class="kf-review-name">
+              {% if r0.user %}<a href="{% url 'public_user_profile' r0.user.id %}">{{ r0.first_name }} {{ r0.last_name }}</a>{% else %}{{ r0.first_name }} {{ r0.last_name }}{% endif %}
+              {% if r0.user %}{% if r0.user.is_staff or r0.user.is_superuser %}<span class="kf-badge-admin">Admin</span>{% endif %}{% endif %}
+            </div>
+            <div class="kf-review-date"><time class="local-rel" data-iso="{{ r0.created_at|date:'c' }}"></time></div>
+          </div>
+        </div>
+        <div class="kf-review-stars">{% for i in "12345" %}{% if forloop.counter <= r0.rating %}★{% else %}☆{% endif %}{% endfor %}</div>
+        <div class="kf-review-body">{{ r0.comment }}</div>
+
+        {% if user.is_authenticated %}
+        <div class="kf-reply-form mt-2">
+          <form method="post" action="{% url 'reply_review' r0.id %}">
+            {% csrf_token %}
+            <textarea rows="2" name="comment" placeholder="Write a reply…" required></textarea>
+            <button type="submit" class="kf-reply-btn">Reply</button>
+          </form>
+        </div>
+        {% endif %}
+
+        {% for r1 in r0.replies.all %}{% if r1.is_approved %}
+        <div class="kf-thread">
+          <div class="kf-review">
+            <div class="kf-review-header">
+              <img class="kf-review-avatar" src="{% static 'images/profile-7.jpg' %}" alt="">
+              <div>
+                <div class="kf-review-name">{{ r1.first_name }} {{ r1.last_name }}{% if r1.user %}{% if r1.user.is_staff or r1.user.is_superuser %}<span class="kf-badge-admin">Admin</span>{% endif %}{% endif %}</div>
+                <div class="kf-review-date"><time class="local-rel" data-iso="{{ r1.created_at|date:'c' }}"></time></div>
+              </div>
+            </div>
+            <div class="kf-review-body">{{ r1.comment|linebreaks }}</div>
+            {% if user.is_authenticated %}
+            <div class="kf-reply-form mt-2"><form method="post" action="{% url 'reply_review' r1.id %}">{% csrf_token %}<textarea rows="2" name="comment" placeholder="Write a reply…" required></textarea><button type="submit" class="kf-reply-btn">Reply</button></form></div>
+            {% endif %}
+
+            {% for r2 in r1.replies.all %}{% if r2.is_approved %}
+            <div class="kf-thread">
+              <div class="kf-review">
+                <div class="kf-review-header"><img class="kf-review-avatar" src="{% static 'images/profile-7.jpg' %}" alt=""><div><div class="kf-review-name">{{ r2.first_name }} {{ r2.last_name }}{% if r2.user %}{% if r2.user.is_staff or r2.user.is_superuser %}<span class="kf-badge-admin">Admin</span>{% endif %}{% endif %}</div><div class="kf-review-date"><time class="local-rel" data-iso="{{ r2.created_at|date:'c' }}"></time></div></div></div>
+                <div class="kf-review-body">{{ r2.comment|linebreaks }}</div>
+                {% if user.is_authenticated %}<div class="kf-reply-form mt-2"><form method="post" action="{% url 'reply_review' r2.id %}">{% csrf_token %}<textarea rows="2" name="comment" placeholder="Write a reply…" required></textarea><button type="submit" class="kf-reply-btn">Reply</button></form></div>{% endif %}
+
+                {% for r3 in r2.replies.all %}{% if r3.is_approved %}
+                <div class="kf-thread">
+                  <div class="kf-review">
+                    <div class="kf-review-header"><img class="kf-review-avatar" src="{% static 'images/profile-7.jpg' %}" alt=""><div><div class="kf-review-name">{{ r3.first_name }} {{ r3.last_name }}{% if r3.user %}{% if r3.user.is_staff or r3.user.is_superuser %}<span class="kf-badge-admin">Admin</span>{% endif %}{% endif %}</div><div class="kf-review-date"><time class="local-rel" data-iso="{{ r3.created_at|date:'c' }}"></time></div></div></div>
+                    <div class="kf-review-body">{{ r3.comment|linebreaks }}</div>
+                  </div>
+                </div>
+                {% endif %}{% endfor %}
+              </div>
+            </div>
+            {% endif %}{% endfor %}
+          </div>
+        </div>
+        {% endif %}{% endfor %}
+      </div>
+      {% endfor %}
+    {% else %}
+      <p style="color:var(--ink-3); text-align:center; padding: 40px 0; font-size:15px;">No reviews yet — be the first!</p>
+    {% endif %}
   </div>
 
-  <!-- دکمه اضافه کردن به سبد -->
-  <button class="btn btn-success btn-add px-4 py-2 fw-semibold rounded-pill {% if cart_quantity > 0 %}d-none{% endif %}">
-    🛒 Add to Cart
-  </button>
-
-  <!-- دکمه View Cart با انیمیشن -->
-  <a href="{% url 'reservation' %}" class="btn btn-primary btn-view-cart d-none ms-2">
-    View Cart
-  </a>
-
-  <!-- ادامه خرید -->
-  <a href="{% url 'menu' %}" class="btn btn-outline-success">
-    Continue Shopping
-  </a>
-</div>
-
-
-<div class="continue-shopping">
-
-</div>
-
-</div>
-</div>
-</div>
-</section>
-
-<!-- Reviews Section -->
-<section class="reviews-section">
-<div class="container">
-<div class="reviews-header">
-<h3>Customer Reviews</h3>
-<p class="review-summary">
-  Average Rating: 
-  <span class="stars-avg">
-    {% for _ in "12345" %}
-      {% if forloop.counter <= avg_rating %}
-        ★
-      {% else %}
-        <span class="empty">★</span>
-      {% endif %}
-    {% endfor %}
-  </span>
-  <strong>({{ avg_rating }})</strong> — Based on {{ approved_reviews_count }} reviews
-</p>
-
-</div>
-
-<div class="row">
-<div class="col-lg-8 col-md-10 mx-auto">
-
-{% if approved_reviews %}
-  {% for review in approved_reviews %}
-    <div class="review-item">
-      <div class="review-user d-flex align-items-center gap-3 mb-2">
-          <img src="{{ review.user.profile.avatar.url }}" alt="{{ review.first_name }}" class="rounded-circle" width="55" height="55" onerror="this.onerror=null;this.src='{% static 'images/profile-7.jpg' %}'">
-        <div>
-          <h5 class="mb-0"><a href="{% url 'public_user_profile' review.user.id %}">{{ review.first_name }} {{ review.last_name }}</a></h5>
-          <small class="text-muted">{{ review.created_at|timesince }} ago</small>
+  <!-- ═══ WRITE A REVIEW ═══ -->
+  {% if user.is_authenticated %}
+  <div class="kf-write-review">
+    <div class="kf-write-title">Leave a Review</div>
+    <form method="post" action="{% url 'add_review' product.slug %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="kf-form-field">
+        <label>Your rating</label>
+        <div class="kf-star-rating">
+          {% for i in "54321" %}
+            <input type="radio" id="{{ i }}-stars" name="rating" value="{{ i }}" required>
+            <label for="{{ i }}-stars">★</label>
+          {% endfor %}
         </div>
       </div>
-
-      <!-- ستاره‌ها -->
-      <div class="review-rating mb-2">
-        {% for i in "12345" %}
-          {% if forloop.counter <= review.rating %}⭐{% else %}☆{% endif %}
-        {% endfor %}
+      <div class="kf-form-field">
+        <label for="reviewText">Your review</label>
+        <textarea id="reviewText" name="comment" rows="4" placeholder="Share your experience…" required></textarea>
       </div>
+      <div class="kf-form-field">
+        <label>Photos (optional)</label>
+        <input type="file" name="images" multiple>
+      </div>
+      <button type="submit" class="kf-submit-btn">Submit Review</button>
+    </form>
+  </div>
+  {% else %}
+  <div style="text-align:center; padding: 24px; color: var(--ink-3); font-size:14px;">
+    <a href="{% url 'ru' %}?next={{ request.path }}" style="color:var(--orange); font-weight:700;">Log in</a> to leave a review.
+  </div>
+  {% endif %}
 
-      <!-- عکس‌های آپلودشده توسط کاربر -->
-{% if review.images.all %}
-<div class="user-gallery">
-  {% for img in review.images.all %}
-    <img src="{{ img.image.url }}" alt="Review image"
-         class="user-photo"
-         data-user="{{ review.first_name }} {{ review.last_name }}"
-         data-rating="{{ review.rating }}"
-         data-review="{{ review.comment|escapejs }}">
-  {% endfor %}
-</div>
-{% endif %}
+</div><!-- /.kf-page -->
 
-      <p class="mb-0">{{ review.comment }}</p>
-    </div>
-  {% endfor %}
-{% else %}
-  <p class="text-center text-muted">No reviews yet. Be the first!</p>
-{% endif %}
-
-{% if user.is_authenticated %}
-<div class="add-review mt-5">
-<h5 class="mb-3">Leave a Review</h5>
-<form method="post" action="{% url 'add_review' product.slug %}" enctype="multipart/form-data">
-{% csrf_token %}
-<div class="form-group">
-<label>Rate this product:</label>
-<div class="star-rating">
-{% for i in "54321" %}
-<input type="radio" id="{{ i }}-stars" name="rating" value="{{ i }}" required>
-<label for="{{ i }}-stars">★</label>
-{% endfor %}
-</div>
+<!-- REVIEW IMAGE MODAL -->
+<div id="reviewImageModal">
+  <span class="modal-close" id="modalClose">&times;</span>
+  <img id="modalImg" src="" alt="">
+  <div class="modal-info">
+    <h5 id="modalName"></h5>
+    <p id="modalComment"></p>
+  </div>
 </div>
 
-<div class="form-group mt-3">
-<label for="reviewText">Your Review</label>
-<textarea id="reviewText" rows="4" class="form-control" name="comment" placeholder="Write your feedback..." required></textarea>
-</div>
+{% include 'freshbread/footer.html' %}
 
-<div class="form-group mt-3">
-  <label for="reviewImages">Upload Images (optional)</label>
-  <input type="file" name="images" multiple>
-</div>
-
-</div>
-
-<button type="submit" class="btn btn-warning text-white mt-3">Submit Review</button>
-</form>
-</div>
-{% else %}
-<p class="text-center mt-3">
-You must <a href="{% url 'ru' %}?next={{ request.path }}">log in</a> to post a review.
-</p>
-{% endif %}
-
-</div>
-</div>
-</div>
-</section>
-
-<!-- Scripts -->
 <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
-<div id="reviewImageModal">
-  <span class="close-btn">&times;</span>
-  <img id="modalReviewImg" src="" alt="">
-  <div class="info-box">
-    <h5 id="modalReviewerName"></h5>
-    <p id="modalReviewerComment"></p>
-    <div id="modalReviewerStars" style="font-size:22px; color:#ffc107;"></div>
-  </div>
-</div>
-
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  /* -----------------------
-     0) IMAGE HOVER POPUP
-  ----------------------- */
-  const productImage = document.querySelector(".food-image img");
-  if (productImage) {
-    const popup = document.createElement("div");
-    popup.className = "image-popup";
-    popup.innerHTML = `<p>${productImage.alt || "Product Image"}</p>`;
-    document.body.appendChild(popup);
-
-    productImage.addEventListener("mouseenter", (e) => {
-      popup.style.opacity = "1";
-      popup.style.transform = "translate(-50%, -120%) scale(1)";
-      popup.style.left = e.pageX + "px";
-      popup.style.top = e.pageY - 30 + "px";
-      productImage.classList.add("zoom-in");
-    });
-
-    productImage.addEventListener("mousemove", (e) => {
-      popup.style.left = e.pageX + "px";
-      popup.style.top = e.pageY - 30 + "px";
-    });
-
-    productImage.addEventListener("mouseleave", () => {
-      popup.style.opacity = "0";
-      popup.style.transform = "translate(-50%, -100%) scale(0.8)";
-      productImage.classList.remove("zoom-in");
-    });
-  }
-
-  /* -----------------------
-     1) CSS ANIMATION FOR POPUP & ZOOM
-  ----------------------- */
-  const style = document.createElement("style");
-  style.innerHTML = `
-    @keyframes fadeInOut {
-      0% { opacity: 0; transform: translateY(-20px); }
-      10% { opacity: 1; transform: translateY(0); }
-      90% { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-20px); }
+/* ── RELATIVE TIMES ── */
+document.addEventListener('DOMContentLoaded', () => {
+  const rtf = typeof Intl !== 'undefined' && Intl.RelativeTimeFormat
+    ? new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' }) : null;
+  const units = [['year',31536000],['month',2592000],['week',604800],['day',86400],['hour',3600],['minute',60],['second',1]];
+  const now = Date.now();
+  document.querySelectorAll('time.local-rel').forEach(el => {
+    const iso = el.getAttribute('data-iso');
+    if (!iso) return;
+    const diff = Math.round((now - new Date(iso).getTime()) / 1000);
+    if (rtf) for (const [u,s] of units) {
+      if (Math.abs(diff) >= s || u === 'second') { el.textContent = rtf.format(Math.round(-diff/s), u); el.title = new Date(iso).toString(); break; }
     }
-    .image-popup {
-      position: absolute;
-      background: rgba(0,0,0,0.8);
-      color: #fff;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 14px;
-      opacity: 0;
-      transform: translate(-50%, -100%) scale(0.8);
-      pointer-events: none;
-      transition: all 0.3s ease;
-      z-index: 9999;
-    }
-    .food-image img { transition: transform 0.3s ease; }
-    .food-image img.zoom-in { transform: scale(1.1); filter: brightness(1.1); }
-  `;
-  document.head.appendChild(style);
-
-  /* -----------------------
-     2) CART + VIEW CART BUTTON
-  ----------------------- */
-  const cartBox = document.querySelector(".add-to-cart");
-  const viewCartBtn = document.querySelector('.btn-view-cart');
-
-  function updateViewCartBtn() {
-    if (!viewCartBtn) return;
-    const cartRows = document.querySelectorAll('#cart-section tbody tr');
-    if (cartRows.length > 0) {
-      viewCartBtn.classList.remove('d-none');
-      let totalItems = 0;
-      cartRows.forEach(row => {
-        const qty = parseInt(row.querySelector('span[id^="qty-"]').innerText || '0', 10);
-        totalItems += qty;
-      });
-      viewCartBtn.textContent = `View Cart (${totalItems})`;
-    } else {
-      viewCartBtn.classList.add('d-none');
-    }
-  }
-
-  if (cartBox) {
-    const slug = cartBox.dataset.productSlug;
-    const maxQty = 5;
-    const addBtn = cartBox.querySelector(".btn-add");
-    const qtyBox = cartBox.querySelector(".quantity-control");
-    const qtyText = qtyBox ? qtyBox.querySelector(".quantity") : null;
-    const increaseBtn = qtyBox ? qtyBox.querySelector(".increase") : null;
-    const decreaseBtn = qtyBox ? qtyBox.querySelector(".decrease") : null;
-
-    const priceBox = document.createElement("div");
-    priceBox.className = "price-box text-end mt-2 fw-bold text-success fs-5";
-    cartBox.appendChild(priceBox);
-
-    let qty = qtyText ? parseInt(qtyText.textContent.replace(/\D/g, '')) || 0 : 0;
-    const unitPriceEl = document.querySelector(".food-info h4");
-    const unitPrice = unitPriceEl ? parseFloat(unitPriceEl.textContent.replace(/[^0-9.\-]/g, '')) || 0 : 0;
-
-    function updatePrice() {
-      priceBox.innerHTML = qty > 0 ? `Total: $${(qty * unitPrice).toFixed(2)}` : '';
-    }
-
-    function showToast(msg, type = "success") {
-      const toast = document.createElement("div");
-      toast.textContent = msg;
-      toast.style.cssText = `
-        position:fixed; right:20px; top:20px; z-index:99999;
-        background:${type === "error" ? "#dc3545" : "#28a745"};
-        color:#fff; padding:12px 20px; border-radius:10px; font-weight:600;
-        box-shadow:0 4px 12px rgba(0,0,0,0.2);
-        animation:fadeInOut 2s ease forwards;
-      `;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 2000);
-    }
-
-    function updateUI() {
-      if (!qtyBox || !addBtn) return;
-      if (qty <= 0) {
-        qtyBox.classList.add("d-none");
-        addBtn.classList.remove("d-none");
-        priceBox.innerHTML = "";
-      } else {
-        qtyBox.classList.remove("d-none");
-        addBtn.classList.add("d-none");
-        qtyText.textContent = qty;
-      }
-
-      if (increaseBtn) {
-        if (qty >= maxQty) {
-          increaseBtn.disabled = true;
-          increaseBtn.style.opacity = "0.5";
-          increaseBtn.style.cursor = "not-allowed";
-        } else {
-          increaseBtn.disabled = false;
-          increaseBtn.style.opacity = "1";
-          increaseBtn.style.cursor = "pointer";
-        }
-      }
-
-      updatePrice();
-      updateViewCartBtn();
-    }
-
-    async function updateServer(newQty) {
-      try {
-        const resp = await fetch(`/cart/set_cart_quantity/${slug}/${newQty}/`, {
-          method: "GET",
-          headers: { "X-Requested-With": "XMLHttpRequest" },
-          credentials: "same-origin"
-        });
-        const data = await resp.json();
-        if (data.success) showToast(`Cart updated (${data.quantity})`);
-        else showToast(data.message || "Failed to update cart", "error");
-      } catch (err) {
-        console.error(err);
-        showToast("Network error", "error");
-      }
-    }
-
-    if (addBtn) addBtn.addEventListener("click", async () => { qty = 1; updateUI(); await updateServer(qty); });
-    if (increaseBtn) increaseBtn.addEventListener("click", async () => { if (qty < maxQty) { qty++; updateUI(); await updateServer(qty); } else showToast(`Max ${maxQty}`, "error"); });
-    if (decreaseBtn) decreaseBtn.addEventListener("click", async () => { qty--; if (qty <= 0) { qty = 0; updateUI(); await updateServer(0); } else { updateUI(); await updateServer(qty); } });
-    updateUI();
-  }
-
-  /* -----------------------
-     3) FIXED ZOOM BOX (DIGI-KALA STYLE)
-  ----------------------- */
-  (function setupFixedZoom() {
-    const mainImg = document.getElementById("mainProductImage");
-    if (!mainImg) return;
-
-    let zoomBox = document.getElementById("zoomBox");
-    if (!zoomBox) {
-      zoomBox = document.createElement("div");
-      zoomBox.id = "zoomBox";
-      document.body.appendChild(zoomBox);
-    }
-
-    let zoomedImg = zoomBox.querySelector("img");
-    if (!zoomedImg) {
-      zoomedImg = document.createElement("img");
-      zoomedImg.id = "zoomedImage";
-      zoomBox.appendChild(zoomedImg);
-    }
-
-    Object.assign(zoomBox.style, {
-      position: "fixed", right: "40px", top: "140px",
-      width: "420px", height: "420px", overflow: "hidden",
-      border: "2px solid #28a745", borderRadius: "12px",
-      background: "#fff", boxShadow: "0 6px 20px rgba(0,0,0,0.25)",
-      display: "none", opacity: "0", transform: "scale(0.9)",
-      transition: "opacity .28s ease, transform .28s ease", zIndex: "99999"
-    });
-
-    Object.assign(zoomedImg.style, {
-      width: "200%", height: "200%", objectFit: "cover",
-      transform: "scale(1)", transformOrigin: "50% 50%",
-      transition: "transform .08s linear, transform-origin .08s linear",
-      display: "block"
-    });
-
-    mainImg.addEventListener("mouseenter", () => {
-      zoomedImg.src = mainImg.currentSrc || mainImg.src;
-      zoomBox.style.display = "block";
-      requestAnimationFrame(() => { zoomBox.style.opacity = "1"; zoomBox.style.transform = "scale(1)"; });
-    });
-
-    mainImg.addEventListener("mousemove", (e) => {
-      const rect = mainImg.getBoundingClientRect();
-      const clampedX = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-      const clampedY = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
-      const xPercent = (clampedX / rect.width) * 100;
-      const yPercent = (clampedY / rect.height) * 100;
-      zoomedImg.style.transformOrigin = `${xPercent}% ${yPercent}%`;
-      zoomedImg.style.transform = "scale(2)";
-    });
-
-    mainImg.addEventListener("mouseleave", () => {
-      zoomBox.style.opacity = "0";
-      zoomBox.style.transform = "scale(0.9)";
-      zoomedImg.style.transform = "scale(1)";
-      setTimeout(() => { zoomBox.style.display = "none"; }, 300);
-    });
-  })();
-
-});
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  /* -----------------------
-     4) USER GALLERY MODAL
-  ----------------------- */
-  const photos = document.querySelectorAll(".user-gallery .user-photo");
-  if (photos.length === 0) return;
-
-  const modal = document.createElement("div");
-  modal.className = "photo-modal";
-  modal.innerHTML = `
-    <div class="photo-overlay"></div>
-    <div class="photo-content">
-      <button class="nav-btn prev">&#10094;</button>
-      <img class="modal-img" src="" alt="">
-      <button class="nav-btn next">&#10095;</button>
-      <div class="photo-info"></div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-
-  const overlay = modal.querySelector(".photo-overlay");
-  const modalImg = modal.querySelector(".modal-img");
-  const photoInfo = modal.querySelector(".photo-info");
-  const prevBtn = modal.querySelector(".prev");
-  const nextBtn = modal.querySelector(".next");
-
-  let currentIndex = 0;
-
-  function getStars(rating) {
-    rating = parseFloat(rating);
-    if (isNaN(rating)) rating = 0;
-    const full = Math.floor(rating);
-    const half = rating % 1 >= 0.5 ? 1 : 0;
-    const empty = 5 - full - half;
-    let stars = "★".repeat(full);
-    if (half) stars += "⭐";
-    stars += "☆".repeat(empty);
-    return stars;
-  }
-
-  function openModal(index) {
-    currentIndex = index;
-    const photo = photos[index];
-    const rating = photo.dataset.rating || 0;
-    const user = photo.dataset.user || "کاربر ناشناس";
-    const review = photo.dataset.review || "بدون نظر";
-
-    modalImg.src = photo.src;
-    photoInfo.innerHTML = `
-      <h5 class="fw-bold text-success mt-3">${user}</h5>
-      <div class="stars" style="color:gold; font-size:1.3rem;">${getStars(rating)}</div>
-      <div style="color:#666; font-size:0.9rem;">Rating: ${parseFloat(rating).toFixed(1)} / 5</div>
-      <p class="user-review mt-3" style="font-size:1rem; color:#444; line-height:1.6;">“${review}”</p>
-    `;
-
-    modal.style.display = "flex";
-    requestAnimationFrame(() => modal.classList.add("show"));
-  }
-
-  function closeModal() {
-    modal.classList.remove("show");
-    setTimeout(() => (modal.style.display = "none"), 300);
-  }
-
-  function showPhoto(dir) {
-    currentIndex = (currentIndex + dir + photos.length) % photos.length;
-    openModal(currentIndex);
-  }
-
-  photos.forEach((photo, index) => photo.addEventListener("click", () => openModal(index)));
-  overlay.addEventListener("click", closeModal);
-  prevBtn.addEventListener("click", () => showPhoto(-1));
-  nextBtn.addEventListener("click", () => showPhoto(1));
-
-  const style = document.createElement("style");
-  style.innerHTML = `
-    .user-gallery { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-    .user-photo { width: 100px; height: 100px; object-fit: cover; border-radius: 10px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-    .user-photo:hover { transform: scale(1.08); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-    .photo-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; transition: opacity 0.3s ease; z-index: 10000; }
-    .photo-modal.show { opacity: 1; }
-    .photo-overlay { position: absolute; inset: 0; cursor: pointer; }
-    .photo-content { position: relative; z-index: 2; background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 6px 20px rgba(0,0,0,0.3); text-align: center; animation: popIn .3s ease; }
-    .modal-img { max-width: 80vw; max-height: 70vh; border-radius: 10px; }
-    .photo-info { margin-top: 10px; font-size: 1.1rem; }
-    .user-review { margin-top: 10px; font-style: italic; }
-    .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: #28a745; color: #fff; border: none; border-radius: 50%; width: 45px; height: 45px; font-size: 1.5rem; cursor: pointer; transition: background 0.3s; }
-    .nav-btn:hover { background: #218838; }
-    .prev { left: -60px; }
-    .next { right: -60px; }
-    @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-  `;
-  document.head.appendChild(style);
-
-});
-
-/* -----------------------
-   5) CART POPUP QUANTITY UPDATE
------------------------ */
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.cart-popup').forEach(popup => {
-    popup.addEventListener('click', function (e) {
-      if (e.target.classList.contains('increase') || e.target.classList.contains('decrease')) {
-        const item = e.target.closest('.cart-item');
-        const slug = item.dataset.slug;
-        const quantityElem = item.querySelector('.quantity');
-        let quantity = parseInt(quantityElem.textContent) || 1;
-
-        if (e.target.classList.contains('increase')) quantity++;
-        if (e.target.classList.contains('decrease')) quantity--;
-
-        quantity = Math.max(0, Math.min(quantity, 5));
-
-        fetch(`/cart/set_cart_quantity/${slug}/${quantity}/`, {
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': '{{ csrf_token }}',
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            if (quantity === 0) item.remove();
-            else quantityElem.textContent = data.quantity;
-
-            const countElem = document.querySelector('#cart-count');
-            let total = 0;
-            document.querySelectorAll('.cart-item .quantity').forEach(q => { total += parseInt(q.textContent) || 0; });
-            countElem.textContent = total > 0 ? total : '';
-
-            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: data.message, showConfirmButton: false, timer: 1500 });
-          }
-        })
-        .catch(err => console.error('Error:', err));
-      }
-    });
   });
 });
 
-function updateViewCartBtn() {
-  const viewCartBtn = document.querySelector('.btn-view-cart');
-  const cartRows = document.querySelectorAll('#cart-section tbody tr');
+/* ── ZOOM BOX ── */
+(function() {
+  const mainImg = document.getElementById('mainProductImage');
+  const zoomBox = document.getElementById('zoomBox');
+  const zoomedImg = document.getElementById('zoomedImg');
+  if (!mainImg || !zoomBox) return;
 
-  if (cartRows.length > 0) {
-    viewCartBtn.classList.remove('d-none');
-    viewCartBtn.animate([
-      { transform: 'translateY(-10px)', opacity: 0.5 },
-      { transform: 'translateY(0)', opacity: 1 }
-    ], { duration: 300, easing: 'ease-out' });
-  } else {
-    viewCartBtn.animate([
-      { transform: 'translateY(0)', opacity: 1 },
-      { transform: 'translateY(10px)', opacity: 0 }
-    ], { duration: 300, easing: 'ease-in' }).onfinish = () => {
-      viewCartBtn.classList.add('d-none');
-    };
+  mainImg.addEventListener('mouseenter', () => {
+    zoomedImg.src = mainImg.currentSrc || mainImg.src;
+    zoomBox.style.display = 'block';
+    requestAnimationFrame(() => { zoomBox.style.opacity = '1'; zoomBox.style.transform = 'scale(1)'; });
+  });
+  mainImg.addEventListener('mousemove', e => {
+    const r = mainImg.getBoundingClientRect();
+    const xp = Math.max(0, Math.min((e.clientX - r.left) / r.width, 1)) * 100;
+    const yp = Math.max(0, Math.min((e.clientY - r.top)  / r.height, 1)) * 100;
+    zoomedImg.style.transformOrigin = `${xp}% ${yp}%`;
+    zoomedImg.style.transform = 'scale(2)';
+  });
+  mainImg.addEventListener('mouseleave', () => {
+    zoomBox.style.opacity = '0'; zoomBox.style.transform = 'scale(0.9)';
+    zoomedImg.style.transform = 'scale(1)';
+    setTimeout(() => { zoomBox.style.display = 'none'; }, 280);
+  });
+})();
+
+/* ── CART ── */
+document.addEventListener('DOMContentLoaded', () => {
+  const cartBox = document.querySelector('.add-to-cart');
+  if (!cartBox) return;
+
+  const slug = cartBox.dataset.productSlug;
+  const maxQty = 5;
+  const addBtn = cartBox.querySelector('.btn-add');
+  const qtyControl = cartBox.querySelector('.quantity-control');
+  const qtyText = cartBox.querySelector('.quantity');
+  const viewBtn = cartBox.querySelector('.btn-view-cart');
+  const totalLine = document.getElementById('totalLine');
+  const totalAmt = document.getElementById('totalAmt');
+
+  const priceText = document.querySelector('.kf-price-final, .kf-price-single');
+  const unitPrice = priceText ? parseFloat(priceText.textContent.replace(/[^0-9.]/g,'')) || 0 : 0;
+
+  let qty = parseInt(qtyText?.textContent) || 0;
+
+  function showToast(msg, type = 'success') {
+    const t = document.createElement('div');
+    t.className = `kf-toast ${type}`;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2200);
   }
-}
+
+  function updateUI() {
+    if (qty <= 0) {
+      qtyControl?.classList.add('d-none');
+      addBtn?.classList.remove('d-none');
+      viewBtn?.classList.add('d-none');
+      if (totalLine) totalLine.style.display = 'none';
+    } else {
+      qtyControl?.classList.remove('d-none');
+      addBtn?.classList.add('d-none');
+      viewBtn?.classList.remove('d-none');
+      if (qtyText) qtyText.textContent = qty;
+      if (totalLine) totalLine.style.display = '';
+      if (totalAmt) totalAmt.textContent = `$${(qty * unitPrice).toFixed(2)}`;
+    }
+    const inc = cartBox.querySelector('.increase');
+    if (inc) { inc.disabled = qty >= maxQty; inc.style.opacity = qty >= maxQty ? '0.4' : '1'; }
+  }
+
+  async function syncServer(newQty) {
+    try {
+      const r = await fetch(`/cart/set_cart_quantity/${slug}/${newQty}/`, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin'
+      });
+      const d = await r.json();
+      if (d.success) showToast(`Cart updated (${d.quantity})`);
+      else showToast(d.message || 'Could not update cart', 'error');
+    } catch { showToast('Network error', 'error'); }
+  }
+
+  addBtn?.addEventListener('click', async () => { qty = 1; updateUI(); await syncServer(1); });
+  cartBox.querySelector('.increase')?.addEventListener('click', async () => {
+    if (qty >= maxQty) { showToast(`Max ${maxQty} per order`, 'error'); return; }
+    qty++; updateUI(); await syncServer(qty);
+  });
+  cartBox.querySelector('.decrease')?.addEventListener('click', async () => {
+    qty = Math.max(0, qty - 1); updateUI(); await syncServer(qty);
+  });
+
+  updateUI();
+});
+
+/* ── REVIEW IMAGE MODAL ── */
+document.getElementById('modalClose')?.addEventListener('click', () => {
+  document.getElementById('reviewImageModal').classList.remove('open');
+});
+document.getElementById('reviewImageModal')?.addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('open');
+});
+document.querySelectorAll('.review-thumb').forEach(img => {
+  img.addEventListener('click', () => {
+    document.getElementById('modalImg').src = img.src;
+    document.getElementById('reviewImageModal').classList.add('open');
+  });
+});
 </script>
-
-
-
 </body>
 </html>

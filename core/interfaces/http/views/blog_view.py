@@ -21,7 +21,10 @@ def blog_details(request, slug):
     popular = BlogPost.objects.filter(is_published=True).exclude(pk=post.pk).order_by('-views_count', '-likes_count')[:6]
     liked_posts = request.session.get('liked_posts', [])
     is_liked = post.pk in liked_posts
-    reviews = BlogReview.objects.filter(post=post, is_approved=True)
+    # Prefetch nested replies up to 5 levels
+    reviews = BlogReview.objects.filter(post=post, is_approved=True, parent__isnull=True).prefetch_related(
+        'replies', 'replies__replies', 'replies__replies__replies', 'replies__replies__replies__replies'
+    )
     avg = 0
     if reviews.exists():
         avg = round(sum(r.rating for r in reviews) / reviews.count(), 1)
@@ -114,7 +117,22 @@ def blog_like(request, slug):
 
 @login_required
 def blog_manage(request):
+    from django.utils.text import slugify
+    from django.utils.crypto import get_random_string
     posts = BlogPost.objects.filter(author=request.user).order_by('-created_at')
+    # Fix any posts with empty slugs on the fly
+    for post in posts:
+        if not post.slug:
+            base = slugify(post.title)
+            if not base:
+                base = f"post-{get_random_string(8)}"
+            candidate = base
+            i = 1
+            while BlogPost.objects.filter(slug=candidate).exclude(pk=post.pk).exists():
+                candidate = f"{base}-{i}"
+                i += 1
+            post.slug = candidate
+            post.save()
     return render(request, 'freshbread/blog/blog_manage.html', {"posts": posts})
     # return render(request, 'freshbread/ecommerce/coming_soon.html')
 
@@ -151,6 +169,34 @@ def blog_delete(request, slug):
     post.delete()
     messages.success(request, "Blog deleted.")
     return redirect("blog_manage")
+
+
+@login_required
+def blog_reply_review(request, review_id):
+    parent = get_object_or_404(BlogReview.objects.select_related('post'), id=review_id)
+    if request.method != 'POST':
+        return redirect('blog_details', slug=parent.post.slug)
+    comment = (request.POST.get('comment') or '').strip()
+    if not comment:
+        messages.error(request, "Reply cannot be empty.")
+        return redirect('blog_details', slug=parent.post.slug)
+    if getattr(parent, 'depth', 1) >= 6:
+        messages.error(request, "Reply chain is full for this comment.")
+        return redirect('blog_details', slug=parent.post.slug)
+    BlogReview.objects.create(
+        post=parent.post,
+        parent=parent,
+        depth=(getattr(parent, 'depth', 1) + 1),
+        user=request.user,
+        first_name=request.user.first_name or request.user.username,
+        last_name=request.user.last_name or "",
+        email=request.user.email,
+        rating=parent.rating,
+        comment=comment,
+        is_approved=False,
+    )
+    messages.success(request, "Your reply was submitted and will appear after approval.")
+    return redirect('blog_details', slug=parent.post.slug)
 
 
 def _moderate_content(api_key, text, img1, img2):

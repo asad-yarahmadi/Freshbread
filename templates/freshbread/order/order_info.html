@@ -3,154 +3,571 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Order Info - Kingfood</title>
+  <title>Order Info – Kingfood</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
   <style>
-    .order-card {
-      border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    :root {
+      --kf-bg: #f5f2ee;
+      --kf-card: #ffffff;
+      --kf-accent: #d85a30;
+      --kf-accent-light: #faece7;
+      --kf-accent-mid: #f0997b;
+      --kf-dark: #1c1a18;
+      --kf-muted: #7a7570;
+      --kf-border: #e8e4df;
+      --kf-success: #1d9e75;
+      --kf-success-bg: #e1f5ee;
+      --kf-info: #185fa5;
+      --kf-info-bg: #e6f1fb;
+      --kf-radius: 16px;
+      --kf-radius-sm: 10px;
+      --kf-shadow: 0 2px 16px rgba(28, 26, 24, 0.08);
     }
-    .avatar {
-      width: 72px;
-      height: 72px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 3px solid #eee;
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--kf-bg);
+      color: var(--kf-dark);
+      min-height: 100vh;
     }
-    .item-box {
-      background: #f8f9fa;
-      border-radius: 10px;
-      padding: 10px 14px;
-      margin-bottom: 8px;
-      font-size: 18px;
+
+    /* ── PAGE WRAPPER ── */
+    .kf-page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    /* ── BREADCRUMB ── */
+    .kf-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--kf-muted);
+      margin-bottom: 28px;
+    }
+    .kf-breadcrumb a {
+      color: var(--kf-accent);
+      text-decoration: none;
       font-weight: 500;
     }
-    .section-title {
-      margin-top: 30px;
+    .kf-breadcrumb a:hover { text-decoration: underline; }
+    .kf-breadcrumb span { font-size: 10px; }
+
+    /* ── PAGE TITLE ── */
+    .kf-page-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--kf-accent);
+      margin-bottom: 6px;
+    }
+    .kf-page-heading {
+      font-size: 26px;
       font-weight: 700;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 6px;
+      color: var(--kf-dark);
+      margin-bottom: 28px;
+    }
+
+    /* ── CARD ── */
+    .kf-card {
+      background: var(--kf-card);
+      border-radius: var(--kf-radius);
+      border: 1px solid var(--kf-border);
+      box-shadow: var(--kf-shadow);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .kf-card-header {
+      padding: 20px 24px 18px;
+      border-bottom: 1px solid var(--kf-border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .kf-card-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--kf-accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .kf-card-icon svg { width: 17px; height: 17px; stroke: var(--kf-accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .kf-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--kf-dark);
+    }
+    .kf-card-body { padding: 22px 24px; }
+
+    /* ── USER PROFILE ── */
+    .kf-user-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .kf-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--kf-accent-light);
+      flex-shrink: 0;
+    }
+    .kf-user-name {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--kf-dark);
+      line-height: 1.2;
+    }
+    .kf-user-handle {
+      font-size: 13px;
+      color: var(--kf-accent);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+    .kf-user-email {
+      font-size: 13px;
+      color: var(--kf-muted);
+      margin-top: 2px;
+    }
+
+    /* ── ORDER CODE BANNER ── */
+    .kf-order-banner {
+      background: var(--kf-dark);
+      border-radius: var(--kf-radius);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .kf-order-banner-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 4px;
+    }
+    .kf-order-code {
+      font-family: 'DM Mono', monospace;
+      font-size: 20px;
+      font-weight: 500;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+    }
+    .kf-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .kf-status-pill.pending  { background: #faeeda; color: #854f0b; }
+    .kf-status-pill.confirmed { background: var(--kf-success-bg); color: #0f6e56; }
+    .kf-status-pill.delivered { background: var(--kf-success-bg); color: #0f6e56; }
+    .kf-status-pill.cancelled { background: #fcebeb; color: #a32d2d; }
+    .kf-status-pill.default  { background: var(--kf-info-bg); color: var(--kf-info); }
+
+    /* ── INFO ROWS ── */
+    .kf-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .kf-info-cell {
+      background: var(--kf-bg);
+      border-radius: var(--kf-radius-sm);
+      padding: 14px 16px;
+      border: 1px solid var(--kf-border);
+    }
+    .kf-info-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--kf-muted);
+      margin-bottom: 5px;
+    }
+    .kf-info-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--kf-dark);
+    }
+
+    /* ── DISCOUNT BADGE ── */
+    .kf-discount-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--kf-success-bg);
+      border: 1px solid #9fe1cb;
+      border-radius: var(--kf-radius-sm);
+      margin-top: 12px;
+    }
+    .kf-discount-icon {
+      font-size: 18px;
+    }
+    .kf-discount-text {
+      font-size: 13px;
+      color: #0f6e56;
+    }
+    .kf-discount-code {
+      font-family: 'DM Mono', monospace;
+      font-weight: 500;
+      font-size: 13px;
+      background: rgba(15,110,86,0.12);
+      padding: 2px 8px;
+      border-radius: 5px;
+      color: #085041;
+    }
+
+    /* ── ITEMS LIST ── */
+    .kf-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--kf-border);
+    }
+    .kf-item-row:last-child { border-bottom: none; }
+    .kf-item-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--kf-accent-mid);
+      flex-shrink: 0;
+    }
+    .kf-item-name {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--kf-dark);
+    }
+    .kf-item-qty {
+      font-size: 13px;
+      color: var(--kf-muted);
+      background: var(--kf-bg);
+      border: 1px solid var(--kf-border);
+      border-radius: 6px;
+      padding: 2px 9px;
+      font-weight: 500;
+    }
+    .kf-item-price {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--kf-dark);
+      min-width: 70px;
+      text-align: right;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── DELIVERY CARD ── */
+    .kf-address-block {
+      font-size: 15px;
+      color: var(--kf-dark);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .kf-address-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--kf-muted);
+      margin-bottom: 4px;
+    }
+    .kf-map-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--kf-radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 2px solid var(--kf-accent);
+      color: var(--kf-accent);
+      background: transparent;
+      transition: background 0.18s, color 0.18s;
+    }
+    .kf-map-btn:hover {
+      background: var(--kf-accent);
+      color: #fff;
+    }
+    .kf-map-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .kf-pickup-tag {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      background: var(--kf-info-bg);
+      border: 1px solid #b5d4f4;
+      border-radius: var(--kf-radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--kf-info);
+    }
+    .kf-pickup-tag svg { width: 18px; height: 18px; stroke: var(--kf-info); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── TOTAL FOOTER ── */
+    .kf-total-card {
+      background: var(--kf-accent);
+      border-radius: var(--kf-radius);
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .kf-total-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.75);
+    }
+    .kf-total-amount {
+      font-size: 30px;
+      font-weight: 700;
+      color: #ffffff;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 540px) {
+      .kf-page { padding: 24px 14px 60px; }
+      .kf-page-heading { font-size: 21px; }
+      .kf-order-code { font-size: 16px; }
+      .kf-total-amount { font-size: 24px; }
+      .kf-card-body { padding: 18px 16px; }
+      .kf-card-header { padding: 16px 16px 14px; }
+      .kf-user-row { gap: 14px; }
+      .kf-avatar { width: 52px; height: 52px; }
     }
   </style>
 </head>
 
-<body class="bg-light">
+<body>
 
 {% include 'freshbread/header.html' %}
-<h2></h2><br>
-<h2></h2><br>
-<div class="container py-5">
-  <div class="card order-card p-4">
 
-    <!-- USER INFO -->
-    <div class="d-flex align-items-center mb-4">
-      {% if order.user.profile and order.user.profile.avatar %}
-        <img src="{{ order.user.profile.avatar.url }}" class="avatar me-3">
-      {% else %}
-        <img src="{% static 'images/default_avatar.png' %}" class="avatar me-3">
-      {% endif %}
+<div class="kf-page">
 
-      <div>
-        <h4 class="mb-0">
-          {{ order.user.first_name }} {{ order.user.last_name }}
-        </h4>
-        <div class="text-muted">@{{ order.user.username }}</div>
-        <small class="text-muted">{{ order.user.email }}</small>
+  <!-- BREADCRUMB -->
+  <div class="kf-breadcrumb">
+    <a href="/">Home</a>
+    <span>›</span>
+    <a href="/orders/">Orders</a>
+    <span>›</span>
+    <span>Order Details</span>
+  </div>
+
+  <!-- PAGE TITLE -->
+  <p class="kf-page-title">Order details</p>
+  <h1 class="kf-page-heading">Your Order Summary</h1>
+
+  <!-- ORDER CODE BANNER -->
+  <div class="kf-order-banner">
+    <div>
+      <div class="kf-order-banner-label">Order code</div>
+      <div class="kf-order-code">{{ order.order_code }}</div>
+    </div>
+    <div class="kf-status-pill {{ order.status|lower|default:'default' }}">
+      {{ order.status|upper }}
+    </div>
+  </div>
+
+  <!-- CUSTOMER CARD -->
+  <div class="kf-card">
+    <div class="kf-card-header">
+      <div class="kf-card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <span class="kf-card-title">Customer</span>
+    </div>
+    <div class="kf-card-body">
+      <div class="kf-user-row">
+        {% if order.user.profile and order.user.profile.avatar and order.user.profile.avatar.name != 'default_avatar.png' %}
+          <img src="{{ order.user.profile.avatar.url }}" class="kf-avatar" alt="Avatar">
+        {% else %}
+          <img src="{% static 'images/profile-7.jpg' %}" class="kf-avatar" alt="Avatar">
+        {% endif %}
+        <div>
+          <div class="kf-user-name">{{ order.user.first_name }} {{ order.user.last_name }}</div>
+          <div class="kf-user-handle">@{{ order.user.username }}</div>
+          <div class="kf-user-email">{{ order.user.email }}</div>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- ORDER CODE -->
-    <div class="alert alert-primary">
-      <strong>Order Code:</strong> {{ order.order_code }}
+  <!-- DELIVERY INFO CARD -->
+  {% if order.deliver or order.delivery_slot or order.delivery_code or discount_used %}
+  <div class="kf-card">
+    <div class="kf-card-header">
+      <div class="kf-card-icon">
+        <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      </div>
+      <span class="kf-card-title">Delivery details</span>
     </div>
+    <div class="kf-card-body">
+      <div class="kf-info-grid">
+        {% if order.deliver %}
+        <div class="kf-info-cell">
+          <div class="kf-info-label">Type</div>
+          <div class="kf-info-value">🚚 Delivery</div>
+        </div>
+        {% endif %}
+        {% if order.delivery_slot %}
+        <div class="kf-info-cell">
+          <div class="kf-info-label">Time slot</div>
+          <div class="kf-info-value">{{ order.delivery_slot }}</div>
+        </div>
+        {% endif %}
+        {% if order.delivery_location and order.delivery_location.receiver_phone %}
+        <div class="kf-info-cell">
+          <div class="kf-info-label">Receiver phone</div>
+          <div class="kf-info-value">{{ order.delivery_location.receiver_phone }}</div>
+        </div>
+        {% endif %}
+        {% if order.delivery_code %}
+        <div class="kf-info-cell">
+          <div class="kf-info-label">Delivery code</div>
+          <div class="kf-info-value" style="font-family:'DM Mono',monospace;">{{ order.delivery_code }}</div>
+        </div>
+        {% endif %}
+      </div>
 
-    <div class="alert alert-secondary">
-      {% if order.deliver %}<div>Delivery requested</div>{% endif %}
-      {% if order.delivery_slot %}<div>Delivery time: {{ order.delivery_slot }}</div>{% endif %}
-      {% if order.delivery_location and order.delivery_location.receiver_phone %}<div>Receiver phone: {{ order.delivery_location.receiver_phone }}</div>{% endif %}
-      {% if order.delivery_code %}<div>Delivery Code: <strong>{{ order.delivery_code }}</strong></div>{% endif %}
       {% if discount_used %}
-      <div class="mt-2">
-        <span class="badge bg-success">Discount code used</span>
-        <div>Code: <code>{{ discount_used.code }}</code> – Amount: ${{ discount_used.amount }}</div>
+      <div class="kf-discount-row">
+        <span class="kf-discount-icon">🎁</span>
+        <div class="kf-discount-text">
+          Discount applied: <span class="kf-discount-code">{{ discount_used.code }}</span> — saves you <strong>${{ discount_used.amount }}</strong>
+        </div>
       </div>
       {% endif %}
     </div>
+  </div>
+  {% endif %}
 
-    <!-- ITEMS -->
-    <h5 class="section-title">Ordered Items</h5>
-    {% if order.items.all %}
-      {% for it in order.items.all %}
-        <div class="item-box">{{ it.product.name }} × {{ it.quantity }}</div>
-      {% endfor %}
-    {% else %}
-      <p class="text-muted">No items recorded.</p>
-    {% endif %}
+  <!-- ITEMS CARD -->
+  <div class="kf-card">
+    <div class="kf-card-header">
+      <div class="kf-card-icon">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </div>
+      <span class="kf-card-title">Ordered items</span>
+    </div>
+    <div class="kf-card-body">
+      {% if order.items.all %}
+        {% for it in order.items.all %}
+        <div class="kf-item-row">
+          <span class="kf-item-dot"></span>
+          <span class="kf-item-name">{{ it.product.name }}</span>
+          <span class="kf-item-qty">× {{ it.quantity }}</span>
+          <span class="kf-item-price">${{ it.price }}</span>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p style="color: var(--kf-muted); font-size: 14px;">No items recorded for this order.</p>
+      {% endif %}
+    </div>
+  </div>
 
-    <!-- DELIVERY -->
-    {% if order.deliver %}
-      <h5 class="section-title">Delivery Information</h5>
-
+  <!-- DELIVERY ADDRESS CARD -->
+  {% if order.deliver %}
+  <div class="kf-card">
+    <div class="kf-card-header">
+      <div class="kf-card-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <span class="kf-card-title">Delivery address</span>
+    </div>
+    <div class="kf-card-body">
       {% if order.delivery_location %}
-        <p>
-          <strong>Address:</strong><br>
-          {{ order.delivery_location.address_line }}
-          {% if order.delivery_location.postal_code %}
-            , {{ order.delivery_location.postal_code }}
-          {% endif %}
-        </p>
+        <div class="kf-address-label">Drop-off address</div>
+        <div class="kf-address-block">
+          {{ order.delivery_location.address_line }}{% if order.delivery_location.postal_code %}, {{ order.delivery_location.postal_code }}{% endif %}
+        </div>
 
         {% if order.delivery_location.latitude and order.delivery_location.longitude %}
           <a
             target="_blank"
-            class="btn btn-outline-success"
+            class="kf-map-btn"
             href="https://www.google.com/maps?q={{ order.delivery_location.latitude }},{{ order.delivery_location.longitude }}"
           >
-            📍 Open Exact Location in Google Maps
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Open in Google Maps
           </a>
         {% else %}
           <a
             target="_blank"
-            class="btn btn-outline-secondary"
+            class="kf-map-btn"
             href="https://www.google.com/maps/search/?api=1&query={{ order.delivery_location.address_line|urlencode }}"
           >
-            🗺 Open Address in Google Maps
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Search address on Maps
           </a>
         {% endif %}
+
       {% else %}
-        <p class="text-danger">Delivery selected but no location found.</p>
+        <p style="color:#a32d2d; font-size:14px;">⚠️ Delivery selected but no location found.</p>
       {% endif %}
-    {% else %}
-      <div class="alert alert-secondary mt-4">
-        Pickup Order (No Delivery)
-      </div>
-    {% endif %}
-
-    <!-- TOTAL -->
-    <div class="mt-4 text-end">
-      <h4>Total Due: <strong>${{ order.total_price }}</strong></h4>
-      <span class="badge bg-info text-dark">{{ order.status|upper }}</span>
     </div>
-
   </div>
-</div>
+  {% else %}
+  <div class="kf-card">
+    <div class="kf-card-body">
+      <div class="kf-pickup-tag">
+        <svg viewBox="0 0 24 24"><path d="M5 12H3l9-9 9 9h-2M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6h6v6"/></svg>
+        Pickup order — no delivery needed
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- TOTAL -->
+  <div class="kf-total-card">
+    <div>
+      <div class="kf-total-label">Total due</div>
+      <div class="kf-total-amount">${{ order.total_price }}</div>
+    </div>
+    <div class="kf-status-pill {{ order.status|lower|default:'default' }}" style="border: 2px solid rgba(255,255,255,0.3);">
+      {{ order.status|upper }}
+    </div>
+  </div>
+
+</div><!-- /.kf-page -->
 
 {% include 'freshbread/footer.html' %}
-	<!-- ALL JS FILES -->
-	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-	<script src="{% static 'js/popper.min.js' %}"></script>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <!-- ALL PLUGINS -->
-	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
-	<script src="{% static 'js/images-loded.min.js' %}"></script>
-	<script src="{% static 'js/isotope.min.js' %}"></script>
-	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
-	<script src="{% static 'js/form-validator.min.js' %}"></script>
-    <script src="{% static 'js/contact-form-script.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
 </body>
 </html>

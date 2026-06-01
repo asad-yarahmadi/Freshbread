@@ -1,0 +1,528 @@
+{% load static %}
+{% load tz %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin – Security Controls</title>
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      background-color: #f8f9fc;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    .container {
+      max-width: 1140px;
+    }
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      margin-bottom: 1.75rem;
+      overflow: hidden;
+    }
+    .card-header {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      font-weight: 600;
+      padding: 1rem 1.5rem;
+      border-bottom: none;
+    }
+    .status-badge {
+      padding: 0.4em 1em;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .log-list {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 0.5rem;
+    }
+    .list-group-item {
+      border-left: 4px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .list-group-item:hover {
+      background-color: #f1f5f9;
+      border-left-color: #3b82f6;
+    }
+    .btn {
+      border-radius: 8px;
+      padding: 0.65rem 1.5rem;
+      font-weight: 500;
+    }
+    .form-label {
+      font-weight: 500;
+      color: #1e293b;
+    }
+    .text-danger  { color: #dc2626 !important; }
+    .text-success { color: #16a34a !important; }
+    .divider { border-top: 1px solid #e2e8f0; margin: 1.25rem 0; }
+  </style>
+
+  <script>
+    function getNowIsoLocal() {
+      const d = new Date();
+      d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+      return d.toISOString().slice(0, 16); // up to minutes for datetime-local
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const start = document.getElementById('schedule_start');
+      const end   = document.getElementById('schedule_end');
+
+      if (start && !start.value) {
+        start.value = getNowIsoLocal();
+      }
+      if (end && !end.value) {
+        const d = new Date();
+        d.setHours(d.getHours() + 1);
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        end.value = d.toISOString().slice(0, 16);
+      }
+    });
+  </script>
+
+  {% include 'freshbread/header.html' %}
+</head>
+<body>
+{% timezone "America/Toronto" %}
+
+<div class="container py-5">
+<h2></h2><br>
+<h2></h2><br>
+  <h3 class="mb-4 fw-bold text-dark">
+    <i class="fa fa-shield-halved me-2 text-primary"></i>
+    Security Controls
+  </h3>
+
+  <div class="d-flex justify-content-end mb-4">
+    <a href="{% url 'manage_urls' %}" class="btn btn-outline-primary">
+      <i class="fa fa-link me-2"></i>
+      URL Blocker
+    </a>
+  </div>
+
+  <!-- Current Status Card -->
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+          <h5 class="mb-1">Current Site Status</h5>
+          {% if is_effective_lock %}
+            <span class="status-badge bg-danger text-white">Locked</span>
+          {% else %}
+            <span class="status-badge bg-success text-white">Unlocked</span>
+          {% endif %}
+        </div>
+        <div class="text-end">
+          <small class="text-muted">Manual lock:</small>
+          <strong>{{ site_lock.is_locked|yesno:"Enabled,Disabled" }}</strong>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <dl class="row g-0 mb-0 small">
+        {% if site_lock.is_locked %} 
+        <dt class="col-sm-3 text-muted">Lock reason:</dt>
+        <dd class="col-sm-9">{{ site_lock.reason|default:"—" }}</dd>
+         {% else %}
+        <dt class="col-sm-3 text-muted">Unlock reason:</dt>
+        <dd class="col-sm-9">{{ site_lock.reason|default:"—" }}</dd>
+         {% endif %}
+        <dt class="col-sm-3 text-muted mt-2">Schedule:</dt>
+        <dd class="col-sm-9 mt-2">
+          {% if site_lock.schedule_start %}
+            {{ site_lock.schedule_start|date:"Y-m-d H:i" }}
+          {% else %}—{% endif %}
+          →
+          {% if site_lock.schedule_end %}
+            {{ site_lock.schedule_end|date:"Y-m-d H:i" }}
+          {% else %}—{% endif %}
+        </dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Lock / Unlock -->
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="fa fa-lock me-2"></i> Lock / Unlock Site
+        </div>
+        <div class="card-body">
+          <form method="post">{% csrf_token %}
+            <div class="mb-3">
+              {% if site_lock.is_locked %} 
+              <label class="form-label">Reason (Optional) </label>
+              <input name="reason" class="form-control" placeholder="e.g. Maintenance window, security update">
+  <br>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+              <button name="action" value=""   class="btn btn-danger"   type="submit" disabled>
+                <i class="fa fa-lock me-1"></i> Lock Site
+              </button>
+              <button name="action" value="unlock" class="btn btn-success" type="submit">
+                <i class="fa fa-unlock me-1" aria-disabled="true"></i> Unlock Site
+              </button>
+            </div> 
+              {% else %}
+              <label class="form-label">Reason</label>
+              <input name="reason" class="form-control" placeholder="e.g. Maintenance window, security update" required>
+            <br>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+              <button name="action" value="lock"   class="btn btn-danger"   type="submit">
+                <i class="fa fa-lock me-1"></i> Lock Site
+              </button>
+              <button name="action" value="unlock" class="btn btn-success" type="submit" disabled>
+                <i class="fa fa-unlock me-1"></i> Unlock Site
+              </button>
+            </div> 
+              {% endif %}
+            </div>
+
+            <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+              <button name="action" value="lock"   class="btn btn-danger"   type="submit">
+                <i class="fa fa-lock me-1"></i> Lock Site
+              </button>
+              <button name="action" value="unlock" class="btn btn-success" type="submit">
+                <i class="fa fa-unlock me-1"></i> Unlock Site
+              </button>
+            </div> -->
+          </form>
+          <p class="text-muted small mt-3 mb-0">
+            Unlocking also clears any active DDoS protection locks.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Schedule -->
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header">
+          <i class="fa fa-clock-rotate-left me-2"></i> Scheduled Lock
+        </div>
+        <div class="card-body">
+          <form method="post">{% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Start time</label>
+                <input id="schedule_start" name="schedule_start" type="datetime-local"
+                       class="form-control" step="60"
+                       value="{{ site_lock.schedule_start|date:'Y-m-d\TH:i' }}">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">End time</label>
+                <input id="schedule_end" name="schedule_end" type="datetime-local"
+                       class="form-control" step="60"
+                       value="{{ site_lock.schedule_end|date:'Y-m-d\TH:i' }}">
+              </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+              <label class="form-label">Reason</label>
+              <input name="reason" class="form-control" placeholder="e.g. Planned deployment window" required>
+            </div>
+
+            <button name="action" value="schedule" class="btn btn-primary w-100">
+              <i class="fa fa-save me-1"></i> Save Schedule
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Security Log -->
+  <div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div>
+        <i class="fa fa-history me-2"></i> Recent Security Log
+      </div>
+      <small class="text-white-75">Includes lock, unlock, and DDoS trigger events</small>
+    </div>
+    <div class="card-body log-list p-0">
+      <ul class="list-group list-group-flush">
+        {% for item in logs %}
+          <li class="list-group-item px-4 py-3">
+            <div class="d-flex justify-content-between align-items-baseline">
+              <div>
+                <strong class="d-block">{{ item.event_type }}</strong>
+                <small class="text-muted">
+                  {{ item.created_at }}
+                  {% if item.actor %} • by {{ item.actor.username }}{% endif %}
+                </small>
+              </div>
+            </div>
+            {% if item.message %}
+              <div class="mt-2 text-secondary">{{ item.message }}</div>
+            {% endif %}
+          </li>
+        {% empty %}
+          <li class="list-group-item text-center text-muted py-5">
+            No recent security events.
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Suspicious Activity -->
+<div class="card shadow border-0 mt-4 overflow-hidden">
+  <!-- Header -->
+  <div class="card-header bg-primary bg-gradient text-white d-flex justify-content-between align-items-center py-3 px-4">
+    <div class="d-flex align-items-center">
+      <i class="fa fa-user-secret me-3 fs-4"></i>
+      <div>
+        <h5 class="mb-1">Suspicious Activity</h5>
+        <small class="opacity-85">Tracked after 3+ failed actions — IPs, users & behavior</small>
+      </div>
+    </div>
+    <small class="opacity-75 d-none d-md-block">Clicks • Pages • Events</small>
+  </div>
+
+  <div class="card-body p-0">
+    <!-- Verification Controls -->
+    <div class="alert alert-light border-bottom rounded-0 mb-0 px-4 py-3">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div class="d-flex align-items-center">
+          {% if delete_verified_until %}
+            <i class="fa fa-check-circle text-success me-2 fs-4"></i>
+            <div>
+              <strong>Deletion mode active</strong>
+              <div class="text-muted small">Valid until {{ delete_verified_until }}</div>
+            </div>
+          {% else %}
+            <i class="fa fa-shield-halved text-warning me-2 fs-4"></i>
+            <div>
+              <strong>Verification required</strong>
+              <div class="text-muted small">to enable report & record deletion</div>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+          <form method="post" class="m-0">{% csrf_token %}
+            <input type="hidden" name="action" value="request_delete_verify">
+            <button type="submit" class="btn btn-sm btn-outline-primary">
+              <i class="fa fa-envelope me-1"></i> Send Code
+            </button>
+          </form>
+
+          <form method="post" class="d-flex align-items-center m-0 gap-2">{% csrf_token %}
+            <input type="hidden" name="action" value="confirm_delete_verify">
+            <input name="verify_code" class="form-control form-control-sm" 
+                   style="width: 140px;" placeholder="Code" autocomplete="one-time-code">
+            <button type="submit" class="btn btn-sm btn-primary">
+              <i class="fa fa-check me-1"></i> Verify
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {% if suspicious %}
+    <div class="table-responsive">
+      <table class="table table-sm table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th class="ps-4">IP</th>
+            <th>User</th>
+            <th>Failures</th>
+            <th>Last Seen</th>
+            <th class="text-end pe-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in suspicious %}
+          <tr class="align-middle {% if a.unread %}bg-warning-subtle{% endif %}">
+            <td class="ps-4">
+              <strong>{{ a.ip }}</strong>
+              {% if a.unread %}
+                <span class="badge bg-danger ms-2 pulse-badge">New</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if a.user %}
+                {{ a.user.username }}
+              {% else %}
+                <span class="text-muted fst-italic">anonymous</span>
+              {% endif %}
+            </td>
+            <td><span class="fw-bold text-danger">{{ a.failure_count }}</span></td>
+            <td class="text-nowrap">{{ a.last_seen|date:"Y-m-d H:i" }}</td>
+            <td class="text-end pe-4">
+              <div class="d-flex flex-wrap gap-2 justify-content-end">
+                <!-- Block / Unblock -->
+                {% if a.is_blocked %}
+                  <form method="post">{% csrf_token %}
+                    <input type="hidden" name="action" value="unblock_ip">
+                    <input type="hidden" name="activity_id" value="{{ a.id }}">
+                    <button type="submit" class="btn btn-sm btn-success">
+                      <i class="fa fa-unlock-alt"></i> Unblock
+                    </button>
+                  </form>
+                {% else %}
+                  <form method="post">{% csrf_token %}
+                    <input type="hidden" name="action" value="block_ip">
+                    <input type="hidden" name="activity_id" value="{{ a.id }}">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                      <i class="fa fa-ban"></i> Block
+                    </button>
+                  </form>
+                {% endif %}
+
+                <!-- Mute / Unmute -->
+                {% if a.suppress_logging %}
+                  <form method="post">{% csrf_token %}
+                    <input type="hidden" name="action" value="unmute_logs">
+                    <input type="hidden" name="activity_id" value="{{ a.id }}">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">
+                      <i class="fa fa-volume-up"></i> Unmute
+                    </button>
+                  </form>
+                {% else %}
+                  <form method="post">{% csrf_token %}
+                    <input type="hidden" name="action" value="mute_logs">
+                    <input type="hidden" name="activity_id" value="{{ a.id }}">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">
+                      <i class="fa fa-volume-mute"></i> Mute
+                    </button>
+                  </form>
+                {% endif %}
+
+                <!-- Delete actions (only when verified) -->
+                {% if delete_verified_until %}
+                  <form method="post">{% csrf_token %}
+                    <input type="hidden" name="action" value="delete_ip_record">
+                    <input type="hidden" name="activity_id" value="{{ a.id }}">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                      <i class="fa fa-trash-can"></i> Delete IP
+                    </button>
+                  </form>
+
+                  <form method="post">{% csrf_token %}
+                    <input type="hidden" name="action" value="delete_reports">
+                    <input type="hidden" name="activity_id" value="{{ a.id }}">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                      <i class="fa fa-trash"></i> Clear Reports
+                    </button>
+                  </form>
+                {% else %}
+                  <button class="btn btn-sm btn-danger" disabled>
+                    <i class="fa fa-trash-can"></i> Delete IP
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" disabled>
+                    <i class="fa fa-trash"></i> Clear Reports
+                  </button>
+                {% endif %}
+
+                <!-- Reviewed -->
+                <form method="post">{% csrf_token %}
+                  <input type="hidden" name="action" value="mark_reviewed">
+                  <input type="hidden" name="activity_id" value="{{ a.id }}">
+                  <button type="submit" class="btn btn-sm btn-outline-primary">
+                    <i class="fa fa-check"></i> Reviewed
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Events -->
+          <tr>
+            <td colspan="5" class="p-0">
+              <details class="bg-white">
+                <summary class="d-flex justify-content-between align-items-center px-4 py-3 bg-light-subtle hover-bg-light pointer">
+                  <div class="d-flex align-items-center">
+                    <i class="fa fa-chevron-right me-3 text-muted transition-rotate"></i>
+                    <strong>Recent Events</strong>
+                    <span class="badge bg-secondary ms-3">{{ a.events.count }}</span>
+                  </div>
+
+                  {% with succ=a.last_success_event %}
+                    {% if succ or a.last_success_at %}
+                      <small class="text-success fw-medium">
+                        Last success: 
+                        {% if succ %}{{ succ.created_at|date:"Y-m-d H:i" }}{% else %}{{ a.last_success_at|date:"Y-m-d H:i" }}{% endif %}
+                      </small>
+                    {% endif %}
+                  {% endwith %}
+                </summary>
+
+                <div class="p-4 bg-white small">
+                  {% if a.events.exists %}
+                  <ul class="list-unstyled mb-0">
+                    {% for e in a.events.all %}
+                    <li class="py-3 border-top d-flex justify-content-between align-items-start gap-4 hover-bg-light">
+                      <div class="flex-grow-1">
+                        <div class="d-flex align-items-center mb-2 flex-wrap gap-2">
+                          <span class="text-muted font-monospace">{{ e.created_at|date:"H:i:s" }}</span>
+                          <code class="bg-light px-1 py-0">{{ e.method }} {{ e.path }}</code>
+                          <span class="badge bg-secondary">{{ e.status_code }}</span>
+                          {% if e.action %}<span class="badge bg-info">{{ e.action }}</span>{% endif %}
+                        </div>
+                        {% if e.meta %}<div class="text-muted mt-1">{{ e.meta|truncatechars:160 }}</div>{% endif %}
+                        {% if e.referer %}<div class="text-muted mt-1 small">Referer: {{ e.referer|truncatechars:100 }}</div>{% endif %}
+                      </div>
+
+                      <div class="flex-shrink-0">
+                        {% if delete_verified_until %}
+                        <form method="post">{% csrf_token %}
+                          <input type="hidden" name="action" value="delete_report_event">
+                          <input type="hidden" name="event_id" value="{{ e.id }}">
+                          <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </form>
+                        {% else %}
+                        <button class="btn btn-sm btn-outline-danger" disabled>
+                          <i class="fa fa-trash"></i>
+                        </button>
+                        {% endif %}
+                      </div>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                  {% else %}
+                  <p class="text-center text-muted py-5 mb-0">
+                    <i class="fa fa-history fa-2x opacity-50 mb-2 d-block"></i>
+                    No events captured yet.
+                  </p>
+                  {% endif %}
+                </div>
+              </details>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="p-5 text-center text-muted">
+      <i class="fa fa-shield-halved fa-4x mb-4 opacity-50"></i>
+      <h5 class="mb-2">All clear</h5>
+      <p class="lead mb-0">No suspicious activity is currently being tracked.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+</div>
+
+{% include 'freshbread/footer.html' %}
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+{% endtimezone %}
+</html>

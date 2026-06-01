@@ -92,7 +92,7 @@
             <div class="order-card border-start border-4 border-primary">
               <div class="card-body">
                 <div class="d-flex align-items-center mb-3">
-                  <img src="{{ r.user.profile.avatar.url }}" alt="avatar" width="50" height="50" class="rounded-circle me-3 avatar-img">
+                  <img src="{% if r.user.profile and r.user.profile.avatar and r.user.profile.avatar.name != 'default_avatar.png' %}{{ r.user.profile.avatar.url }}{% else %}{% static 'images/profile-7.jpg' %}{% endif %}" alt="avatar" width="50" height="50" class="rounded-circle me-3 avatar-img" onerror="this.onerror=null;this.src='{% static 'images/profile-7.jpg' %}'">
                   <div>
                     <h5 class="mb-0">{{ r.user.username }}</h5>
                     <small class="text-muted">{{ r.email }}</small>
@@ -160,7 +160,7 @@
             <div class="order-card border-start border-4 border-danger">
               <div class="card-body">
                 <div class="d-flex align-items-center mb-3">
-                  <img src="{{ r.user.profile.avatar.url }}" alt="avatar" width="50" height="50" class="rounded-circle me-3 avatar-img">
+                  <img src="{% if r.user.profile and r.user.profile.avatar and r.user.profile.avatar.name != 'default_avatar.png' %}{{ r.user.profile.avatar.url }}{% else %}{% static 'images/profile-7.jpg' %}{% endif %}" alt="avatar" width="50" height="50" class="rounded-circle me-3 avatar-img" onerror="this.onerror=null;this.src='{% static 'images/profile-7.jpg' %}'">
                   <div>
                     <h5 class="mb-0">{{ r.user.username }}</h5>
                     <small class="text-muted">{{ r.email }}</small>

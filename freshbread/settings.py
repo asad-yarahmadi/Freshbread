@@ -13,7 +13,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-import dj_database_url
+try:
+    import dj_database_url  # type: ignore
+except Exception:
+    dj_database_url = None
 
 # Load environment variables from .env file
 load_dotenv()
@@ -47,9 +50,11 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "core.interfaces.http.middleware.site_security_middleware.SiteSecurityMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "core.interfaces.http.middleware.robots_middleware.RobotsNoIndexMiddleware",
+    "core.interfaces.http.middleware.admin_middleware.URLBlockerMiddleware", 
 ]
 
 # مسیر اصلی URL
@@ -86,6 +91,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'freshbread.context_processors.cart_total_items',
                 'freshbread.context_processors.cart_context',
+                'freshbread.context_processors.announcement_and_release',
+                'freshbread.context_processors.site_lock_reason'
             ],
         },
     },

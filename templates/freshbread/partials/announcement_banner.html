@@ -1,0 +1,12 @@
+{% if user.is_authenticated and announcement %}
+<div class="container mt-3">
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>{{ announcement.title }}</strong>
+    <div class="mt-1">{{ announcement.body|linebreaksbr }}</div>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <hr>
+</div>
+{% endif %}

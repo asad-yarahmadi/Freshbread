@@ -19,32 +19,63 @@
         display: flex;
         justify-content: center;
         align-items: center;
-background: radial-gradient(
-                circle at top left,
-                rgba(255, 96, 219, 0.40),   /* قبلاً 0.25 بود → روشن‌تر */
-                transparent 45%
-            ),
-            radial-gradient(
-                circle at bottom right,
-                rgba(86, 191, 255, 0.40),  /* قبلاً 0.25 بود → روشن‌تر */
-                transparent 45%
-            ),
-            linear-gradient(
-                135deg,
-                #142050,   /* روشن‌تر از #0a0f2a */
-                #1a2b63,   /* روشن‌تر از #0d173b */
-                #1f3a7a    /* روشن‌تر از #10204d */
-            );
-background-size: cover;
-background-attachment: fixed;
-
+        background: radial-gradient(circle at top left, rgba(255, 96, 219, 0.40), transparent 45%),
+                    radial-gradient(circle at bottom right, rgba(86, 191, 255, 0.40), transparent 45%),
+                    linear-gradient(135deg, #142050, #1a2b63, #1f3a7a);
+        background-size: cover;
+        background-attachment: fixed;
         overflow: hidden;
     }
 
-    /* ---------- FUTURE GLASS CARD ---------- */
+    /* Progress Bar */
+    #progress-bar {
+        position: fixed;
+        top: 0; left: 0;
+        width: 0%;
+        height: 3px;
+        background: linear-gradient(90deg, #ff45c4, #6bc7ff);
+        z-index: 10000;
+        box-shadow: 0 0 8px rgba(255, 69, 196, 0.6);
+        transition: width 0.4s ease;
+    }
+
+    /* Return to Home */
+    .return-home {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #fff;
+        background: rgba(255,255,255,0.1);
+        padding: 10px 16px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-size: 14.5px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.15);
+        transition: 0.3s;
+        z-index: 100;
+    }
+    .return-home:hover {
+        background: rgba(255,255,255,0.25);
+        transform: translateX(-5px);
+    }
+
+    @media (max-width: 576px) {
+        .return-home {
+            padding: 12px;
+            border-radius: 50%;
+        }
+        .return-home span { display: none; }
+    }
+
+    /* Login Card */
     .login-card {
         position: relative;
-        width: 420px;
+        width: 100%;
+        max-width: 420px;
         padding: 45px 40px;
         border-radius: 22px;
         background: rgba(39, 44, 85, 0.5);
@@ -52,6 +83,7 @@ background-attachment: fixed;
         border: 1px solid rgba(255,255,255,0.15);
         box-shadow: 0 0 30px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.05);
         animation: fadeIn 0.7s ease;
+        margin: 20px;
     }
 
     @keyframes fadeIn {
@@ -64,14 +96,13 @@ background-attachment: fixed;
         font-size: 28px;
         font-weight: 700;
         color: #fff;
-        margin-bottom: 25px;
-        letter-spacing: 1px;
+        margin-bottom: 30px;
         background: linear-gradient(90deg, #ff43c1, #7acbff);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
-    /* ---------- INPUTS ---------- */
+    /* Inputs */
     .form-group {
         position: relative;
         margin-bottom: 22px;
@@ -95,12 +126,7 @@ background-attachment: fixed;
         font-size: 15px;
         color: #fff;
         outline: none;
-        transition: 0.25s;
-        backdrop-filter: blur(6px);
-    }
-
-    .form-group input::placeholder {
-        color: #a9b3c6;
+        transition: 0.3s;
     }
 
     .form-group input:focus {
@@ -108,11 +134,11 @@ background-attachment: fixed;
         box-shadow: 0 0 12px rgba(110,180,255,0.45);
     }
 
-    /* ---------- BUTTON ---------- */
+    /* Submit Button */
     .btn-submit {
         width: 100%;
         padding: 15px;
-        margin-top: 5px;
+        margin-top: 8px;
         border-radius: 14px;
         border: none;
         background: linear-gradient(90deg, #ff45c4, #6bc7ff);
@@ -120,76 +146,95 @@ background-attachment: fixed;
         font-size: 17px;
         font-weight: 700;
         cursor: pointer;
-        letter-spacing: 1px;
-        box-shadow: 0 0 15px rgba(255,255,255,0.25);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
         transition: 0.3s;
     }
 
     .btn-submit:hover {
-        filter: brightness(1.2);
+        filter: brightness(1.15);
         transform: scale(1.03);
     }
 
-    /* ---------- SOCIAL ---------- */
+    .btn-submit.loading {
+        pointer-events: none;
+        filter: brightness(0.95);
+    }
+
+    .btn-submit .spinner {
+        width: 23px;
+        height: 23px;
+        border: 3.5px solid rgba(255,255,255,0.35);
+        border-top-color: #ffffff;
+        border-radius: 50%;
+        animation: spin 0.75s linear infinite;
+        display: none;
+    }
+
+    .btn-submit.loading .spinner {
+        display: block;
+    }
+
+    .btn-submit.loading span {
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Social */
     .social-section {
-        margin-top: 30px;
+        margin-top: 35px;
         text-align: center;
     }
-
     .social-section p {
         color: #d5d8e1;
-        font-weight: 600;
         margin-bottom: 15px;
+        font-weight: 600;
     }
-
     .social-icons {
         display: flex;
         justify-content: center;
-        gap: 18px;
+        gap: 20px;
     }
-
     .icon {
-        width: 48px;
-        height: 48px;
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 22px;
+        font-size: 24px;
         color: #fff;
-        cursor: pointer;
         transition: 0.3s;
-        backdrop-filter: blur(4px);
         box-shadow: 0 0 12px rgba(255,255,255,0.15);
     }
+    .icon:hover { transform: scale(1.12); }
+    .google { background: #db4437; }
+    .github { background: #333; }
 
-    .icon:hover {
-        transform: scale(1.15);
-        box-shadow: 0 0 20px rgba(255,255,255,0.35);
-    }
-
-    .google   { background: #db4437; }
-    .x        { background: #000;    }
-
-    /* ---------- FOOTER ---------- */
+    /* Footer */
     .footer-text {
         margin-top: 28px;
         text-align: center;
         font-size: 14px;
         color: #d2d6df;
     }
-
     .footer-text a {
         color: #7acbff;
         text-decoration: none;
         font-weight: 700;
     }
+    .footer-text a:hover { text-decoration: underline; }
 
-    .footer-text a:hover {
-        text-decoration: underline;
-    }
-
-    /* ---------- FLOATING DECOR ---------- */
+    /* Floating Dots */
     .dot {
         position: absolute;
         border-radius: 50%;
@@ -197,12 +242,10 @@ background-attachment: fixed;
         filter: blur(4px);
         animation: float 6s ease-in-out infinite;
     }
-
     @keyframes float {
         0%,100% { transform: translateY(0); }
         50%     { transform: translateY(-12px); }
     }
-
     .d1 { width: 80px; height: 80px; top: -40px; left: -35px; }
     .d2 { width: 55px; height: 55px; bottom: -30px; right: -25px; }
     .d3 { width: 40px; height: 40px; top: 35%; right: -20px; }
@@ -210,89 +253,49 @@ background-attachment: fixed;
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </head>
 <body>
 
-{% if messages %}
-<script>
-document.addEventListener("DOMContentLoaded", function() {
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
 
-    const messages = [
-        {% for message in messages %}
-        { text: "{{ message|escapejs }}", tag: "{{ message.tags }}" },
-        {% endfor %}
-    ];
-
-    function getAlertColors(tag) {
-        switch (tag) {
-            case 'success': return { bg:'#22c55e', text:'#fff', icon:'success' };
-            case 'error':   return { bg:'#dc2626', text:'#fff', icon:'error' };
-            case 'warning': return { bg:'#facc15', text:'#000', icon:'warning' };
-            default:        return { bg:'#2563eb', text:'#fff', icon:'info' };
-        }
-    }
-
-    function isMobile() { return window.innerWidth < 768; }
-
-    function showNext(index = 0) {
-        if (index >= messages.length) return;
-
-        const style = getAlertColors(messages[index].tag);
-        const mobile = isMobile();
-
-        Swal.fire({
-            title: messages[index].text,
-            icon: style.icon,
-            background: style.bg,
-            color: style.text,
-            timer: 6500,
-            timerProgressBar: true,
-            showConfirmButton: false,
-            toast: !mobile,
-            position: mobile ? 'center' : 'top-end',
-            showClass: { popup: 'animate__animated animate__fadeInDown' },
-            hideClass: { popup: 'animate__animated animate__fadeOutUp' }
-        }).then(() => showNext(index + 1));
-    }
-
-    showNext();
-});
-</script>
-{% endif %}
-
+<!-- Return to Home -->
+<a href="{% url 'index' %}" class="return-home">
+    <i class="fas fa-arrow-left"></i>
+    <span>Return to Home</span>
+</a>
 
 <div class="login-card">
-
     <div class="dot d1"></div>
     <div class="dot d2"></div>
     <div class="dot d3"></div>
 
     <h2>LOGIN</h2>
 
-    <form action="{% url 'Login' %}" method="POST">
+    <form id="login-form" action="{% url 'Login' %}" method="POST">
         {% csrf_token %}
 
         <div class="form-group">
             <i class="fa fa-envelope"></i>
-            <input type="text" name="username" placeholder="Username or Email" required />
+            <input type="text" id="username" name="username" placeholder="Username or Email" required />
         </div>
 
         <div class="form-group">
             <i class="fa fa-lock"></i>
-            <input type="password" name="password" placeholder="Password" required />
+            <input type="password" id="password" name="password" placeholder="Password" required />
         </div>
 
-        <button type="submit" class="btn-submit">Login</button>
+        <button type="submit" id="submit-btn" class="btn-submit">
+            <span>Login</span>
+            <div class="spinner"></div>
+        </button>
 
         <div class="social-section">
             <p>Or Login With</p>
-
             <div class="social-icons">
-                <a href="{% url 'social:begin' 'github' %}" class="icon x">
+                <a href="{% url 'social:begin' 'github' %}" class="icon github">
                     <i class="fab fa-github"></i>
                 </a>
-
                 <a href="{% url 'social:begin' 'google-oauth2' %}" class="icon google">
                     <i class="fab fa-google"></i>
                 </a>
@@ -300,13 +303,74 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
 
         <div class="footer-text">
-            Forgot your password?
-            <a href="{% url 'reset_password_step1' %}">Reset</a><br>
-            Don’t have an account?
-            <a href="{% url 'su' %}">Register</a>
+            Forgot your password? <a href="{% url 'reset_password_step1' %}">Reset</a><br>
+            Don’t have an account? <a href="{% url 'su' %}">Register</a>
         </div>
     </form>
 </div>
+
+<script>
+// Progress Bar
+const progressBar = document.getElementById('progress-bar');
+function startProgress() {
+    progressBar.style.width = '0%';
+    setTimeout(() => progressBar.style.width = '95%', 50);
+}
+document.querySelectorAll('a').forEach(link => link.addEventListener('click', startProgress));
+
+// Login Form
+const form = document.getElementById('login-form');
+const submitBtn = document.getElementById('submit-btn');
+let isSubmitting = false;
+
+form.addEventListener('submit', function(e) {
+    if (isSubmitting) {
+        e.preventDefault();
+        return;
+    }
+    isSubmitting = true;
+    submitBtn.classList.add('loading');
+});
+
+// SweetAlert Messages
+{% if messages %}
+document.addEventListener("DOMContentLoaded", function() {
+    const messages = [
+        {% for message in messages %}
+        { text: "{{ message|escapejs }}", tag: "{{ message.tags }}" },
+        {% endfor %}
+    ];
+
+    function getAlertColors(tag) {
+        switch(tag) {
+            case 'success': return { bg:'#22c55e', icon:'success' };
+            case 'error':   return { bg:'#dc2626', icon:'error' };
+            case 'warning': return { bg:'#facc15', icon:'warning' };
+            default:        return { bg:'#3b82f6', icon:'info' };
+        }
+    }
+
+    function showNext(index = 0) {
+        if (index >= messages.length) return;
+        const style = getAlertColors(messages[index].tag);
+
+        Swal.fire({
+            title: messages[index].text,
+            icon: style.icon,
+            background: style.bg,
+            color: '#fff',
+            timer: 6000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: window.innerWidth < 768 ? false : true,
+            position: window.innerWidth < 768 ? 'center' : 'top-end',
+        }).then(() => showNext(index + 1));
+    }
+
+    showNext();
+});
+{% endif %}
+</script>
 
 </body>
 </html>

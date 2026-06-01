@@ -155,7 +155,18 @@
 </head>
 <body>
 
-{% include 'freshbread/header.html' %}
+<header class="top-navbar">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" />
+      </a>
+      
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
 
 <div class="error-page">
     <div class="error-container">
@@ -184,20 +195,23 @@
         <div class="error-number">403</div>
 
         <h1 class="error-heading">Access Denied</h1>
-
+        {% if site_lock.reason %}
         <p class="error-message">
-            Sorry, you don't have permission to view this page.<br>
-            <span class="friendly">This oven is locked — Kingfood only for authorized bakers! 🔒🍞</span>
-        </p>
-
-        <a href="{% url 'index' %}" class="btn-home">
-            <i class="fas fa-home me-2"></i> Back to Home
-        </a>
-
+            Sorry, {{ site_lock.reason }}<br>
+        {% if site_lock.schedule_start and site_lock.schedule_end %}
+        <span class="friendly">Time: {{ site_lock.schedule_start|date:"Y M d (m-d) H:i" }} → {{ site_lock.schedule_end|date:"Y M d (m-d) H:i" }}</span></p>
+        {% endif %}
+        {% else %}
+        <p class="error-message">
+        You don't have permission to view this page, Or your access has limited.<br>
+        <span class="friendly">This oven is locked — Kingfood only for authorized bakers! 🔒🍞</span>
+        {% endif %}
+</p>
         <div class="extra-links">
-            <a href="{% url 'index' %}">Home</a> •
-            <a href="{% url 'contact' %}">Contact Us</a> •
-            <a href="{% url 'tickets' %}">Support</a>
+            <p>Contact Informaition:</p>
+            <p>Address: 2935 Richmond Rd, Ottawa, ON K2B 8C9، Canada </p> <a href="tel:+1 (514) 984 4773">+1 (514) 984 4773</a><a href="mailto:kingfoodca@gmail.com">kingfoodca@gmail.com</a>
+
+
         </div>
     </div>
 </div>

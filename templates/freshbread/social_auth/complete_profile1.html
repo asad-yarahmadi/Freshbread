@@ -247,7 +247,7 @@
         <div class="footer-text1">
             <label>
                 <input id="remembermesignup" name="acc_prpo" type="checkbox" {% if acc_prpo %}checked{% endif %} />
-                <span>I agree to the <a href="#">Privacy Policy</a> and <a href="#">Terms of use</a></span>
+                          <span>I agree to the <a href="{% url 'prpo' %}">Privacy Policy</a> and <a href="{% url 'tms' %}">Terms of use</a> </span>
             </label>
         </div>
 

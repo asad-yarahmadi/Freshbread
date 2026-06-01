@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Releases | Kingfood</title>
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      background-color: #f8f9fc;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    .container {
+      max-width: 960px;
+    }
+    .card {
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .list-group-item {
+      padding: 1.25rem 1.5rem;
+      border-left: 4px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .list-group-item:hover {
+      background-color: #f1f5f9;
+      border-left-color: #3b82f6;
+      transform: translateX(4px);
+    }
+    .version-badge {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 10px;
+      min-width: 120px;
+      text-align: center;
+    }
+    .date {
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+    .header-icon {
+      font-size: 1.8rem;
+    }
+    .empty-state {
+      padding: 4rem 1rem;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+
+<div class="container py-5">
+<h2></h2><br>
+<h2></h2><br>
+  <h1 class="fw-bold text-center mb-5">
+    <i class="fa fa-rocket header-icon text-primary me-3"></i>
+     Releases
+  </h1>
+
+  <div class="card">
+    <div class="card-header bg-gradient text-white d-flex align-items-center gap-3" 
+         style="background: linear-gradient(135deg, #1e40af, #3b82f6); border-bottom: none;">
+      <i class="fa fa-history fa-lg"></i>
+      <span>Release History</span>
+    </div>
+
+    <ul class="list-group list-group-flush">
+      {% for r in releases %}
+        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div class="d-flex align-items-center gap-4 flex-grow-1">
+            <span class="version-badge">{{ r.version }}</span>
+            <div>
+              <div class="date mb-1">
+                <i class="fa fa-calendar-day me-2 text-muted"></i>
+                {{ r.release_date|date:"F j, Y" }}
+              </div>
+              {% if r.published %}
+                <span class="badge bg-success">Published</span>
+              {% else %}
+                <span class="badge bg-secondary">Draft</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <a href="{% url 'release_detail' r.version %}" class="btn btn-outline-primary btn-md">
+            <i class="fa fa-eye me-1"></i> View Details
+          </a>
+        </li>
+      {% empty %}
+        <li class="list-group-item empty-state py-5">
+          <i class="fa fa-box-open fa-3x mb-3 d-block text-muted"></i>
+          No releases have been published yet.<br>
+          <small>Check back soon for updates!</small>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Optional: small footer note -->
+  <p class="text-center text-muted mt-4 small">
+    Latest version is always available in the app or on this page.
+  </p>
+
+</div>
+
+{% include 'freshbread/footer.html' %}
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

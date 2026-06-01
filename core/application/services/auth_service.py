@@ -82,7 +82,7 @@ class AuthService:
                 raise ValidationError("Invalid username/email or password.")
 
             if not authenticated_user.is_active:
-                raise ValidationError("🚫 حساب کاربری شما غیرفعال است.")
+                raise ValidationError("🚫 Account disabaled.")
 
             # ورود موفق
             login(request, authenticated_user, backend='django.contrib.auth.backends.ModelBackend')
@@ -585,7 +585,7 @@ class AuthService:
 
         except Exception as e:
             logger.error(f"Failed to send password reset email to {email}: {str(e)}")
-            raise ValidationError("خطا در ارسال ایمیل بازنشانی.")
+            raise ValidationError("Failed to send password reset email.")
 
 
 # Instance

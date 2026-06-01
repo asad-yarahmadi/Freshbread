@@ -1,0 +1,138 @@
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  function showRelease() {
+    {% if release_to_show %}
+      Swal.fire({
+        title: 'Welcome to {{ release_to_show.version|escapejs }}',
+        html: `
+          <div style="text-align: left; font-size: 1.05rem;">
+            <p><strong>Release Date:</strong> {{ release_to_show.release_date|date:"F j, Y"|escapejs }}</p>
+            <hr style="margin: 1.2rem 0;">
+            
+            <h6 style="margin-bottom: 0.6rem; color: #1e40af;">New Features</h6>
+            <div style="white-space: pre-wrap; line-height: 1.6;">
+              {{ release_to_show.features|default:"No new features listed."|escapejs }}
+            </div>
+            
+            <hr style="margin: 1.2rem 0;">
+            
+            <h6 style="margin-bottom: 0.6rem; color: #047857;">Bug Fixes & Improvements</h6>
+            <div style="white-space: pre-wrap; line-height: 1.6;">
+              {{ release_to_show.bug_fixes|default:"No fixes in this release."|escapejs }}
+            </div>
+          </div>
+        `,
+        icon: 'success',
+        confirmButtonText: 'Got it!',
+        confirmButtonColor: '#10b981',
+        background: '#ecfdf5',
+        padding: '2rem',
+      });
+    {% endif %}
+  }
+
+  function showAnnouncement() {
+    {% if announcement %}
+      Swal.fire({
+        title: "{{ announcement.title|escapejs }}",
+        html: `
+          <div style="text-align: left; white-space: pre-wrap; line-height: 1.6; font-size: 1.05rem;">
+            {{ announcement.body|escapejs }}
+          </div>
+        `,
+        icon: 'info',
+        confirmButtonText: 'Got it',
+        confirmButtonColor: '#3b82f6',
+        background: '#fffbeb',
+        padding: '2rem',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: true,
+      }).then(() => {
+        // Small delay so the second popup doesn't feel too abrupt
+        setTimeout(showRelease, 400);
+      });
+    {% else %}
+      showRelease();
+    {% endif %}
+  }
+
+  // Start the flow
+  showAnnouncement();
+
+});
+</script><script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const isMobile = window.innerWidth < 576;
+
+  function showRelease() {
+    {% if release_to_show %}
+      Swal.fire({
+        title: 'Release {{ release_to_show.version|escapejs }}',
+        html: `
+          <div style="text-align: left; font-size: ${isMobile ? '0.95rem' : '1.05rem'}; line-height: 1.6; max-height: 60vh; overflow-y: auto; padding-right: 8px;">
+            <p style="margin-bottom: 1rem;"><strong>Release Date:</strong> {{ release_to_show.release_date|date:"F j, Y"|escapejs }}</p>
+            <hr style="margin: 1.2rem 0; border-color: #e5e7eb;">
+
+            <h6 style="margin: 1rem 0 0.5rem; color: #1e40af; font-size: ${isMobile ? '1.1rem' : '1.25rem'};">New Features</h6>
+            <div style="white-space: pre-wrap; word-break: break-word;">
+              {{ release_to_show.features|default:"No new features listed in this release."|escapejs }}
+            </div>
+
+            <hr style="margin: 1.2rem 0; border-color: #e5e7eb;">
+
+            <h6 style="margin: 1rem 0 0.5rem; color: #047857; font-size: ${isMobile ? '1.1rem' : '1.25rem'};">Bug Fixes & Improvements</h6>
+            <div style="white-space: pre-wrap; word-break: break-word;">
+              {{ release_to_show.bug_fixes|default:"No fixes or improvements in this release."|escapejs }}
+            </div>
+          </div>
+        `,
+        icon: 'success',
+        confirmButtonText: 'Got it!',
+        confirmButtonColor: '#10b981',
+        background: '#ecfdf5',
+        padding: isMobile ? '1.2rem' : '2rem',
+        width: isMobile ? '90%' : '720px',
+        maxWidth: '95vw',
+        showCloseButton: true,
+        scrollbarPadding: false,
+      });
+    {% endif %}
+  }
+
+  function showAnnouncement() {
+    {% if announcement %}
+      Swal.fire({
+        title: "{{ announcement.title|escapejs }}",
+        html: `
+          <div style="text-align: left; white-space: pre-wrap; line-height: 1.6; font-size: ${isMobile ? '0.95rem' : '1.05rem'}; word-break: break-word; max-height: 65vh; overflow-y: auto; padding-right: 8px;">
+            {{ announcement.body|escapejs }}
+          </div>
+        `,
+        icon: 'info',
+        confirmButtonText: 'Got it',
+        confirmButtonColor: '#3b82f6',
+        background: '#fffbeb',
+        padding: isMobile ? '1.2rem' : '2rem',
+        width: isMobile ? '90%' : '680px',
+        maxWidth: '95vw',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: true,
+        showCloseButton: true,
+        scrollbarPadding: false,
+      }).then(() => {
+        setTimeout(showRelease, 300);
+      });
+    {% else %}
+      showRelease();
+    {% endif %}
+  }
+
+  // Start the sequence
+  showAnnouncement();
+
+});
+</script>

@@ -4,6 +4,7 @@ from django.utils import timezone
 from datetime import timedelta
 from core.infrastructure.email.alerts import email_alert_sender
 from django.conf import settings
+from core.infrastructure.models import SecurityEventLog
 
 class DDOSChecker:
 
@@ -35,6 +36,7 @@ class DDOSChecker:
 
             cache.set('site_locked', True, self.LOCKDOWN_TIME)
             cache.set('request_log', log, self.LOCKDOWN_TIME)
+            cache.set('site_lock_state', {'is_locked': True, 'reason': 'DDoS protection active'}, self.LOCKDOWN_TIME)
 
             subject = "🚨 DDOS Protection Triggered"
             message = (
@@ -45,6 +47,13 @@ class DDOSChecker:
 
             # === ارسال هشدار (ایمیل) ===
             email_alert_sender.send(subject, message)
+            try:
+                SecurityEventLog.objects.create(
+                    event_type=SecurityEventLog.EVENT_DDOS,
+                    message=f"DDoS threshold exceeded: {len(log['timestamps'])} in {self.WINDOW_MINUTES}m"
+                )
+            except Exception:
+                pass
 
 
         # ذخیره مجدد Log

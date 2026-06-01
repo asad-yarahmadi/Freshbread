@@ -68,7 +68,9 @@ def food_de(request, slug):
         cart = request.session.get('cart', {})
         if str(product.slug) in cart:
             cart_quantity = cart[str(product.slug)].get('quantity', 0)
-    approved_reviews = product.reviews.filter(is_approved=True)
+    approved_reviews = product.reviews.filter(is_approved=True, parent__isnull=True).prefetch_related(
+        'replies', 'replies__replies', 'replies__replies__replies', 'replies__replies__replies__replies'
+    )
     avg_rating = approved_reviews.aggregate(avg=Avg('rating'))['avg'] or 0
     context = {
         'product': product,
@@ -115,5 +117,4 @@ def get_countdown_data(request):
     }
 
     return JsonResponse(data)
-
 

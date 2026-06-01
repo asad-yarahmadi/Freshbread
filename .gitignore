@@ -133,7 +133,7 @@ celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
-
+liara.json
 # Environments
 .env
 .envrc
@@ -205,3 +205,28 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+application/__pycache__/
+application/dto/__pycache__/
+application/security/__pycache__/
+application/services/__pycache__/
+
+domain/__pycache__/
+domain/entities/__pycache__/
+domain/utils/__pycache__/
+domain/validators/__pycache__/
+
+infrastructure/__pycache__/
+infrastructure/email/__pycache__/
+infrastructure/migrations/__pycache__/
+infrastructure/models/__pycache__/
+infrastructure/repositories/__pycache__/
+infrastructure/social/__pycache__/
+
+interfaces/__pycache__/
+interfaces/forms/__pycache__/
+interfaces/http/__pycache__/
+interfaces/http/middleware/__pycache__/
+interfaces/http/urls/__pycache__/
+interfaces/http/utils/__pycache__/
+interfaces/http/views/__pycache__/

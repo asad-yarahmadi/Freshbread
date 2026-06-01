@@ -314,6 +314,7 @@ def admin_order_accept(request, review_id):
         return redirect("admin_order_reviews")
     from core.infrastructure.models import ManualOrderRequest, UsedPaymentReference, Order, OrderItem, Product
     import json
+    from decimal import Decimal, InvalidOperation
     try:
         review = ManualOrderRequest.objects.get(id=review_id)
     except ManualOrderRequest.DoesNotExist:
@@ -329,7 +330,17 @@ def admin_order_accept(request, review_id):
     for it in items:
         try:
             product = Product.objects.get(id=it.get('product_id'))
-            OrderItem.objects.create(order=order, product=product, quantity=int(it.get('quantity', 1)), price=product.price)
+            saved_price = it.get('price', product.price)
+            try:
+                saved_price = Decimal(str(saved_price))
+            except (InvalidOperation, TypeError, ValueError):
+                saved_price = product.price
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                quantity=int(it.get('quantity', 1)),
+                price=saved_price,
+            )
         except Exception:
             continue
     try:

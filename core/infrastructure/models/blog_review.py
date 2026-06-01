@@ -5,6 +5,8 @@ from .blog_post import BlogPost
 
 class BlogReview(models.Model):
     post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='reviews')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    depth = models.PositiveSmallIntegerField(default=1)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100, blank=True)

@@ -25,6 +25,9 @@ class BlogPost(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             base = slugify(self.title)
+            if not base:
+                from django.utils.crypto import get_random_string
+                base = f"post-{get_random_string(8)}"
             candidate = base
             i = 1
             while BlogPost.objects.filter(slug=candidate).exclude(pk=self.pk).exists():

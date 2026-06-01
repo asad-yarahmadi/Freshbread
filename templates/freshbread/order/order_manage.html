@@ -13,6 +13,7 @@
     <script src="https://kit.fontawesome.com/a2d9d5c01f.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
 
+ -->
     <style>
         body {
             background: #f5f7fa;
@@ -407,6 +408,8 @@
                     </div>
                 </div>
             {% endif %}
+            {% empty %}
+            <p class="text-center text-muted py-5">No orders found.</p>
         {% endfor %}
 
         <!-- Sent / Delivered -->
@@ -435,6 +438,8 @@
                     </div>
                 </div>
             {% endif %}
+            {% empty %}
+            <p class="text-center text-muted py-5">No orders found.</p>
         {% endfor %}
 
         <!-- Cancelled -->
@@ -463,6 +468,8 @@
                     </div>
                 </div>
             {% endif %}
+            {% empty %}
+            <p class="text-center text-muted py-5">No orders found.</p>
         {% endfor %}
 
     </main>

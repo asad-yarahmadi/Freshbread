@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.utils import timezone
 
 
 def reset_password_step1_view(request):
@@ -7,6 +8,7 @@ def reset_password_step1_view(request):
     from core.application.security.ddos_checker import ddos_checker
     from core.application.services.password_reset_service import PasswordResetService, RateLimitedException, PasswordResetException
     from core.interfaces.http.utils.ip import get_client_ip
+    from core.application.security.suspicious_recorder import mark_form_render, record_failure
 
     blocked = ddos_checker.check(request)
     if blocked:
@@ -25,12 +27,16 @@ def reset_password_step1_view(request):
             return redirect('reset_password_step2')
 
         except RateLimitedException as e:
+            record_failure(request, "reset_step1_ratelimited", meta_text="initiate")
             messages.error(request, str(e))
         except PasswordResetException as e:
+            record_failure(request, "reset_step1_failed", meta_text="initiate")
             messages.error(request, str(e))
         except Exception as e:
+            record_failure(request, "reset_step1_error", meta_text="initiate")
             messages.error(request, "Internal error during reset initiation")
 
+    mark_form_render(request, "reset_step1_failed")
     return render(request, "freshbread/reset_password/reset 1.html")
 
 
@@ -39,6 +45,7 @@ def reset_password_step2_view(request):
     from core.application.security.ddos_checker import ddos_checker
     from core.application.services.password_reset_service import PasswordResetService, RateLimitedException, PasswordResetException
     from core.interfaces.http.utils.ip import get_client_ip
+    from core.application.security.suspicious_recorder import mark_form_render, record_failure
 
     blocked = ddos_checker.check(request)
     if blocked:
@@ -59,12 +66,16 @@ def reset_password_step2_view(request):
             return redirect("reset_password_step3")
 
         except RateLimitedException as e:
+            record_failure(request, "reset_step2_ratelimited", meta_text="verify")
             messages.error(request, str(e))
         except PasswordResetException as e:
+            record_failure(request, "reset_step2_failed", meta_text="verify")
             messages.error(request, str(e))
         except Exception as e:
+            record_failure(request, "reset_step2_error", meta_text="verify")
             messages.error(request, "Internal error during code verification")
 
+    mark_form_render(request, "reset_step2_failed")
     return render(request, "freshbread/reset_password/reset 2.html")
 
 
@@ -74,6 +85,7 @@ def reset_password_step3_view(request):
     from core.application.services.password_reset_service import PasswordResetService, RateLimitedException, PasswordResetException
     from django.core.exceptions import ValidationError
     from core.interfaces.http.utils.ip import get_client_ip
+    from core.application.security.suspicious_recorder import mark_form_render, record_failure
 
     blocked = ddos_checker.check(request)
     if blocked:
@@ -95,6 +107,7 @@ def reset_password_step3_view(request):
             password = request.POST.get("npassword", "")
             password_confirm = request.POST.get("npassword_confirm", "")
             if password != password_confirm:
+                record_failure(request, "reset_step3_failed", meta_text="mismatch")
                 messages.error(request, "❌ Passwords do not match.")
                 return render(request, "freshbread/reset_password/reset 3.html")
 
@@ -113,10 +126,14 @@ def reset_password_step3_view(request):
             for err in getattr(e, 'messages', [str(e)]):
                 messages.error(request, err)
         except RateLimitedException as e:
+            record_failure(request, "reset_step3_ratelimited", meta_text="reset")
             messages.error(request, str(e))
         except PasswordResetException as e:
+            record_failure(request, "reset_step3_failed", meta_text="reset")
             messages.error(request, str(e))
         except Exception:
+            record_failure(request, "reset_step3_error", meta_text="reset")
             messages.error(request, "Internal error during password reset")
 
+    mark_form_render(request, "reset_step3_failed")
     return render(request, "freshbread/reset_password/reset 3.html")

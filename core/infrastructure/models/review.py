@@ -9,6 +9,14 @@ class Review(models.Model):
             on_delete=models.CASCADE,
         related_name='reviews'
     )
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='replies'
+    )
+    depth = models.PositiveSmallIntegerField(default=1)
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

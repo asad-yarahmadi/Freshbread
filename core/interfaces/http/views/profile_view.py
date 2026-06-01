@@ -233,4 +233,15 @@ def public_user_profile(request, user_id: int):
     if not prof:
         prof = Profile.objects.create(user=target)
     bio = prof.bio or "hi there! im using Freshbread."
-    return render(request, "freshbread/profile/user_public.html", {"target": target, "profile": prof, "bio": bio})
+    from core.infrastructure.models import BlogPost
+    authored_blogs = BlogPost.objects.filter(author=target, is_published=True).order_by('-created_at')
+    return render(
+        request,
+        "freshbread/profile/user_public.html",
+        {
+            "target": target,
+            "profile": prof,
+            "bio": bio,
+            "authored_blogs": authored_blogs,
+        },
+    )

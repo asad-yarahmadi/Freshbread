@@ -5,290 +5,367 @@
   <meta charset="UTF-8" />
   <title>Signup - Kingfood</title>
   <link rel="icon" type="image/png" href="{% static 'images/favicon.ico' %}" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 <style>
 * { box-sizing: border-box; font-family: 'Roboto', sans-serif; }
 
-/* ================== پس‌زمینه نئونی روشن ================== */
 body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 0; padding: 0; min-height: 100vh;
+    display: flex; justify-content: center; align-items: center;
     background: radial-gradient(circle at top left, rgba(255, 96, 219, 0.40), transparent 45%),
                 radial-gradient(circle at bottom right, rgba(86, 191, 255, 0.40), transparent 45%),
                 linear-gradient(135deg, #142050, #1a2b63, #1f3a7a);
-    background-size: cover;
-    background-attachment: fixed;
-    overflow: hidden;
+    background-size: cover; background-attachment: fixed; overflow: hidden;
 }
 
-/* ================== کانتینر شیشه‌ای ================== */
-.signup-container {
-    position: relative;
-    width: 420px;
-    padding: 45px 40px;
-    border-radius: 22px;
-    background: rgba(39, 44, 85, 0.5);
-    backdrop-filter: blur(12px);
+/* Progress Bar */
+#progress-bar {
+    position: fixed; top: 0; left: 0; width: 0%; height: 3px;
+    background: linear-gradient(90deg, #ff45c4, #6bc7ff);
+    z-index: 10000; box-shadow: 0 0 8px rgba(255, 69, 196, 0.6);
+    transition: width 0.4s ease;
+}
+
+/* Return to Home */
+.return-home {
+    position: absolute; top: 20px; left: 20px;
+    display: flex; align-items: center; gap: 8px;
+    color: #fff; background: rgba(255,255,255,0.1);
+    padding: 10px 16px; border-radius: 50px; text-decoration: none;
+    font-size: 14.5px; backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.15);
+    transition: 0.3s; z-index: 100;
+}
+.return-home:hover { background: rgba(255,255,255,0.25); transform: translateX(-5px); }
+
+@media (max-width: 576px) {
+    .return-home { padding: 12px; border-radius: 50%; }
+    .return-home span { display: none; }
+}
+
+/* Card */
+.signup-container {
+    position: relative; width: 100%; max-width: 420px; padding: 45px 40px;
+    border-radius: 22px; background: rgba(39, 44, 85, 0.5);
+    backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15);
     box-shadow: 0 0 30px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.05);
-    animation: fadeIn 0.7s ease;
+    animation: fadeIn 0.7s ease; margin: 20px;
 }
 
-/* ================== انیمیشن ================== */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(25px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ================== عنوان ================== */
 h2 {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    letter-spacing: 1px;
+    text-align: center; font-size: 28px; font-weight: 700; margin-bottom: 30px;
     background: linear-gradient(90deg, #ff43c1, #7acbff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
-/* ================== فیلدهای فرم ================== */
-.form-group {
-    position: relative;
-    margin-bottom: 22px;
-}
-
+/* Inputs */
+.form-group { position: relative; margin-bottom: 22px; }
 .form-group i {
-    position: absolute;
-    top: 50%;
-    left: 16px;
-    transform: translateY(-50%);
-    color: #c8d2e0;
-    font-size: 17px;
+    position: absolute; top: 50%; left: 16px; transform: translateY(-50%);
+    color: #c8d2e0; font-size: 17px; transition: all 0.3s ease;
 }
-
 .form-group input {
-    width: 100%;
-    padding: 15px 16px 15px 48px;
-    background: rgba(255,255,255,0.08);
-    border: none;
-    border-radius: 12px;
-    font-size: 15px;
-    color: #fff;
-    outline: none;
-    transition: 0.25s;
-    backdrop-filter: blur(6px);
+    width: 100%; padding: 15px 16px 15px 48px;
+    background: rgba(255,255,255,0.08); border: none;
+    border-radius: 12px; font-size: 15px; color: #fff; outline: none;
 }
-
-.form-group input::placeholder {
-    color: #a9b3c6;
-}
-
 .form-group input:focus {
     background: rgba(255,255,255,0.18);
     box-shadow: 0 0 12px rgba(110,180,255,0.45);
 }
 
-/* ================== چک‌باکس و متن پایین ================== */
-.footer-text1 {
-    margin-bottom: 20px;
-    font-size: 15px;
-    color: #d2d6df;
-}
-
-.footer-text1 a { color: #7acbff; }
-
-#remembermesignup { transform: scale(1.1); accent-color: #7acbff; }
-
-.footer-text {
-    margin-top: 28px;
-    text-align: center;
-    font-size: 14px;
-    color: #d2d6df;
-}
-
-.footer-text a {
-    color: #7acbff;
-    text-decoration: none;
-    font-weight: 700;
-}
-
-.footer-text a:hover { text-decoration: underline; }
-
-/* ================== دکمه ثبت‌نام ================== */
-.btn-submit {
-    width: 100%;
-    padding: 15px;
-    margin-top: 5px;
-    border-radius: 14px;
-    border: none;
-    background: linear-gradient(90deg, #ff45c4, #6bc7ff);
-    color: #fff;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 1px;
-    box-shadow: 0 0 15px rgba(255,255,255,0.25);
-    transition: 0.3s;
-}
-
-.btn-submit:hover {
-    filter: brightness(1.2);
-    transform: scale(1.03);
-}
-
-/* ================== شبکه‌های اجتماعی ================== */
-.social-section {
-    margin-top: 30px;
-    text-align: center;
-}
-
-.social-section p {
-    color: #d5d8e1;
-    font-weight: 600;
-    margin-bottom: 15px;
-}
-
-.social-icons {
+/* Password Strength */
+.password-strength-container {
+    margin-top: 8px;
     display: flex;
-    justify-content: center;
-    gap: 18px;
-}
-
-.icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    font-size: 22px;
-    color: #fff;
-    cursor: pointer;
-    transition: 0.3s;
-    backdrop-filter: blur(4px);
-    box-shadow: 0 0 12px rgba(255,255,255,0.15);
+    gap: 12px;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.45s ease;
+}
+.password-strength-container.show {
+    opacity: 1;
+    max-height: 55px;
+}
+#password-strength {
+    flex: 1; height: 6px; border-radius: 10px; background: #333; overflow: hidden;
+}
+.strength-bar {
+    height: 100%; width: 0%; transition: width 0.4s ease, background-color 0.3s ease;
+}
+.strength-text {
+    font-size: 13.5px; font-weight: 500; color: #c8d2e0;
+    min-width: 130px; white-space: nowrap;
 }
 
-.icon:hover {
-    transform: scale(1.15);
-    box-shadow: 0 0 20px rgba(255,255,255,0.35);
+/* Button */
+.btn-submit {
+    width: 100%; padding: 15px; margin-top: 12px; border-radius: 14px;
+    border: none; background: linear-gradient(90deg, #ff45c4, #6bc7ff);
+    color: #fff; font-size: 17px; font-weight: 700; cursor: pointer;
+    position: relative; overflow: hidden; display: flex;
+    align-items: center; justify-content: center; gap: 10px;
+    opacity: 0.6; pointer-events: none;
 }
-
-.icon.google { background: #db4437; }
-.icon.x      { background: #000; }
-
-/* ================== دایره‌های تزیینی ================== */
-.dot {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.08);
-    filter: blur(4px);
-    animation: float 6s ease-in-out infinite;
+.btn-submit.active {
+    opacity: 1; pointer-events: auto;
 }
-
-@keyframes float {
-    0%,100% { transform: translateY(0); }
-    50%     { transform: translateY(-12px); }
+.btn-submit:hover { filter: brightness(1.15); transform: scale(1.03); }
+.btn-submit.loading { pointer-events: none; filter: brightness(0.95); }
+.btn-submit .spinner {
+    width: 23px; height: 23px; border: 3.5px solid rgba(255,255,255,0.35);
+    border-top-color: #fff; border-radius: 50%; animation: spin 0.75s linear infinite;
+    display: none;
 }
+.btn-submit.loading .spinner { display: block; }
+.btn-submit.loading span { opacity: 0; visibility: hidden; width: 0; }
 
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Social & Footer */
+.social-section { margin-top: 30px; text-align: center; }
+.social-section p { color: #d5d8e1; margin-bottom: 15px; font-weight: 600; }
+.social-icons { display: flex; justify-content: center; gap: 20px; }
+.icon { width: 52px; height: 52px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; color: #fff; }
+.google { background: #db4437; } .github { background: #333; }
+
+.footer-text1, .footer-text { color: #d2d6df; text-align: center; }
+.footer-text1 a, .footer-text a { color: #7acbff; }
+
+/* Floating Dots */
+.dot { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.08); filter: blur(4px); animation: float 6s ease-in-out infinite; }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 .d1 { width: 80px; height: 80px; top: -40px; left: -35px; }
 .d2 { width: 55px; height: 55px; bottom: -30px; right: -25px; }
 .d3 { width: 40px; height: 40px; top: 35%; right: -20px; }
-
-/* ================== ریسپانسیو ================== */
-@media (max-width: 480px) {
-    .signup-container { width: 90%; padding: 30px 20px; }
-    .form-group input { padding-left: 42px; }
-    .icon { width: 40px; height: 40px; font-size: 18px; }
-}
 </style>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
-  {% if error %}
-<div id="topErrorBanner" class="top-error-banner" role="alert" aria-live="assertive">
-    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-    <span>{{ error }}</span>
-  </div>
-  {% endif %}
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
 
-  <div class="signup-container">
-    <div class="decor-circle circle1"></div>
-    <div class="decor-circle circle2"></div>
-    <div class="decor-circle circle3"></div>
-    <div class="decor-circle circle4"></div>
-    <h2>Create Account</h2>
-    <form action="{% url 'Signup' %}" method="POST">
-      {% csrf_token %}
-
-      <div class="form-group">
-        <i class="fa fa-user"></i>
-        <input type="text" name="username" placeholder="Username" value="{{ username }}" required />
-      </div>
-
-      <div class="form-group">
-        <i class="fa fa-envelope"></i>
-        <input type="email" name="email" placeholder="Email Address" value="{{ email }}" required />
-      </div>
-
-      <div class="form-group">
-        <i class="fa fa-lock"></i>
-        <input type="password" name="password" placeholder="Password" required />
-      </div>
-
-      <div class="form-group">
-        <i class="fa fa-lock"></i>
-        <input type="password" name="password_confirm" placeholder="Confirm Password" required />
-      </div>
-      <div class="footer-text1">
-        <label>
-          <input id="remembermesignup" name="acc_prpo" type="checkbox" {% if acc_prpo %}checked{% endif %} />
-          <span>I agree to the <a href="{% url 'prpo' %}">Privacy Policy</a> and <a href="{% url 'tms' %}">Terms of use</a> </span>
-        </label>
-      </div>
-
-      <button class="btn-submit" type="submit">Sign Up</button>
-
-      <div class="social-section">
-        <div class="social-icons">
-          <a href="{% url 'social:begin' 'github' %}" class="icon x"><i class="fab fa-github"></i></a>
-<a href="{% url 'social:begin' 'google-oauth2' %}" class="icon google">
-    <i class="fab fa-google"></i>
+<!-- Return to Home -->
+<a href="{% url 'index' %}" class="return-home">
+    <i class="fas fa-arrow-left"></i>
+    <span>Return to Home</span>
 </a>
-        </div>
-      </div>
 
-      <div class="footer-text">
-        Already have an account? <a href="{% url 'ru' %}">Login</a>
-      </div>
+<div class="signup-container">
+    <div class="dot d1"></div>
+    <div class="dot d2"></div>
+    <div class="dot d3"></div>
+
+    <h2>Create Account</h2>
+
+    <form id="signup-form" action="{% url 'Signup' %}" method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <i class="fa fa-user"></i>
+            <input type="text" id="username" name="username" placeholder="Username" value="{{ username }}" required />
+        </div>
+
+        <div class="form-group">
+            <i class="fa fa-envelope"></i>
+            <input type="email" id="email" name="email" placeholder="Email Address" value="{{ email }}" required />
+        </div>
+
+        <div class="form-group">
+            <i class="fa fa-lock" id="lock-icon"></i>
+            <input type="password" id="password" name="password" placeholder="Password" required />
+            
+            <div class="password-strength-container" id="strength-container">
+                <div id="strength-text" class="strength-text"></div>
+                <div id="password-strength"><div class="strength-bar" id="strength-bar"></div></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <i class="fa fa-lock"></i>
+            <input type="password" id="password_confirm" name="password_confirm" placeholder="Confirm Password" required />
+        </div>
+
+        <div class="footer-text1">
+            <label>
+                <input id="remembermesignup" name="acc_prpo" type="checkbox" {% if acc_prpo %}checked{% endif %} required/>
+                <span>I agree to the <a href="{% url 'prpo' %}">Privacy Policy</a> and <a href="{% url 'tms' %}">Terms of use</a></span>
+            </label>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn-submit">
+            <span>Sign Up</span>
+            <div class="spinner"></div>
+        </button>
+
+        <div class="social-section">
+            <p>Or Sign Up With</p>
+            <div class="social-icons">
+                <a href="{% url 'social:begin' 'github' %}" class="icon github"><i class="fab fa-github"></i></a>
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="icon google"><i class="fab fa-google"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-text">
+            Already have an account? <a href="{% url 'ru' %}">Login</a>
+        </div>
     </form>
-  </div>
+</div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const banner = document.getElementById('topErrorBanner');
-    if (banner) {
-      // بعد 6 ثانیه، کلاس انیمیشن خروج رو اضافه کن
-      setTimeout(() => {
-        banner.classList.add('slide-up');
-      }, 6000);
+// Progress Bar
+const progressBar = document.getElementById('progress-bar');
+function startProgress() {
+    progressBar.style.width = '0%';
+    setTimeout(() => progressBar.style.width = '95%', 50);
+}
+document.querySelectorAll('a').forEach(link => link.addEventListener('click', startProgress));
 
-      // بعد از پایان انیمیشن خروج، بنر رو حذف کن
-      banner.addEventListener('animationend', (event) => {
-        if (event.animationName === 'slideUpBanner') {
-          banner.remove();
+// Password Strength
+const passwordInput = document.getElementById('password');
+const lockIcon = document.getElementById('lock-icon');
+const strengthContainer = document.getElementById('strength-container');
+const strengthBar = document.getElementById('strength-bar');
+const strengthText = document.getElementById('strength-text');
+const submitBtn = document.getElementById('submit-btn');
+let hasFocused = false;
+
+function containsNonEnglish(text) {
+    return /[^\x00-\x7F]/.test(text);
+}
+
+function checkPasswordStrength(password) {
+    if (password === '') {
+        strengthBar.style.width = "0%";
+        if (hasFocused) {
+            strengthText.textContent = "Upper • Lower • Number • Symbol";
+            strengthText.style.color = "#c8d2e0";
         }
-      });
+        submitBtn.classList.remove('active');
+        return;
     }
-  });
+
+    if (containsNonEnglish(password)) {
+        strengthText.textContent = "Only English characters allowed";
+        strengthText.style.color = "#ff4444";
+        strengthBar.style.width = "0%";
+        submitBtn.classList.remove('active');
+        return;
+    }
+
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+
+    const width = (score / 5) * 100;
+    strengthBar.style.width = width + '%';
+
+    const colors = ['#ff4444', '#ffaa00', '#ffdd00', '#44ff88'];
+    strengthBar.style.backgroundColor = colors[Math.min(score-1, 3)];
+
+    if (score <= 2) {
+        strengthText.textContent = "Weak";
+        strengthText.style.color = "#ff4444";
+        submitBtn.classList.remove('active');
+    } else if (score === 3) {
+        strengthText.textContent = "Medium";
+        strengthText.style.color = "#ffdd00";
+        submitBtn.classList.remove('active');
+    } else if (score === 4) {
+        strengthText.textContent = "Strong";
+        strengthText.style.color = "#44ff88";
+        submitBtn.classList.add('active');
+    } else  {
+        strengthText.textContent = "Very Strong";
+        strengthText.style.color = "#44ff88";
+        submitBtn.classList.add('active');
+    }
+}
+
+// Events
+passwordInput.addEventListener('focus', () => {
+    hasFocused = true;
+    strengthContainer.classList.add('show');
+    lockIcon.style.transform = 'translateY(-8px)';
+    strengthText.textContent = "Upper • Lower • Number • Symbol";
+    strengthText.style.color = "#c8d2e0";
+});
+
+passwordInput.addEventListener('input', () => {
+    checkPasswordStrength(passwordInput.value);
+});
+
+passwordInput.addEventListener('blur', () => {
+    lockIcon.style.transform = 'translateY(0)';
+});
+
+// Form Submit
+const form = document.getElementById('signup-form');
+let isSubmitting = false;
+
+form.addEventListener('submit', function(e) {
+    if (isSubmitting) {
+        e.preventDefault();
+        return;
+    }
+    if (!submitBtn.classList.contains('active')) {
+        e.preventDefault();
+        Swal.fire({
+            title: "Weak Password!",
+            text: "Password must be Strong and only contain English characters.",
+            icon: "warning",
+            confirmButtonColor: "#ff45c4"
+        });
+        return;
+    }
+
+    isSubmitting = true;
+    submitBtn.classList.add('loading');
+});
+
+// SweetAlert
+{% if messages %}
+document.addEventListener("DOMContentLoaded", function() {
+    const messages = [{% for message in messages %}{ text: "{{ message|escapejs }}", tag: "{{ message.tags }}" },{% endfor %}];
+    function getAlertColors(tag) {
+        switch(tag) {
+            case 'success': return { bg:'#22c55e', icon:'success' };
+            case 'error':   return { bg:'#dc2626', icon:'error' };
+            case 'warning': return { bg:'#facc15', icon:'warning' };
+            default: return { bg:'#3b82f6', icon:'info' };
+        }
+    }
+    function showNext(index = 0) {
+        if (index >= messages.length) return;
+        const style = getAlertColors(messages[index].tag);
+        Swal.fire({
+            title: messages[index].text,
+            icon: style.icon,
+            background: style.bg,
+            color: '#fff',
+            timer: 6000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: window.innerWidth < 768,
+            position: window.innerWidth < 768 ? 'center' : 'top-end',
+        }).then(() => showNext(index + 1));
+    }
+    showNext();
+});
+{% endif %}
 </script>
 
 </body>
