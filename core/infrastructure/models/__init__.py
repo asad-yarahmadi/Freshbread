@@ -25,3 +25,4 @@ from .site_announcement import SiteAnnouncement
 from .release_note import ReleaseNote
 from .suspicious import SuspiciousActivity, SuspiciousEvent
 from .admin_block_url import BlockedURL, BlockLog
+from .slideshow import SlideshowMode, Slide, SlideButton

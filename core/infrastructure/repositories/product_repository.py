@@ -4,9 +4,11 @@ Infrastructure Layer: Product Repository
 """
 from typing import Optional, List, Dict, Any
 from django.core.paginator import Paginator, Page
+from django.db.models import OuterRef, Subquery
 from decimal import Decimal
 
 from core.infrastructure.models import Product, ProductDetailImage
+from core.infrastructure.models.product import CategorySort
 
 
 class ProductRepository:
@@ -49,23 +51,34 @@ class ProductRepository:
             return None
     
     @staticmethod
-    def get_all_products(available_only: bool = False, order_by: str = '-created_at') -> List[Product]:
+    def get_all_products(available_only: bool = False) -> List[Product]:
         """
         گرفتن تمام محصولات
         
         Args:
             available_only: فقط محصولات موجود
-            order_by: ترتیب نمایش
         
         Returns:
             List[Product]
         """
-        qs = Product.objects.all()
+        # Subquery to get category sort order
+        category_sort_subquery = CategorySort.objects.filter(
+            category=OuterRef('category')
+        ).values('sort_order')[:1]
+        
+        qs = Product.objects.annotate(
+            category_sort_order=Subquery(category_sort_subquery)
+        )
         
         if available_only:
             qs = qs.filter(available=True)
         
-        return list(qs.order_by(order_by))
+        return list(qs.order_by(
+            '-available',
+            'category_sort_order',
+            'sort_order',
+            '-created_at'
+        ))
     
     @staticmethod
     def get_products_paginated(page: int = 1, page_size: int = None, available_only: bool = False) -> Page:
@@ -83,12 +96,24 @@ class ProductRepository:
         if page_size is None:
             page_size = ProductRepository.DEFAULT_PAGE_SIZE
         
-        qs = Product.objects.all()
+        # Subquery to get category sort order
+        category_sort_subquery = CategorySort.objects.filter(
+            category=OuterRef('category')
+        ).values('sort_order')[:1]
+        
+        qs = Product.objects.annotate(
+            category_sort_order=Subquery(category_sort_subquery)
+        )
         
         if available_only:
             qs = qs.filter(available=True)
         
-        qs = qs.order_by('-created_at')
+        qs = qs.order_by(
+            '-available',
+            'category_sort_order',
+            'sort_order',
+            '-created_at'
+        )
         
         paginator = Paginator(qs, page_size)
         return paginator.get_page(page)
@@ -106,9 +131,23 @@ class ProductRepository:
         """
         return list(
             Product.objects.filter(category=category)
-            .filter(available=True)
-            .order_by('-created_at')
+            .order_by(
+                '-available',
+                'sort_order',
+                '-created_at'
+            )
         )
+    
+    @staticmethod
+    def get_all_categories_with_sort():
+        """
+        Get all categories with their sort orders
+        """
+        categories = [choice[0] for choice in Product.CATEGORY_CHOICES]
+        # Create missing CategorySort entries
+        for cat in categories:
+            CategorySort.objects.get_or_create(category=cat)
+        return CategorySort.objects.order_by('sort_order')
     
     @staticmethod
     def create_product(data: Dict[str, Any]) -> Product:
@@ -156,20 +195,6 @@ class ProductRepository:
         product.delete()
     
     @staticmethod
-    def delete_product_images(product: Product) -> None:
-        """
-        حذف تمام تصاویر محصول
-        
-        Args:
-            product: شیء Product
-        """
-        images = ProductDetailImage.objects.filter(product=product)
-        for img in images:
-            if img.image:
-                img.image.delete(save=False)
-            img.delete()
-    
-    @staticmethod
     def product_exists_by_name(name: str) -> bool:
         """
         بررسی وجود محصول بر اساس نام
@@ -194,7 +219,7 @@ class ProductRepository:
             bool
         """
         return Product.objects.filter(slug=slug).exists()
-
+    
     @staticmethod
     def get_product_count() -> int:
         """

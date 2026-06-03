@@ -21,21 +21,32 @@ def gallery(request):
 
 def index(request):
     from core.infrastructure.repositories.product_repository import ProductRepository
+    from core.infrastructure.repositories.slideshow_repository import SlideshowRepository
     from core.infrastructure.models import GalleryImage
 
-    products = ProductRepository.get_all_products(available_only=True)[:50]
+    products = ProductRepository.get_all_products()[:50]
     hero_images = GalleryImage.objects.filter(is_active=True).order_by('-created_at')[:5]
     images = GalleryImage.objects.filter(is_active=True).order_by('-created_at')[:6]
+
+    slideshow_mode = SlideshowRepository.get_active_slideshow()
+    slides = []
+    use_custom = False
+    if slideshow_mode and not slideshow_mode.is_default:
+        slides = slideshow_mode.slides.prefetch_related('buttons').all()
+        use_custom = True
 
     return render(request, "freshbread/ecommerce/index.html", {
         "products": products,
         "hero_images": hero_images,
-        "images": images
+        "images": images,
+        "slideshow_mode": slideshow_mode,
+        "slides": slides,
+        "use_custom_slideshow": use_custom
     })
 
 def menu(request):
     from core.infrastructure.repositories.product_repository import ProductRepository
-    products = ProductRepository.get_all_products(available_only=True)
+    products = ProductRepository.get_all_products()
     return render(request, 'freshbread/ecommerce/menu.html', {'products': products})
 
 def reverse_geocode(request):
@@ -58,7 +69,7 @@ def stuff(request):
 
 def food_de(request, slug):
     from core.infrastructure.models import Product as ProductModel, Cart as CartModel
-    product = get_object_or_404(ProductModel, slug=slug, available=True)
+    product = get_object_or_404(ProductModel, slug=slug)
     cart_quantity = 0
     if request.user.is_authenticated:
         cart_item = CartModel.objects.filter(user=request.user, product=product).first()

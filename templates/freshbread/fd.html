@@ -605,6 +605,7 @@ a { text-decoration: none; color: inherit; }
 
       <!-- CART -->
       <div class="kf-cart-row add-to-cart" data-product-slug="{{ product.slug }}">
+        {% if product.available %}
         <div class="kf-qty-control quantity-control {% if cart_quantity == 0 %}d-none{% endif %}">
           <button class="decrease" title="Remove one">−</button>
           <span class="kf-qty-num quantity">{{ cart_quantity }}</span>
@@ -618,6 +619,11 @@ a { text-decoration: none; color: inherit; }
         <a href="{% url 'reservation' %}" class="kf-btn-view btn-view-cart {% if cart_quantity == 0 %}d-none{% endif %}">
           <i class="bi bi-bag-check-fill"></i> View Cart
         </a>
+        {% else %}
+        <button class="kf-btn-add" style="background: #6c757d; cursor: not-allowed;" disabled>
+          <i class="bi bi-x-circle-fill"></i> Not Available
+        </button>
+        {% endif %}
 
         <a href="{% url 'menu' %}" class="kf-btn-continue">
           <i class="bi bi-arrow-left"></i> Menu

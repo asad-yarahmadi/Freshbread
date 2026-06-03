@@ -37,9 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',        # مدیریت نشست‌ها (session)
     'django.contrib.messages',        # پیام‌ها (مثلا خطا و اعلان)
     'django.contrib.staticfiles',     # مدیریت فایل‌های استاتیک (css/js)
+    'django.contrib.sites',           # Sites framework for sitemaps
+    'django.contrib.sitemaps',        # Sitemap framework
     'social_django',
     'core.infrastructure',
 ]
+
+# Site configuration for sitemaps
+SITE_ID = 1
 
 # Middleware
 
@@ -54,7 +59,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "core.interfaces.http.middleware.robots_middleware.RobotsNoIndexMiddleware",
-    "core.interfaces.http.middleware.admin_middleware.URLBlockerMiddleware", 
+    "core.interfaces.http.middleware.admin_middleware.URLBlockerMiddleware",
+    "core.interfaces.http.middleware.slideshow_middleware.SlideshowExpirationMiddleware",
 ]
 
 # مسیر اصلی URL

@@ -96,7 +96,7 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
-  const defaultCenter = [45.3290, -75.9040];  // Kanata center (پیش‌فرض)
+  const defaultCenter = [45.4215, -75.6972];  // Ottawa center (پیش‌فرض)
 
   // Bounding box بزرگ‌تر برای پوشش کل Ottawa (تقریبی بر اساس داده‌های جغرافیایی)
   // جنوب: ~45.15, شمال: ~45.55, غرب: ~-76.2, شرق: ~-75.3
@@ -157,7 +157,7 @@
     // چک کردن محدوده مجاز (Ottawa کلی)
     if (!ottawaBounds.contains(point)) {
       alert('The selected location is outside Ottawa. Please choose a point within the city of Ottawa.');
-      resetToDefault();  // برگشت به Kanata center
+      resetToDefault();  // برگشت به Ottawa center
       return;
     }
 

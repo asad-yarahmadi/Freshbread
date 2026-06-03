@@ -59,53 +59,80 @@
 <body>
   {% include 'freshbread/header.html' %}
 
+
 <!-- Start header -->
 
 
 
-
-
-
-	
 	<!-- Start slides -->
 	<div id="slides" class="cover-slides">
 		<ul class="slides-container">
-            <li class="text-center">
-                <img src="{% static 'images/slider-01.jpg' %}" alt="Kingfood hero image 1">
+			<!-- Always show the default first slide -->
+			<li class="text-center">
+				<img src="{% static 'images/slider-01.jpg' %}" alt="Kingfood hero image 1">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-12">
-                            <h1 class="m-b-20"><strong>Welcome To <br> Kingfood </strong></h1>
-                            <p class="m-b-40">Enjoy handmade bread, cakes, foods and pastries from your local bakery ( Otawwa and Kanata ). Reserve a table or order freshly baked treats today.</p>
+							<h1 class="m-b-20"><strong>Welcome To <br> Kingfood</strong></h1>
+							<p class="m-b-40">King Food, based in Ottawa, specializes in producing and serving high-quality <strong>Persian dishes </strong>, fast food, bread, cakes, pastries, desserts, and appetizers.</p>
 							<p><a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'menu' %}">reservation</a></p>
 						</div>
 					</div>
 				</div>
 			</li>
-            <li class="text-center">
-                <img src="{% static 'images/slider-02.jpg' %}" alt="Kingfood hero image 2">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-12">
-                            <h2 class="m-b-20"></h2><br><h2 class="m-b-20"><strong> <br> </strong></h2><br><h2 class="m-b-20"><strong> <br> </strong></h2>
-                            <p class="m-b-40">Discover our Kingfood, pastries, and cakes baked daily. Make a reservation and taste the best of our local bakery ( Otawwa and Kanata ).</p>
-							<p><a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'reservation' %}">Buy!</a></p>
+			<!-- Then show custom slides if available -->
+			{% if use_custom_slideshow %}
+				{% for slide in slides %}
+					<li class="text-center slide-text-{{ slide.text_position }}">
+						{% if slide.image %}
+							<img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}">
+						{% else %}
+							<img src="{% static 'images/slider-01.jpg' %}" alt="{{ slide.title|default:'Slide' }}">
+						{% endif %}
+						<div class="container">
+							<div class="row">
+								<div class="col-md-12">
+									{% if slide.title %}
+										<h2 class="slider-title-h2 m-b-20"><strong>{{ slide.title }}</strong></h2>
+									{% endif %}
+									{% if slide.description %}
+										<p class="m-b-40">{{ slide.description }}</p>
+									{% endif %}
+									{% for btn in slide.buttons.all %}
+										<p><a class="btn btn-lg btn-circle btn-outline-new-white" href="{{ btn.url }}">{{ btn.text }}</a></p>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</li>
+				{% endfor %}
+			{% else %}
+				<!-- Show default slides 2 and 3 if no custom slides -->
+				<li class="text-center">
+					<img src="{% static 'images/slider-02.jpg' %}" alt="Kingfood hero image 2">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-12">
+                                <h2 class="slider-title-h2 m-b-20"><strong>What do you need?</strong></h2>
+                                <p class="m-b-40">Enjoy handmade bread, cakes, foods and pastries from your local bakery in Ottawa. Reserve a table or order freshly baked treats today.</p>
+								<p><a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'reservation' %}">Buy!</a></p>
+							</div>
 						</div>
 					</div>
-				</div>
-			</li>
-            <li class="text-center">
-                <img src="{% static 'images/slider-03.jpg' %}" alt="Kingfood hero image 3">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-12">
-                            <h2 class="m-b-20"></h2><br><h2 class="m-b-20"><strong> <br> </strong></h2><br><h2 class="m-b-20"><strong> <br> </strong></h2>
-                            <p class="m-b-40">From artisan loaves to classic pastries, experience the taste of homemade baking. Visit us or reserve online.</p>
-							<p><a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'menu' %}">Menu</a></p>
+				</li>
+				<li class="text-center">
+					<img src="{% static 'images/slider-03.jpg' %}" alt="Kingfood hero image 3">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-12">
+								<h2 class="slider-title-h2 m-b-20"><strong>Serving Quality, Creating Memories!</strong></h2>
+                                <p class="m-b-40">Our Mission Is Clear: To provide fresh, delicious, and diverse food products while creating an exceptional dining experience for every customer.</p>
+								<p><a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'menu' %}">Menu</a></p>
+							</div>
 						</div>
 					</div>
-				</div>
-			</li>
+				</li>
+			{% endif %}
 		</ul>
 		<div class="slides-navigation">
 			<a href="#" class="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
@@ -125,7 +152,7 @@
 					<div class="inner-column">
                         <h2>Welcome To <span>Kingfood</span></h2>
 						<h4>Little Story</h4>
-                        <p>Since 2020, we have crafted handmade bread, cakes, and pastries with care. What began as a passion became a local bakery ( Otawwa and Kanata ) dedicated to fresh ingredients and authentic recipes.</p>
+                        <p>Since 2020, we have crafted handmade bread, cakes, and pastries with care. What started as a passion became a local bakery in Ottawa dedicated to fresh ingredients and authentic recipes.</p>
                         <p>Visit us for Kingfood and classic pastries, or make a reservation to enjoy our menu in person.</p>
 						<a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'stuff' %}">Our team</a>
 					</div>
@@ -156,8 +183,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="heading-title text-center">
-                    <h2>Special Menu</h2>
-                    <p>The best foods that I can make!</p>
+                    <h2>Kingfood Menu</h2>
+                    <p>At Kingfood, our menu is crafted with care and creativity. We offer freshly baked artisan bread, classic pastries, homemade cakes, and specialty items made daily with premium ingredients. Browse our menu to find your favorites or try something new from our seasonal selections.</p>
                 </div>
             </div>
         </div>
@@ -167,9 +194,13 @@
                 <div class="special-menu text-center">
                     <div class="button-group filter-button-group">
                         <button class="active" data-filter="*">All</button>
-                        <button data-filter=".iranian">Iranian foods</button>
+                        <button data-filter=".iranianfood">Iranian foods</button>
                         <button data-filter=".fastfood">Fast foods</button>
-                        <button data-filter=".bread">Bread & Cakes</button>
+                        <button data-filter=".bread">Bread</button>
+                        <button data-filter=".pastries">Pastries</button>
+                        <button data-filter=".cake">Cakes</button>
+                        <button data-filter=".appetizer">Appetizer</button>
+                        <button data-filter=".dessert">Dessert</button>
                     </div>
                 </div>
             </div>
@@ -182,7 +213,7 @@
                 
                 <div class="image-wrapper position-relative {% if product.discount_percent %}discount-border{% endif %}">
 
-                    <img src="{{ product.menu_image.url }}" class="img-fluid" alt="{{ product.name }} — Kingfood menu image">
+                    <img src="{{ product.menu_image.url }}" class="img-fluid" alt="{{ product.name }}">
                     
                     {% if product.discount_percent %}
                     <!-- علامت % سه‌بعدی بالا -->
@@ -191,7 +222,7 @@
                 </div>
 
                 <div class="why-text">
-                    <h4>{{ product.name }}</h4>
+                    <h4>{{ product.name }}{% if not product.available %} <span class="badge bg-secondary ms-2">Not Available</span>{% endif %}</h4>
                     <p>{{ product.description|safe }}</p>
 
                     <h5>
@@ -290,7 +321,7 @@
 								</div>
 								<h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Daniel vebar</strong></h5>
 								<h6 class="text-dark m-0">Seo Analyst</h6>
-								<p class="m-0 pt-3">Good and tasty food and fast foods. I think in Otawwa and Knanta its the best Fast food and bakery here.</p>
+								<p class="m-0 pt-3">Good and tasty food and fast foods. I think in Ottawa its the best Fast food and bakery here.</p>
 							</div>
 						</div>
 						<a class="carousel-control-prev" href="#reviews" role="button" data-slide="prev">
@@ -454,6 +485,107 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script> -->
 
+<!-- Floating Menu Button - Bottom Right -->
+<div id="floating-menu-btn" class="floating-menu-btn">
+    <button onclick="scrollToMenu()" class="menu-btn">
+        <div class="btn-text-container" style="position: relative; min-width: 120px; min-height: 1.5rem;">
+            <span id="btn-text-1" class="btn-text">Menu</span>
+            <span id="btn-text-2" class="btn-text" style="position: absolute; top: 0; left: 0; opacity: 0;">Menu</span>
+        </div>
+        <span class="arrow-down">↓</span>
+    </button>
+</div>
+<script>
+  const categories = [
+    "Iranian foods",
+    "Fast foods",
+    "Bread",
+    "Pastries",
+    "Cakes",
+    "Appetizer",
+    "Dessert"
+];
 
+let currentIndex = 0;
+let cycleInterval = null;
+let isVisible = false;
+let activeTextEl = 1; // 1 or 2
+
+function showFloatingButton() {
+    const btn = document.getElementById('floating-menu-btn');
+    btn.classList.add('show');
+    isVisible = true;
+}
+
+function hideFloatingButton() {
+    const btn = document.getElementById('floating-menu-btn');
+    btn.classList.remove('show');
+    isVisible = false;
+}
+
+function updateButtonText() {
+    const textEl1 = document.getElementById('btn-text-1');
+    const textEl2 = document.getElementById('btn-text-2');
+    const currentEl = activeTextEl === 1 ? textEl1 : textEl2;
+    const nextEl = activeTextEl === 1 ? textEl2 : textEl1;
+    
+    // Set next text
+    if (currentIndex === 0) {
+        nextEl.textContent = "Menu";
+    } else {
+        nextEl.textContent = categories[currentIndex - 1];
+    }
+    
+    // Crossfade
+    currentEl.style.opacity = "0";
+    nextEl.style.opacity = "1";
+    
+    activeTextEl = activeTextEl === 1 ? 2 : 1;
+    currentIndex = (currentIndex + 1) % (categories.length + 1);
+}
+
+function startTextCycle() {
+    if (cycleInterval) clearInterval(cycleInterval);
+    
+    cycleInterval = setInterval(() => {
+        updateButtonText();
+    }, 2300);
+}
+
+function scrollToMenu() {
+    const menuSection = document.querySelector('.menu-box');
+    if (menuSection) {
+        menuSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    } else {
+        window.scrollTo({ top: 700, behavior: 'smooth' });
+    }
+}
+
+function handleScroll() {
+    const menuSection = document.querySelector('.menu-box');
+    if (!menuSection) return;
+
+    const menuTop = menuSection.getBoundingClientRect().top;
+    
+    if (menuTop < 120) {
+        hideFloatingButton();
+    } else if (!isVisible) {
+        showFloatingButton();
+    }
+}
+
+// شروع
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        showFloatingButton();
+        startTextCycle();
+    }, 3000);
+
+    window.addEventListener('scroll', handleScroll);
+});
+</script>
 </body>
 </html>

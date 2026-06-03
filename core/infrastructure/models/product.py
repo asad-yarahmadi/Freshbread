@@ -1,11 +1,37 @@
 from django.db import models
 from django.utils.text import slugify
 
+
+class CategorySort(models.Model):
+    CATEGORY_CHOICES = [
+        ('iranianfood', 'Iranian food'),
+        ('fastfood', 'Fast Food'),
+        ('bread', 'Bread'),
+        ('pastries', 'Pastries'),
+        ('cake', 'Cakes'),
+        ('appetizer', 'Appetizer'),
+        ('dessert', 'Dessert'),
+    ]
+
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, unique=True)
+    sort_order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['sort_order']
+
+    def __str__(self):
+        return f"{self.get_category_display()} - Order {self.sort_order}"
+
+
 class Product(models.Model):
     CATEGORY_CHOICES = [
-        ('fastfood', 'Fast Food'),
         ('iranianfood', 'Iranian food'),
+        ('fastfood', 'Fast Food'),
         ('bread', 'Bread'),
+        ('pastries', 'Pastries'),
+        ('cake', 'Cakes'),
+        ('appetizer', 'Appetizer'),
+        ('dessert', 'Dessert'),
     ]
 
     # نام و توضیحات
@@ -37,6 +63,9 @@ class Product(models.Model):
 
     # وضعیت موجودی
     available = models.BooleanField(default=True)
+
+    # Sort Order for individual products
+    sort_order = models.IntegerField(default=0)
 
     # تاریخ ایجاد
     created_at = models.DateTimeField(auto_now_add=True)

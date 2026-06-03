@@ -190,7 +190,8 @@ class ProductForm(forms.ModelForm):
             'price',
             'menu_image',
             'category',
-            'available'
+            'available',
+            'sort_order'
         ]
         widgets = {
             'name': forms.TextInput(attrs={'required': 'required'}),
@@ -201,6 +202,7 @@ class ProductForm(forms.ModelForm):
             'menu_image': forms.ClearableFileInput(attrs={'required': 'required'}),
             'category': forms.Select(attrs={'required': 'required'}),
             'available': forms.CheckboxInput(),
+            'sort_order': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -211,6 +213,8 @@ class ProductForm(forms.ModelForm):
         if 'available' in self.fields:
             self.fields['available'].required = False
             self.fields['available'].widget.attrs.pop('required', None)
+        if 'sort_order' in self.fields:
+            self.fields['sort_order'].required = False
         is_edit = getattr(self.instance, 'pk', None) is not None
         if is_edit and 'menu_image' in self.fields:
             self.fields['menu_image'].required = False
@@ -228,4 +232,46 @@ class ReviewForm(forms.ModelForm):
         widgets = {
             'comment': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Write your feedback...'}),
             'rating': forms.RadioSelect(choices=[(i, str(i)) for i in range(1, 6)]),
+        }
+
+
+class SlideshowModeForm(forms.ModelForm):
+    class Meta:
+        from core.infrastructure.models import SlideshowMode
+        model = SlideshowMode
+        fields = ['name', 'expires_at']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'expires_at': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.expires_at:
+            self.initial['expires_at'] = self.instance.expires_at.strftime('%Y-%m-%dT%H:%M')
+
+
+class SlideForm(forms.ModelForm):
+    class Meta:
+        from core.infrastructure.models import Slide
+        model = Slide
+        fields = ['image', 'title', 'description', 'text_position', 'sort_order']
+        widgets = {
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'text_position': forms.Select(attrs={'class': 'form-select'}),
+            'sort_order': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
+class SlideButtonForm(forms.ModelForm):
+    class Meta:
+        from core.infrastructure.models import SlideButton
+        model = SlideButton
+        fields = ['text', 'url', 'sort_order']
+        widgets = {
+            'text': forms.TextInput(attrs={'class': 'form-control'}),
+            'url': forms.TextInput(attrs={'class': 'form-control'}),
+            'sort_order': forms.NumberInput(attrs={'class': 'form-control'}),
         }

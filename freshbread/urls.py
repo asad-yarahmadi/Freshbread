@@ -1,10 +1,22 @@
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from core.infrastructure.sitemaps import StaticViewSitemap, ProductSitemap, BlogPostSitemap
+
+# Define sitemaps dictionary
+sitemaps = {
+    'static': StaticViewSitemap,
+    'products': ProductSitemap,
+    'blog': BlogPostSitemap,
+}
 
 urlpatterns = [
     path('admin_adminali_admin/', admin.site.urls),
+    
+    # Sitemap
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 
     # 🌐 Public / Ecommerce
     path('', include('core.interfaces.http.urls.ecommerce_urls')),
@@ -37,6 +49,8 @@ urlpatterns = [
     path('tickets/', include('core.interfaces.http.urls.ticket_urls')),
     # 🛠 Admin Tools
     path('admin_tools/', include('core.interfaces.http.urls.admin_urls')),
+    # 🖼️ Slideshow
+    path('slideshow/', include('core.interfaces.http.urls.slideshow_urls')),
 ]
 
 handler404 = 'core.interfaces.http.views.errors_view.handler404'

@@ -58,11 +58,11 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const tiles = (map) => L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{ attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
-      const kanataBounds = L.latLngBounds([45.25, -76.05], [45.40, -75.75]);
+      const ottawaBounds = L.latLngBounds([45.15, -76.20], [45.55, -75.30]);
       {% for loc in locations %}
       (function(){
         const el = document.getElementById('map-{{ forloop.counter }}');
-        const map = L.map(el, { center: [{{ loc.latitude }}, {{ loc.longitude }}], zoom: 15, maxBounds: kanataBounds, maxBoundsViscosity: 1.0 });
+        const map = L.map(el, { center: [{{ loc.latitude }}, {{ loc.longitude }}], zoom: 15, maxBounds: ottawaBounds, maxBoundsViscosity: 1.0 });
         tiles(map);
         L.marker([{{ loc.latitude }}, {{ loc.longitude }}]).addTo(map);
       })();

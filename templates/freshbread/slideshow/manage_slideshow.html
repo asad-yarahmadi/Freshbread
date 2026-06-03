@@ -1,0 +1,391 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage Slideshow - Kingfood</title>
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="{% static 'css/superslides.css' %}">
+
+  <style>
+    body { background: linear-gradient(to bottom, #fdfaf5, #f8f1e9); }
+    
+    .manage-section { padding: 70px 0; }
+    .manage-container {
+      background: white;
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 12px 40px rgba(139, 69, 19, 0.08);
+      max-width: 1300px;
+      margin: auto;
+    }
+    .page-title {
+      font-weight: 700;
+      color: #4a2c0b;
+      margin-bottom: 0;
+    }
+    .add-btn {
+      background: linear-gradient(135deg, #8B4513, #A0522D);
+      border: none;
+      transition: all 0.3s;
+    }
+    .add-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
+    }
+    .preview-container {
+      background: #f8f1e9;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .desktop-preview {
+      background: #333;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    .mobile-preview {
+      background: #333;
+      border-radius: 12px;
+      padding: 10px;
+      max-width: 375px;
+      margin: 0 auto;
+    }
+    .preview-label {
+      color: #4a2c0b;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .slides-container {
+      height: 300px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+    .mobile-preview .slides-container {
+      height: 200px;
+    }
+    .mode-card {
+      border: none;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+    }
+    .mode-card:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    .mode-card.active {
+      border: 3px solid #28a745;
+      background: #f0fff4;
+    }
+    .mode-card.default {
+      border-left: 4px solid #ffc107;
+    }
+    .action-btn {
+      border-radius: 30px;
+      padding: 0.4rem 1rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+<h2></h2><br>
+<h2></h2><br>
+<section class="manage-section">
+  <div class="manage-container">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-5">
+      <h2 class="page-title">🖼️ Manage Slideshow</h2>
+      <a href="{% url 'add_slideshow_mode' %}" class="btn btn-lg add-btn text-white rounded-pill px-4">
+        <i class="bi bi-plus-lg me-2"></i> Add New Mode
+      </a>
+    </div>
+
+    {% if messages %}
+    <div class="mb-4">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Preview Section -->
+    {% if active_mode %}
+    <div class="preview-container">
+      <h4 class="mb-4"><i class="bi bi-eye me-2"></i> Preview Current Slideshow</h4>
+      
+      <div class="row">
+        <div class="col-lg-8 mb-4">
+          <div class="preview-label"><i class="bi bi-display me-2"></i> Desktop Preview</div>
+          <div class="desktop-preview">
+            <div id="slides-preview-desktop" class="cover-slides">
+              <ul class="slides-container">
+                {% for slide in active_mode.slides.all %}
+                <li class="text-center slide-text-{{ slide.text_position }}">
+                  {% if slide.image %}
+                  <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}">
+                  {% else %}
+                  <img src="{% static 'images/slider-01.jpg' %}" alt="Default">
+                  {% endif %}
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-md-12">
+                        {% if slide.title %}
+                        <h1 class="m-b-20"><strong>{{ slide.title }}</strong></h1>
+                        {% endif %}
+                        {% if slide.description %}
+                        <p class="m-b-40">{{ slide.description }}</p>
+                        {% endif %}
+                        {% for btn in slide.buttons.all %}
+                        <p><a class="btn btn-lg btn-circle btn-outline-new-white" href="javascript:void(0)">{{ btn.text }}</a></p>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                {% empty %}
+                <li class="text-center">
+                  <img src="{% static 'images/slider-01.jpg' %}" alt="Default">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h1 class="m-b-20"><strong>Welcome To Kingfood</strong></h1>
+                        <p class="m-b-40">Enjoy handmade bread, cakes, foods and pastries</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-4">
+          <div class="preview-label"><i class="bi bi-phone me-2"></i> Mobile Preview</div>
+          <div class="mobile-preview">
+            <div id="slides-preview-mobile" class="cover-slides">
+              <ul class="slides-container">
+                {% for slide in active_mode.slides.all %}
+                <li class="text-center">
+                  {% if slide.image %}
+                  <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}">
+                  {% else %}
+                  <img src="{% static 'images/slider-01.jpg' %}" alt="Default">
+                  {% endif %}
+                </li>
+                {% empty %}
+                <li class="text-center">
+                  <img src="{% static 'images/slider-01.jpg' %}" alt="Default">
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Modes Section -->
+<div>
+    <h4 class="mb-4">
+        <i class="bi bi-collection me-2"></i> Slideshow Modes
+    </h4>
+
+    {% if all_modes %}
+        {% for mode in all_modes %}
+        <div class="mode-card {% if mode.is_active %}active{% endif %} {% if mode.is_default %}default{% endif %}">
+            
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                
+                <div>
+                    <h5 class="mb-1">
+                        {% if mode.is_default %}
+                            <span class="badge bg-warning text-dark me-2">DEFAULT</span>
+                        {% endif %}
+
+                        {% if mode.is_active %}
+                            <span class="badge bg-success me-2">ACTIVE</span>
+                        {% endif %}
+
+                        {{ mode.name }}
+                    </h5>
+
+                    <div class="text-muted small">
+                        {{ mode.slides.count }} slide{{ mode.slides.count|pluralize }}
+
+                        {% if mode.expires_at %}
+                            · Expires: {{ mode.expires_at|date:"M d, Y H:i" }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    {% if not mode.is_active %}
+                        {% if mode.slides.count == 0 %}
+                            <button type="button" class="btn btn-outline-success action-btn" disabled title="Add at least one slide to activate">
+                                <i class="bi bi-play-circle me-1"></i>
+                                Activate
+                            </button>
+                        {% else %}
+                            <a href="{% url 'set_active_slideshow' mode_id=mode.id %}"
+                               class="btn btn-outline-success action-btn">
+                                <i class="bi bi-play-circle me-1"></i>
+                                Activate
+                            </a>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if not mode.is_default %}
+
+                    <a href="{% url 'edit_slideshow_mode' mode_id=mode.id %}"
+                       class="btn btn-outline-primary action-btn">
+                        <i class="bi bi-pencil me-1"></i>
+                        Edit
+                    </a>
+
+                    <button type="button"
+                            class="btn btn-outline-danger action-btn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModeModal{{ mode.id }}">
+                        <i class="bi bi-trash me-1"></i>
+                        Delete
+                    </button>
+                    {% endif %}
+                </div>
+                {% if mode.slides.count == 0 and not mode.is_default %}
+                <div class="mt-2 small text-warning">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i> This mode has no slides. You must add at least one slide to activate it.
+                </div>
+                {% endif %}
+
+            </div>
+
+            {% if not mode.is_default %}
+            <!-- Delete Modal -->
+            <div class="modal fade"
+                 id="deleteModeModal{{ mode.id }}"
+                 tabindex="-1"
+                 role="dialog"
+                 aria-labelledby="deleteModeLabel{{ mode.id }}"
+                 aria-hidden="true">
+
+                <div class="modal-dialog modal-dialog-centered" role="document">
+
+                    <div class="modal-content">
+
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title"
+                                id="deleteModeLabel{{ mode.id }}">
+                                Confirm Deletion
+                            </h5>
+
+                            <button type="button"
+                                    class="close text-white"
+                                    data-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body text-center">
+                            <p>Are you sure you want to delete this slideshow mode?</p>
+
+                            <h5 class="font-weight-bold mb-3">
+                                "{{ mode.name }}"
+                            </h5>
+                        </div>
+
+                        <div class="modal-footer justify-content-center">
+
+                            <button type="button"
+                                    class="btn btn-secondary px-4"
+                                    data-dismiss="modal">
+                                Cancel
+                            </button>
+
+                            <a href="{% url 'delete_slideshow_mode' mode_id=mode.id %}"
+                               class="btn btn-danger px-4">
+                                Yes, Delete
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+
+    {% else %}
+
+        <div class="text-center py-5">
+            <i class="bi bi-images display-1 text-muted mb-3"></i>
+
+            <h4 class="text-muted mb-2">
+                No slideshow modes yet
+            </h4>
+
+            <p class="text-secondary">
+                Get started by adding your first mode
+            </p>
+        </div>
+
+    {% endif %}
+</div>
+
+  </div>
+</section>
+
+{% include 'freshbread/footer.html' %}
+
+	<!-- ALL JS FILES -->
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- ALL PLUGINS -->
+	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+	<script src="{% static 'js/images-loded.min.js' %}"></script>
+	<script src="{% static 'js/isotope.min.js' %}"></script>
+	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+	<script src="{% static 'js/form-validator.min.js' %}"></script>
+    <script src="{% static 'js/contact-form-script.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+
+<script>
+  $(document).ready(function() {
+    $('#slides-preview-desktop').superslides({
+      animation: 'fade',
+      play: 5000,
+      pagination: false
+    });
+    $('#slides-preview-mobile').superslides({
+      animation: 'fade',
+      play: 5000,
+      pagination: false
+    });
+  });
+</script>
+</body>
+</html>

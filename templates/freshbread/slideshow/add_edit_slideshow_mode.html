@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if is_edit %}Edit{% else %}Add{% endif %} Slideshow Mode - Kingfood</title>
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    body { background: linear-gradient(to bottom, #fdfaf5, #f8f1e9); }
+    
+    .manage-section { padding: 70px 0; }
+    .manage-container {
+      background: white;
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 12px 40px rgba(139, 69, 19, 0.08);
+      max-width: 1000px;
+      margin: auto;
+    }
+    .page-title {
+      font-weight: 700;
+      color: #4a2c0b;
+      margin-bottom: 0;
+    }
+    .form-label {
+      font-weight: 600;
+      color: #3d2109;
+    }
+    .save-btn {
+      background: linear-gradient(135deg, #8B4513, #A0522D);
+      border: none;
+      transition: all 0.3s;
+    }
+    .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
+    }
+    .slide-item {
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    .slide-item:hover {
+      border-color: #8B4513;
+      box-shadow: 0 4px 12px rgba(139, 69, 19, 0.1);
+    }
+    .slide-thumb {
+      width: 100%;
+      max-width: 150px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #f8f1e9;
+    }
+  </style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+<h2></h2><br>
+<h2></h2><br>
+<section class="manage-section">
+  <div class="manage-container">
+
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <a href="{% url 'manage_slideshow' %}" class="btn btn-outline-secondary rounded-pill px-3">
+        <i class="bi bi-arrow-left me-2"></i> Back
+      </a>
+      <h2 class="page-title">
+        {% if is_edit %}<i class="bi bi-pencil-square me-2"></i> Edit Mode{% else %}<i class="bi bi-plus-circle me-2"></i> Add New Mode{% endif %}
+      </h2>
+      <div></div>
+    </div>
+
+    {% if messages %}
+    <div class="mb-4">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" class="mb-5">
+      {% csrf_token %}
+      
+      <div class="row">
+        <div class="col-md-8">
+          <div class="mb-3">
+            <label for="{{ form.name.id_for_label }}" class="form-label">Mode Name</label>
+            {{ form.name }}
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="mb-3">
+            <label for="{{ form.expires_at.id_for_label }}" class="form-label">Expiration Date (Optional)</label>
+            {{ form.expires_at }}
+          </div>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-lg save-btn text-white rounded-pill px-5">
+        <i class="bi bi-check-circle me-2"></i> Save Mode
+      </button>
+    </form>
+
+    {% if is_edit %}
+    <hr class="my-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="mb-0"><i class="bi bi-images me-2"></i> Slides</h4>
+      <a href="{% url 'add_slide' mode_id=mode.id %}" class="btn btn-success rounded-pill">
+        <i class="bi bi-plus-lg me-2"></i> Add Slide
+      </a>
+    </div>
+    
+    {% if slides %}
+      {% for slide in slides %}
+      <div class="slide-item">
+        <div class="row g-3">
+          <div class="col-md-2">
+            {% if slide.image %}
+            <img src="{{ slide.image.url }}" class="slide-thumb" alt="{{ slide.title }}">
+            {% else %}
+            <img src="{% static 'images/slider-01.jpg' %}" class="slide-thumb" alt="No image">
+            {% endif %}
+          </div>
+          <div class="col-md-8">
+            <h5 class="mb-1">
+              {% if slide.title %}{{ slide.title }}{% else %}<span class="text-muted">Untitled Slide</span>{% endif %}
+              <span class="badge bg-secondary ms-2">{{ slide.get_text_position_display }}</span>
+            </h5>
+            {% if slide.description %}
+            <p class="text-muted small mb-2">{{ slide.description|truncatechars:100 }}</p>
+            {% endif %}
+            {% if slide.buttons.all %}
+            <div class="small">
+              <strong>Buttons:</strong>
+              {% for btn in slide.buttons.all %}
+              <span class="badge bg-light text-dark me-1">{{ btn.text }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+<div class="col-md-2 text-end">
+    <a href="{% url 'edit_slide' slide_id=slide.id %}"
+       class="btn btn-outline-primary btn-sm me-1">
+        <i class="bi bi-pencil"></i>
+    </a>
+
+    <button type="button"
+            class="btn btn-outline-danger btn-sm"
+            data-toggle="modal"
+            data-target="#deleteSlideModal{{ slide.id }}">
+        <i class="bi bi-trash"></i>
+    </button>
+</div>
+</div>
+
+<!-- Delete Slide Modal -->
+<div class="modal fade"
+     id="deleteSlideModal{{ slide.id }}"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="deleteSlideLabel{{ slide.id }}"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+
+                <h5 class="modal-title"
+                    id="deleteSlideLabel{{ slide.id }}">
+                    Confirm Deletion
+                </h5>
+
+                <button type="button"
+                        class="close text-white"
+                        data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+
+            <div class="modal-body text-center">
+                <p>Are you sure you want to delete this slide?</p>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+
+                <button type="button"
+                        class="btn btn-secondary px-4"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+
+                <a href="{% url 'delete_slide' slide_id=slide.id %}"
+                   class="btn btn-danger px-4">
+                    Yes, Delete
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+{% endfor %}
+    {% else %}
+      <div class="text-center py-5">
+        <i class="bi bi-image display-1 text-muted mb-3"></i>
+        <h5 class="text-muted mb-2">No slides yet</h5>
+        <p class="text-secondary">Add your first slide to get started</p>
+      </div>
+    {% endif %}
+    {% endif %}
+
+  </div>
+</section>
+
+{% include 'freshbread/footer.html' %}
+
+	<!-- ALL JS FILES -->
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- ALL PLUGINS -->
+	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+	<script src="{% static 'js/images-loded.min.js' %}"></script>
+	<script src="{% static 'js/isotope.min.js' %}"></script>
+	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+	<script src="{% static 'js/form-validator.min.js' %}"></script>
+    <script src="{% static 'js/contact-form-script.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+</html>
