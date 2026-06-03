@@ -244,7 +244,7 @@ MEDIA_URL = '/media/'
 if DEBUG:
     MEDIA_ROOT = BASE_DIR / "media"
 else:
-    MEDIA_ROOT = Path("/usr/src/app/media")  # مسیر Volume لیارا
+    MEDIA_ROOT = "/var/www/django-app/media/"
 
 # تنظیمات Inbox پرداخت (برای بررسی پرداخت‌های ایمیلی)
 PAYMENT_INBOX_USERNAME = os.getenv('PAYMENT_INBOX_USERNAME')
