@@ -302,6 +302,98 @@
       font-weight: 700;
     }
 
+    /* ── BADGE SECTION ── */
+    .kf-badge-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 20px 24px;
+    }
+    .kf-badge-card {
+      text-align: center;
+      padding: 16px 12px;
+      border-radius: 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kf-badge-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .kf-badge-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      background: linear-gradient(135deg, var(--orange), #ff7a45);
+      font-size: 28px;
+      color: white;
+      box-shadow: 0 4px 10px rgba(232,84,28,0.25);
+    }
+    .kf-badge-icon.earned {
+      background: linear-gradient(135deg, #1a7a52, #2d9b6d);
+      box-shadow: 0 4px 10px rgba(26,122,82,0.25);
+    }
+    .kf-badge-name {
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+    .kf-badge-level {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 100px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .kf-badge-level.bronze { background: #d4a574; color: #3a2a1a; }
+    .kf-badge-level.silver { background: #c0c0c0; color: #333; }
+    .kf-badge-level.gold { background: #ffd700; color: #3a2a1a; }
+    .kf-badge-level.platinum { background: #e5e4e2; color: #333; }
+    .kf-badge-progress-wrap {
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .kf-badge-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--orange), #ff7a45);
+      border-radius: 100px;
+      transition: width 0.4s ease;
+    }
+    .kf-badge-progress-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-3);
+      margin-top: 6px;
+    }
+    .kf-view-all-badges {
+      text-align: center;
+      padding: 0 24px 20px;
+    }
+    .kf-view-all-btn {
+      background: var(--ink);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-weight: 800;
+      font-size: 13px;
+      text-decoration: none;
+    }
+    .kf-view-all-btn:hover { opacity: 0.9; }
+    
     /* ── RESPONSIVE ── */
     @media (max-width: 580px) {
       .kf-page { padding: 20px 12px 60px; }
@@ -311,6 +403,9 @@
       .kf-referral-stat { text-align: left; }
       .kf-order-row { padding: 14px 16px; }
       .kf-section-head { padding: 15px 16px; }
+      .kf-badge-grid { gap: 10px; padding: 16px; }
+      .kf-badge-card { padding: 12px 8px; }
+      .kf-badge-icon { width: 52px; height: 52px; font-size: 22px; }
     }
   </style>
 </head>
@@ -325,9 +420,9 @@
   <div class="kf-hero">
     <div class="kf-avatar-wrap">
       <img id="avatarPreview"
-           src="{% if profile.avatar and profile.avatar.name and profile.avatar.name != 'default_avatar.png' %}{{ profile.avatar.url }}{% else %}{% static 'images/def.jpg' %}{% endif %}"
+           src="{% if profile.avatar and profile.avatar.name and profile.avatar.name != 'default_avatar.png' %}{{ profile.avatar.url }}{% else %}{% static 'images/def.webp' %}{% endif %}"
            alt="Avatar"
-           onerror="this.onerror=null;this.src='{% static 'images/def.jpg' %}'">
+           onerror="this.onerror=null;this.src='{% static 'images/def.webp' %}'">
     </div>
     <div class="kf-hero-info">
       <div class="kf-hero-name">{{ user.first_name }} {{ user.last_name }}</div>
@@ -355,6 +450,51 @@
     <div class="kf-referral-stat">
       <div class="kf-referral-count">{{ profile.referral_used_count }}</div>
       <div class="kf-referral-sublabel">orders from referrals</div>
+    </div>
+  </div>
+
+  <!-- BADGE SECTION -->
+  <div class="kf-section">
+    <div class="kf-section-head">
+      <div class="kf-section-icon orange"><i class="bi bi-award-fill"></i></div>
+      <span class="kf-section-title">My Badges</span>
+      <span class="kf-section-count">{{ badge_stats.total_earned }} / {{ badge_stats.total_badges }}</span>
+    </div>
+
+    {% if display_badges %}
+    <div class="kf-badge-grid">
+      {% for item in display_badges %}
+      <div class="kf-badge-card">
+        <div class="kf-badge-icon {% if item.type == 'earned' %}earned{% endif %}">
+          {% if item.badge.icon_svg %}
+            <img src="{{ item.badge.icon_svg.url }}" alt="{{ item.badge.name }}" style="width: 36px; height: 36px;">
+          {% elif item.badge.icon_webp %}
+            <img src="{{ item.badge.icon_webp.url }}" alt="{{ item.badge.name }}" style="width: 36px; height: 36px;">
+          {% else %}
+            <i class="bi bi-trophy-fill"></i>
+          {% endif %}
+        </div>
+        <div class="kf-badge-name">{{ item.badge.name }}</div>
+        <div class="kf-badge-level {% if item.badge.level == 1 %}bronze{% elif item.badge.level == 2 %}silver{% elif item.badge.level == 3 %}gold{% elif item.badge.level == 4 %}platinum{% endif %}">Level {{ item.badge.level }}</div>
+        <div class="kf-badge-progress-wrap">
+          <div class="kf-badge-progress-bar" style="width: {{ item.progress }}%;"></div>
+        </div>
+        <div class="kf-badge-progress-text">{{ item.progress|floatformat:0 }}%</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="kf-empty">
+      <i class="bi bi-star"></i>
+      Start earning badges!<br>
+      Complete orders to unlock your first badge.
+    </div>
+    {% endif %}
+
+    <div class="kf-view-all-badges">
+      <a href="{% url 'badge_explorer' %}" class="kf-view-all-btn">
+        <i class="bi bi-grid-3x3"></i> View All Badges
+      </a>
     </div>
   </div>
 

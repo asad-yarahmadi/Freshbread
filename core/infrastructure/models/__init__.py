@@ -5,9 +5,8 @@ from .login_attempt import LoginAttempt
 from .product import Product
 from .product_detail_image import ProductDetailImage
 from .cart import Cart
-from .order import Order, OrderItem
+from .order import Order, OrderItem, OrderReviewRequest
 from .review import Review, ReviewImage
-from .order import Order, OrderItem
 from .user_location import UserLocation
 from .scheduled_email import ScheduledEmail
 from .payment_audit import PaymentAudit
@@ -15,8 +14,8 @@ from .used_payment_reference import UsedPaymentReference
 from .manual_order_request import ManualOrderRequest
 from .admin_notification import AdminNotification
 from .gallery_image import GalleryImage
-from .blog_post import BlogPost
-from .blog_review import BlogReview,BlogPost
+from .blog_post import BlogPost, UserBlogView
+from .blog_review import BlogReview
 from .support_ticket import SupportTicket, TicketMessage
 from .referral import ReferralRecord, DiscountCode
 from .site_lock import SiteLock
@@ -26,3 +25,5 @@ from .release_note import ReleaseNote
 from .suspicious import SuspiciousActivity, SuspiciousEvent
 from .admin_block_url import BlockedURL, BlockLog
 from .slideshow import SlideshowMode, Slide, SlideButton
+from .delayed_task import DelayedTask
+from .badges import BadgeCategory, Badge, UserBadge, ClaimedBadgeReward, BadgeSettings

@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
@@ -50,3 +51,21 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class UserBlogView(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)
+    viewed_at = models.DateTimeField(auto_now_add=True)
+    post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='user_views')
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='blog_views')
+    reading_duration_seconds = models.PositiveIntegerField(default=0)
+    reached_end = models.BooleanField(default=False)
+    is_valid_view = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'infrastructure_userblogview'
+        ordering = ['-viewed_at']
+        unique_together = [('user', 'post')]
+
+    def __str__(self):
+        return f"{self.user.username} - {self.post.title}"

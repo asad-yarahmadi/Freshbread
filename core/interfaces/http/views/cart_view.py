@@ -44,6 +44,7 @@ def update_cart(request):
 def reservation(request):
     from core.application.services.cart_service import CartService
     from core.infrastructure.models import Profile
+    from core.application.services.badge_service import get_available_rewards
     import random, string
     summary = CartService.get_cart_summary(request)
     cart_items = summary['cart_items']
@@ -71,6 +72,11 @@ def reservation(request):
     if referral_orders_count is not None:
         step = 7
         next_reward_in = ((referral_orders_count // step) + 1) * step - referral_orders_count if referral_orders_count >= 0 else step
+    
+    available_rewards = []
+    if request.user.is_authenticated:
+        available_rewards = get_available_rewards(request.user)
+    
     return render(request, 'freshbread/cart/reservation.html', {
         'cart_items': transformed,
         'original_total': summary['original_total'],
@@ -79,6 +85,7 @@ def reservation(request):
         'referral_code': referral_code,
         'referral_orders_count': referral_orders_count,
         'next_reward_in': next_reward_in,
+        'available_rewards': available_rewards,
     })
 
 def remove_from_cart(request, item_id):

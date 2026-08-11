@@ -274,6 +274,9 @@
 
     <form id="login-form" action="{% url 'Login' %}" method="POST">
         {% csrf_token %}
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
 
         <div class="form-group">
             <i class="fa fa-envelope"></i>

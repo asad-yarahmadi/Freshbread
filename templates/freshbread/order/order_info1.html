@@ -344,10 +344,10 @@
     <div class="kf-card-body">
       <div class="kf-user-row">
         <img
-          src="{% if order.user.profile and order.user.profile.avatar and order.user.profile.avatar.name != 'default_avatar.png' %}{{ order.user.profile.avatar.url }}{% else %}{% static 'images/def.jpg' %}{% endif %}"
+          src="{% if order.user.profile and order.user.profile.avatar and order.user.profile.avatar.name != 'default_avatar.png' %}{{ order.user.profile.avatar.url }}{% else %}{% static 'images/def.webp' %}{% endif %}"
           class="kf-avatar"
           alt="Avatar"
-          onerror="this.onerror=null;this.src='{% static 'images/def.jpg' %}'">
+          onerror="this.onerror=null;this.src='{% static 'images/def.webp' %}'">
         <div>
           <div class="kf-user-name">{{ order.user.first_name }} {{ order.user.last_name }}</div>
           <div class="kf-user-handle">@{{ order.user.username }}</div>
@@ -407,7 +407,7 @@
         {% for it in order.items.all %}
         <div class="kf-item">
           <img
-            src="{% if it.product.menu_image %}{{ it.product.menu_image.url }}{% else %}{% static 'images/def.jpg' %}{% endif %}"
+            src="{% if it.product.menu_image %}{{ it.product.menu_image.url }}{% else %}{% static 'images/def.webp' %}{% endif %}"
             class="kf-item-img"
             alt="{{ it.product.name }}">
           <div class="kf-item-info">

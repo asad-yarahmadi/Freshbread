@@ -264,9 +264,9 @@
         <div class="review-card">
             <div class="review-header">
                 <img class="review-avatar"
-                     src="{% if review.user and review.user.profile and review.user.profile.avatar and review.user.profile.avatar.name != 'default_avatar.png' %}{{ review.user.profile.avatar.url }}{% else %}{% static 'images/profile-7.jpg' %}{% endif %}"
+                     src="{% if review.user and review.user.profile and review.user.profile.avatar and review.user.profile.avatar.name != 'default_avatar.png' %}{{ review.user.profile.avatar.url }}{% else %}{% static 'images/profile-7.webp' %}{% endif %}"
                      alt="{{ review.first_name }} {{ review.last_name }}"
-                     onerror="this.src='{% static 'images/profile-7.jpg' %}'">
+                     onerror="this.src='{% static 'images/profile-7.webp' %}'">
                 <div class="review-user">
                     <h5>{{ review.first_name }} {{ review.last_name }}</h5>
                     <small>{{ review.email }}</small>

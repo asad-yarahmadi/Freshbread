@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
+from urllib.parse import urlparse
 
 def verify_email_view(request):
     # Lazy imports to prevent early app loading
@@ -21,6 +23,8 @@ def verify_email_view(request):
     blocked = ddos_checker.check(request)
     if blocked:
         return blocked
+
+    next_url = request.session.get('next_url', '')
 
     if request.method == "POST":
         action = request.POST.get("action", "").strip()
@@ -44,4 +48,4 @@ def verify_email_view(request):
             messages.error(request, str(e))
             return redirect("verify_email")
 
-    return render(request, "freshbread/verify_email.html")
+    return render(request, "freshbread/verify_email.html", {"next": next_url})

@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
-from core.infrastructure.models import BlogPost, BlogReview
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from core.infrastructure.models import BlogPost, BlogReview, UserBlogView
 import os
 import requests
 
@@ -16,6 +18,7 @@ def blog_details(request, slug):
         viewed_posts.append(post.pk)
         request.session['viewed_posts'] = viewed_posts
         post.refresh_from_db(fields=['views_count'])
+    
     today = timezone.now().date()
     recent = BlogPost.objects.filter(is_published=True, created_at__date=today).exclude(pk=post.pk)[:4]
     popular = BlogPost.objects.filter(is_published=True).exclude(pk=post.pk).order_by('-views_count', '-likes_count')[:6]
@@ -29,6 +32,44 @@ def blog_details(request, slug):
     if reviews.exists():
         avg = round(sum(r.rating for r in reviews) / reviews.count(), 1)
     return render(request, 'freshbread/blog/blog_details.html', {"post": post, "recent": recent, "popular": popular, "reviews": reviews, "avg": avg, "is_liked": is_liked})
+
+
+@login_required
+@require_POST
+def update_blog_view_progress(request, slug):
+    post = get_object_or_404(BlogPost, slug=slug, is_published=True)
+    duration = int(request.POST.get('duration', 0))
+    reached_end = request.POST.get('reached_end') == 'true'
+    
+    # Get or create user's view record
+    view, created = UserBlogView.objects.get_or_create(
+        user=request.user,
+        post=post,
+        defaults={
+            'reading_duration_seconds': duration,
+            'reached_end': reached_end,
+        }
+    )
+    
+    # Only update if view isn't already valid
+    if not view.is_valid_view:
+        # Update duration and reached_end
+        if duration > view.reading_duration_seconds:
+            view.reading_duration_seconds = duration
+        if reached_end:
+            view.reached_end = True
+        
+        # Check if conditions are met (>=60 seconds and reached end)
+        if view.reading_duration_seconds >= 60 and view.reached_end:
+            view.is_valid_view = True
+        
+        view.save()
+    
+    return JsonResponse({
+        'valid': view.is_valid_view,
+        'duration': view.reading_duration_seconds,
+        'reached_end': view.reached_end
+    })
 
 def blog(request):
     q = request.GET.get("q", "").strip()

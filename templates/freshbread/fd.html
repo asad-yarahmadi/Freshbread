@@ -660,9 +660,9 @@ a { text-decoration: none; color: inherit; }
       <div class="kf-review">
         <div class="kf-review-header">
           <img class="kf-review-avatar"
-               src="{% if r0.user and r0.user.profile and r0.user.profile.avatar and r0.user.profile.avatar.name != 'default_avatar.png' %}{{ r0.user.profile.avatar.url }}{% else %}{% static 'images/profile-7.jpg' %}{% endif %}"
+               src="{% if r0.user and r0.user.profile and r0.user.profile.avatar and r0.user.profile.avatar.name != 'default_avatar.png' %}{{ r0.user.profile.avatar.url }}{% else %}{% static 'images/profile-7.webp' %}{% endif %}"
                alt="{{ r0.first_name }}"
-               onerror="this.onerror=null;this.src='{% static 'images/profile-7.jpg' %}'">
+               onerror="this.onerror=null;this.src='{% static 'images/profile-7.webp' %}'">
           <div>
             <div class="kf-review-name">
               {% if r0.user %}<a href="{% url 'public_user_profile' r0.user.id %}">{{ r0.first_name }} {{ r0.last_name }}</a>{% else %}{{ r0.first_name }} {{ r0.last_name }}{% endif %}
@@ -688,7 +688,7 @@ a { text-decoration: none; color: inherit; }
         <div class="kf-thread">
           <div class="kf-review">
             <div class="kf-review-header">
-              <img class="kf-review-avatar" src="{% static 'images/profile-7.jpg' %}" alt="">
+              <img class="kf-review-avatar" src="{% static 'images/profile-7.webp' %}" alt="">
               <div>
                 <div class="kf-review-name">{{ r1.first_name }} {{ r1.last_name }}{% if r1.user %}{% if r1.user.is_staff or r1.user.is_superuser %}<span class="kf-badge-admin">Admin</span>{% endif %}{% endif %}</div>
                 <div class="kf-review-date"><time class="local-rel" data-iso="{{ r1.created_at|date:'c' }}"></time></div>
@@ -702,14 +702,14 @@ a { text-decoration: none; color: inherit; }
             {% for r2 in r1.replies.all %}{% if r2.is_approved %}
             <div class="kf-thread">
               <div class="kf-review">
-                <div class="kf-review-header"><img class="kf-review-avatar" src="{% static 'images/profile-7.jpg' %}" alt=""><div><div class="kf-review-name">{{ r2.first_name }} {{ r2.last_name }}{% if r2.user %}{% if r2.user.is_staff or r2.user.is_superuser %}<span class="kf-badge-admin">Admin</span>{% endif %}{% endif %}</div><div class="kf-review-date"><time class="local-rel" data-iso="{{ r2.created_at|date:'c' }}"></time></div></div></div>
+                <div class="kf-review-header"><img class="kf-review-avatar" src="{% static 'images/profile-7.webp' %}" alt=""><div><div class="kf-review-name">{{ r2.first_name }} {{ r2.last_name }}{% if r2.user %}{% if r2.user.is_staff or r2.user.is_superuser %}<span class="kf-badge-admin">Admin</span>{% endif %}{% endif %}</div><div class="kf-review-date"><time class="local-rel" data-iso="{{ r2.created_at|date:'c' }}"></time></div></div></div>
                 <div class="kf-review-body">{{ r2.comment|linebreaks }}</div>
                 {% if user.is_authenticated %}<div class="kf-reply-form mt-2"><form method="post" action="{% url 'reply_review' r2.id %}">{% csrf_token %}<textarea rows="2" name="comment" placeholder="Write a reply…" required></textarea><button type="submit" class="kf-reply-btn">Reply</button></form></div>{% endif %}
 
                 {% for r3 in r2.replies.all %}{% if r3.is_approved %}
                 <div class="kf-thread">
                   <div class="kf-review">
-                    <div class="kf-review-header"><img class="kf-review-avatar" src="{% static 'images/profile-7.jpg' %}" alt=""><div><div class="kf-review-name">{{ r3.first_name }} {{ r3.last_name }}{% if r3.user %}{% if r3.user.is_staff or r3.user.is_superuser %}<span class="kf-badge-admin">Admin</span>{% endif %}{% endif %}</div><div class="kf-review-date"><time class="local-rel" data-iso="{{ r3.created_at|date:'c' }}"></time></div></div></div>
+                    <div class="kf-review-header"><img class="kf-review-avatar" src="{% static 'images/profile-7.webp' %}" alt=""><div><div class="kf-review-name">{{ r3.first_name }} {{ r3.last_name }}{% if r3.user %}{% if r3.user.is_staff or r3.user.is_superuser %}<span class="kf-badge-admin">Admin</span>{% endif %}{% endif %}</div><div class="kf-review-date"><time class="local-rel" data-iso="{{ r3.created_at|date:'c' }}"></time></div></div></div>
                     <div class="kf-review-body">{{ r3.comment|linebreaks }}</div>
                   </div>
                 </div>

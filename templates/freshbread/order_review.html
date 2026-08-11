@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review Your Order - Kingfood</title>
+<link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #f6f3ef;
+  --card: #ffffff;
+  --ink: #1a1410;
+  --ink-2: #57504a;
+  --ink-3: #a09890;
+  --border: #eae5df;
+  --orange: #e85c1c;
+  --orange-light: #fdf1eb;
+  --orange-mid: #f6a882;
+  --green: #1a8a52;
+  --green-light: #e6f7ef;
+  --red: #c42828;
+  --red-light: #fbeaea;
+  --gold: #d4a017;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow: 0 2px 24px rgba(26,20,16,0.09);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+a { text-decoration: none; color: inherit; }
+
+.kf-page { max-width: 900px; margin: 0 auto; padding: 40px 20px 80px; }
+
+.kf-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 36px 32px;
+}
+
+@media (max-width: 580px) {
+  .kf-card { padding: 24px 16px; }
+}
+
+.kf-hero-title {
+  font-size: 32px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.kf-hero-subtitle {
+  font-size: 16px;
+  text-align: center;
+  color: var(--ink-3);
+  margin-bottom: 28px;
+}
+
+.kf-product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.kf-product-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.kf-product-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.kf-product-item-details {
+  flex: 1;
+}
+
+.kf-product-item-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.kf-product-item-qty {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.kf-write-review {
+  background: var(--bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 28px 28px;
+}
+
+@media (max-width: 580px) {
+  .kf-write-review { padding: 20px 16px; }
+}
+
+.kf-write-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 18px;
+  color: var(--ink);
+}
+
+.kf-star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.kf-star-rating input { display: none; }
+.kf-star-rating label {
+  font-size: 32px;
+  color: var(--border);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.kf-star-rating input:checked ~ label,
+.kf-star-rating label:hover,
+.kf-star-rating label:hover ~ label { color: var(--gold); }
+
+.kf-form-field {
+  margin-bottom: 14px;
+}
+.kf-form-field label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-2);
+  display: block;
+  margin-bottom: 6px;
+}
+.kf-form-field textarea,
+.kf-form-field input[type="file"] {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.18s;
+}
+.kf-form-field textarea:focus { border-color: var(--orange); }
+
+.kf-submit-btn {
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 100px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: opacity 0.18s, transform 0.18s;
+}
+
+.kf-submit-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+.kf-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 24px 0;
+}
+
+.kf-toast {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  z-index: 99999;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: 'Outfit', sans-serif;
+  color: #fff;
+  pointer-events: none;
+  animation: toastIn 2s ease forwards;
+}
+
+@keyframes toastIn {
+  0%   { opacity: 0; transform: translateY(-14px); }
+  10%  { opacity: 1; transform: translateY(0); }
+  80%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+.kf-toast.success { background: var(--green); }
+.kf-toast.error   { background: var(--red); }
+</style>
+</head>
+
+<body>
+{% include 'freshbread/header.html' %}
+<div class="kf-page">
+
+  <div class="kf-card">
+    <div class="kf-hero-title">We're glad you ordered from us!</div>
+    <div class="kf-hero-subtitle">How was your meal? Leave a review for your order.</div>
+    
+    <h3 style="font-size:16px; font-weight:700; margin-bottom:12px;">Your order:</h3>
+    <div class="kf-product-list">
+      {% for item in order.items.all %}
+        <div class="kf-product-item">
+          <img src="{{ item.product.menu_image.url }}" alt="{{ item.product.name }}">
+          <div class="kf-product-item-details">
+            <div class="kf-product-item-name">{{ item.product.name }}</div>
+            <div class="kf-product-item-qty">× {{ item.quantity }}</div>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace; font-weight:700;">${{ item.price }}</span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="kf-divider"></div>
+
+    <div class="kf-write-review">
+      <div class="kf-write-title">Leave a review (applies to all items in your order)</div>
+      
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="kf-form-field">
+          <label>Your rating</label>
+          <div class="kf-star-rating">
+            {% for i in "54321" %}
+              <input type="radio" id="{{ i }}-stars" name="rating" value="{{ i }}" required>
+              <label for="{{ i }}-stars">★</label>
+            {% endfor %}
+          </div>
+        </div>
+        
+        <div class="kf-form-field">
+          <label for="reviewText">Your review</label>
+          <textarea id="reviewText" name="comment" rows="5" placeholder="Tell us about your experience..." required></textarea>
+        </div>
+        
+        <div class="kf-form-field">
+          <label>Photos (optional)</label>
+          <input type="file" name="images" multiple>
+        </div>
+        
+        <div style="text-align:center;">
+          <button type="submit" class="kf-submit-btn">Submit Review</button>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+
+</div>
+
+{% include 'freshbread/footer.html' %}
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+{% if messages %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  {% for message in messages %}
+  const t = document.createElement('div');
+  t.className = `kf-toast {{ message.tags }}`;
+  t.textContent = "{{ message|escapejs }}";
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2200);
+  {% endfor %}
+});
+</script>
+{% endif %}
+
+</body>
+</html>

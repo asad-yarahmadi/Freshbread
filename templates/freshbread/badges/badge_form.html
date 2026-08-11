@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if is_edit %}Edit{% else %}Add{% endif %} Badge - Kingfood</title>
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    body { background: linear-gradient(to bottom, #fdfaf5, #f8f1e9); }
+    
+    .manage-section { padding: 70px 0; }
+    .manage-container {
+      background: white;
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 12px 40px rgba(139, 69, 19, 0.08);
+      max-width: 900px;
+      margin: auto;
+    }
+    .page-title {
+      font-weight: 700;
+      color: #4a2c0b;
+      margin-bottom: 0;
+    }
+    .save-btn {
+      background: linear-gradient(135deg, #8B4513, #A0522D);
+      border: none;
+      transition: all 0.3s;
+    }
+    .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+<h2></h2><br>
+<h2></h2><br>
+<section class="manage-section">
+  <div class="manage-container">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-5">
+      <h2 class="page-title">{% if is_edit %}📝 Edit Badge{% else %}➕ Add Badge{% endif %}</h2>
+      <a href="{% url 'badge_dashboard' %}" class="btn btn-outline-secondary rounded-pill">
+        <i class="bi bi-arrow-left me-2"></i> Back to Dashboard
+      </a>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <label for="{{ form.category.id_for_label }}" class="form-label fw-bold">Category</label>
+          {{ form.category }}
+          {% if form.category.errors %}
+          <div class="text-danger mt-1">{{ form.category.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div class="col-md-6 mb-4">
+          <label for="{{ form.name.id_for_label }}" class="form-label fw-bold">Name</label>
+          {{ form.name }}
+          {% if form.name.errors %}
+          <div class="text-danger mt-1">{{ form.name.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label for="{{ form.description.id_for_label }}" class="form-label fw-bold">Description</label>
+        {{ form.description }}
+        {% if form.description.errors %}
+        <div class="text-danger mt-1">{{ form.description.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="mb-4">
+        <label for="{{ form.requirement.id_for_label }}" class="form-label fw-bold">Requirement</label>
+        {{ form.requirement }}
+        {% if form.requirement.errors %}
+        <div class="text-danger mt-1">{{ form.requirement.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <label for="{{ form.level.id_for_label }}" class="form-label fw-bold">Level</label>
+          {{ form.level }}
+          {% if form.level.errors %}
+          <div class="text-danger mt-1">{{ form.level.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div class="col-md-4 mb-4">
+          <label for="{{ form.rarity.id_for_label }}" class="form-label fw-bold">Rarity</label>
+          {{ form.rarity }}
+          {% if form.rarity.errors %}
+          <div class="text-danger mt-1">{{ form.rarity.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div class="col-md-4 mb-4">
+          <label for="{{ form.color.id_for_label }}" class="form-label fw-bold">Color</label>
+          {{ form.color }}
+          {% if form.color.errors %}
+          <div class="text-danger mt-1">{{ form.color.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <label for="{{ form.icon_svg.id_for_label }}" class="form-label fw-bold">SVG Icon</label>
+          {{ form.icon_svg }}
+          {% if form.icon_svg.errors %}
+          <div class="text-danger mt-1">{{ form.icon_svg.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div class="col-md-6 mb-4">
+          <label for="{{ form.icon_webp.id_for_label }}" class="form-label fw-bold">WebP Icon</label>
+          {{ form.icon_webp }}
+          {% if form.icon_webp.errors %}
+          <div class="text-danger mt-1">{{ form.icon_webp.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <label for="{{ form.progress_type.id_for_label }}" class="form-label fw-bold">Progress Type</label>
+          {{ form.progress_type }}
+          {% if form.progress_type.errors %}
+          <div class="text-danger mt-1">{{ form.progress_type.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div class="col-md-6 mb-4">
+          <label for="{{ form.progress_target.id_for_label }}" class="form-label fw-bold">Progress Target</label>
+          {{ form.progress_target }}
+          {% if form.progress_target.errors %}
+          <div class="text-danger mt-1">{{ form.progress_target.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="form-check">
+            {{ form.is_public }}
+            <label class="form-check-label" for="{{ form.is_public.id_for_label }}">
+              Public Badge
+            </label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-check">
+            {{ form.is_active }}
+            <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+              Active Badge
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label for="{{ form.sort_order.id_for_label }}" class="form-label fw-bold">Sort Order</label>
+        {{ form.sort_order }}
+        {% if form.sort_order.errors %}
+        <div class="text-danger mt-1">{{ form.sort_order.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="d-flex gap-3">
+        <button type="submit" class="btn btn-lg save-btn text-white rounded-pill px-5">
+          <i class="bi bi-check-lg me-2"></i> {% if is_edit %}Update{% else %}Create{% endif %}
+        </button>
+        <a href="{% url 'badge_dashboard' %}" class="btn btn-lg btn-outline-secondary rounded-pill px-5">Cancel</a>
+      </div>
+    </form>
+
+  </div>
+</section>
+
+{% include 'freshbread/footer.html' %}
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+</html>

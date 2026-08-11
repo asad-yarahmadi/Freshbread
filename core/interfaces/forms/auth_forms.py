@@ -275,3 +275,82 @@ class SlideButtonForm(forms.ModelForm):
             'url': forms.TextInput(attrs={'class': 'form-control'}),
             'sort_order': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
+
+class BadgeCategoryForm(forms.ModelForm):
+    class Meta:
+        from core.infrastructure.models import BadgeCategory
+        model = BadgeCategory
+        fields = ['name', 'description', 'is_public', 'sort_order']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'is_public': forms.CheckboxInput(),
+            'sort_order': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
+class BadgeForm(forms.ModelForm):
+    class Meta:
+        from core.infrastructure.models import Badge
+        model = Badge
+        fields = ['category', 'name', 'description', 'requirement', 'level', 'rarity', 'color', 'icon_svg', 'icon_webp', 'progress_type', 'progress_target', 'is_public', 'is_active', 'sort_order']
+        widgets = {
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'requirement': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'level': forms.Select(attrs={'class': 'form-control'}),
+            'rarity': forms.Select(attrs={'class': 'form-control'}),
+            'color': forms.TextInput(attrs={'class': 'form-control', 'type': 'color'}),
+            'icon_svg': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': '.svg'}),
+            'icon_webp': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': '.webp'}),
+            'progress_type': forms.Select(attrs={'class': 'form-control'}),
+            'progress_target': forms.NumberInput(attrs={'class': 'form-control'}),
+            'is_public': forms.CheckboxInput(),
+            'is_active': forms.CheckboxInput(),
+            'sort_order': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+    def clean_icon_svg(self):
+        icon_svg = self.cleaned_data.get('icon_svg')
+        if icon_svg:
+            if not icon_svg.name.lower().endswith('.svg'):
+                raise forms.ValidationError("Please upload a valid SVG file.")
+            if icon_svg.size > 5 * 1024 * 1024:  # 5MB limit
+                raise forms.ValidationError("SVG file is too large (max 5MB).")
+        return icon_svg
+
+    def clean_icon_webp(self):
+        icon_webp = self.cleaned_data.get('icon_webp')
+        if icon_webp:
+            if not icon_webp.name.lower().endswith('.webp'):
+                raise forms.ValidationError("Please upload a valid WebP file.")
+            if icon_webp.size > 5 * 1024 * 1024:  # 5MB limit
+                raise forms.ValidationError("WebP file is too large (max 5MB).")
+        return icon_webp
+
+
+class UserBadgeForm(forms.ModelForm):
+    class Meta:
+        from core.infrastructure.models import UserBadge
+        model = UserBadge
+        fields = ['user', 'badge', 'is_featured']
+        widgets = {
+            'user': forms.Select(attrs={'class': 'form-control'}),
+            'badge': forms.Select(attrs={'class': 'form-control'}),
+            'is_featured': forms.CheckboxInput(),
+        }
+
+
+class BadgeSettingsForm(forms.ModelForm):
+    class Meta:
+        from core.infrastructure.models import BadgeSettings
+        model = BadgeSettings
+        fields = ['badges_public', 'badge_stats_public', 'max_visible_badges', 'sort_method']
+        widgets = {
+            'badges_public': forms.CheckboxInput(),
+            'badge_stats_public': forms.CheckboxInput(),
+            'max_visible_badges': forms.NumberInput(attrs={'class': 'form-control'}),
+            'sort_method': forms.Select(attrs={'class': 'form-control'}),
+        }

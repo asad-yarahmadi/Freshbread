@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils.http import url_has_allowed_host_and_scheme
+from urllib.parse import urlparse
 
 
 def login_view(request):
@@ -14,6 +16,12 @@ def login_view(request):
     blocked = ddos_checker.check(request)
     if blocked:
         return blocked
+
+    next_url = request.GET.get('next', '')
+    if next_url:
+        parsed_next = urlparse(next_url)
+        if not url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+            next_url = ''
 
     if request.method == "POST":
         try:
@@ -38,15 +46,21 @@ def login_view(request):
                 record_success(request, "login_success", user=user_obj, status_code=200)
             except Exception:
                 pass
+            next_url_post = request.POST.get('next', '')
+            if next_url_post:
+                parsed_next = urlparse(next_url_post)
+                if url_has_allowed_host_and_scheme(next_url_post, allowed_hosts={request.get_host()}):
+                    return redirect(next_url_post)
             return redirect("index")
         except Exception as e:
             username = (request.POST.get("username") or "").strip()
             record_failure(request, "login_failed", meta_text=f"user={username}")
             messages.error(request, str(e))
-            return redirect("ru")
+            redirect_url = f"ru?next={next_url}" if next_url else "ru"
+            return redirect(redirect_url)
 
     mark_form_render(request, "login_failed")
-    return render(request, "freshbread/auth/ru.html")
+    return render(request, "freshbread/auth/ru.html", {"next": next_url})
 
 
 @login_required

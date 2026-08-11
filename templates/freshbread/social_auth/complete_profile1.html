@@ -223,6 +223,9 @@
 
     <form method="POST" action="{% url 'complete_social_profile_view' %}">
         {% csrf_token %}
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
 
         <div class="form-group">
             <i class="fa fa-user"></i>

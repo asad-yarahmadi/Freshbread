@@ -10,6 +10,7 @@ urlpatterns = [
     path('ban_user_from_review/<int:review_id>/', ban_user_from_review, name='ban_user_from_review'),
     path('add_review/<slug:slug>/', add_review, name='add_review'),
     path('reply_review/<int:review_id>/', reply_review, name='reply_review'),
+    path('order_review/<str:token>/', submit_order_review, name='submit_order_review'),
     # Blog reviews
     path('approve_blog_review/<int:review_id>/', approve_blog_review, name='approve_blog_review'),
     path('delete_blog_review/<int:review_id>/', delete_blog_review, name='delete_blog_review'),

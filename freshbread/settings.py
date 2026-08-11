@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+
 try:
     import dj_database_url  # type: ignore
 except Exception:
@@ -21,73 +22,98 @@ except Exception:
 # Load environment variables from .env file
 load_dotenv()
 
-# مسیر پایه پروژه
+# --------------------------------------------------------------------------------
+# HELPER FUNCTIONS
+# --------------------------------------------------------------------------------
+
+def env_bool(key, default=False):
+    """Helper to convert environment variables to boolean."""
+    return os.getenv(key, str(default)).lower() == "true"
+
+# --------------------------------------------------------------------------------
+# BASE DIRECTORY
+# --------------------------------------------------------------------------------
+
+# Base directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# امنیت
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-change-this-in-production')
+# --------------------------------------------------------------------------------
+# CORE DJANGO SETTINGS (Security & Hosts)
+# --------------------------------------------------------------------------------
+
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-  # در حالت توسعه روشن باشه
+
+# Allowed hosts for the project (comma-separated in .env)
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
-# اپلیکیشن‌ها
+
+# Default auto field for models
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# --------------------------------------------------------------------------------
+# INSTALLED APPLICATIONS
+# --------------------------------------------------------------------------------
+
 INSTALLED_APPS = [
-    'django.contrib.admin',            # پنل مدیریت جنگو
-    'django.contrib.auth',             # سیستم احراز هویت جنگو
-    'django.contrib.contenttypes',    # انواع داده‌ها و مدل‌ها
-    'django.contrib.sessions',        # مدیریت نشست‌ها (session)
-    'django.contrib.messages',        # پیام‌ها (مثلا خطا و اعلان)
-    'django.contrib.staticfiles',     # مدیریت فایل‌های استاتیک (css/js)
+    # Django built-in apps
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     'django.contrib.sites',           # Sites framework for sitemaps
     'django.contrib.sitemaps',        # Sitemap framework
-    'social_django',
+    
+    # Third-party apps
+    'social_django',                  # Social authentication
+    'csp',                            # Content Security Policy
+    
+    # Local/project apps
+    'core',
     'core.infrastructure',
 ]
 
 # Site configuration for sitemaps
 SITE_ID = 1
 
-# Middleware
-
+# --------------------------------------------------------------------------------
+# MIDDLEWARE
+# --------------------------------------------------------------------------------
 
 MIDDLEWARE = [
+    # Security & Session
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    
+    # Authentication & Custom Middlewares
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "core.interfaces.http.middleware.site_security_middleware.SiteSecurityMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "core.interfaces.http.middleware.robots_middleware.RobotsNoIndexMiddleware",
     "core.interfaces.http.middleware.admin_middleware.URLBlockerMiddleware",
     "core.interfaces.http.middleware.slideshow_middleware.SlideshowExpirationMiddleware",
+    
+    # Messages & Clickjacking
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# مسیر اصلی URL
+# --------------------------------------------------------------------------------
+# URL CONFIGURATION
+# --------------------------------------------------------------------------------
+
 ROOT_URLCONF = 'freshbread.urls'
 
-SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.user.get_username',
-    'social_core.pipeline.user.create_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
+# --------------------------------------------------------------------------------
+# TEMPLATES
+# --------------------------------------------------------------------------------
 
-    # Custom pipeline for saving social auth email and provider
-    'core.infrastructure.social.pipeline.save_email_provider',
-)
-
-
-# قالب‌ها
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # پوشه templates عمومی
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'templates'], # Global templates directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -95,6 +121,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
+                # Custom context processors
                 'freshbread.context_processors.cart_total_items',
                 'freshbread.context_processors.cart_context',
                 'freshbread.context_processors.announcement_and_release',
@@ -104,10 +132,16 @@ TEMPLATES = [
     },
 ]
 
-# WSGI
+# --------------------------------------------------------------------------------
+# WSGI / ASGI APPLICATION
+# --------------------------------------------------------------------------------
+
 WSGI_APPLICATION = 'freshbread.wsgi.application'
 
-# دیتابیس (sqlite برای شروع – میشه بعداً MySQL یا PostgreSQL گذاشت)
+# --------------------------------------------------------------------------------
+# DATABASE CONFIGURATION
+# --------------------------------------------------------------------------------
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -119,18 +153,29 @@ DATABASES = {
     }
 }
 
+# --------------------------------------------------------------------------------
+# AUTHENTICATION, SESSIONS & PASSWORDS
+# --------------------------------------------------------------------------------
 
+# Authentication backends (Social auth + Django default)
+AUTHENTICATION_BACKENDS = [  
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.linkedin.LinkedinOAuth2',
+    'social_core.backends.xing.XingOAuth',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',  # Default Django backend (Removed duplicate)
+]
 
-
-# پسورد و امنیت
-# اعتبارسنجی پسوردها
+# Password validation rules
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {'min_length': 8},  # حداقل طول 8 کاراکتر
+        'OPTIONS': {'min_length': 8},  # Minimum length of 8 characters
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -140,35 +185,94 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Authentication URLs
+LOGIN_URL = '/auth/ru/'
+LOGIN_REDIRECT_URL = '/auth/check_profile/'  # Redirect destination after login
+LOGOUT_REDIRECT_URL = '/'
 
-# زبان و منطقه زمانی
+# Session & Cookie Configuration
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # One week
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+SESSION_COOKIE_SECURE = env_bool("SESSION_COOKIE_SECURE", False)
+SESSION_COOKIE_HTTPONLY = env_bool("SESSION_COOKIE_HTTPONLY", True)
+
+# --------------------------------------------------------------------------------
+# SOCIAL AUTHENTICATION (OAuth Tokens & Pipelines)
+# --------------------------------------------------------------------------------
+
+# Social auth pipeline (Custom pipeline added at the end)
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'core.infrastructure.social.pipeline.save_email_provider', # Custom pipeline
+)
+
+# GitHub OAuth Keys
+SOCIAL_AUTH_GITHUB_KEY = os.getenv('SOCIAL_AUTH_GITHUB_KEY')
+SOCIAL_AUTH_GITHUB_SECRET = os.getenv('SOCIAL_AUTH_GITHUB_SECRET')
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
+
+# Google OAuth Keys & Scopes
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+]
+
+# LinkedIn OAuth Keys
+SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY')
+SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET')
+
+# Facebook OAuth Keys
+SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET')
+
+# Twitter / X OAuth Keys
+SOCIAL_AUTH_TWITTER_KEY = os.getenv('SOCIAL_AUTH_TWITTER_KEY')
+SOCIAL_AUTH_TWITTER_SECRET = os.getenv('SOCIAL_AUTH_TWITTER_SECRET')
+
+# --------------------------------------------------------------------------------
+# INTERNATIONALIZATION (I18N & L10N)
+# --------------------------------------------------------------------------------
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# --------------------------------------------------------------------------------
+# STATIC & MEDIA FILES
+# --------------------------------------------------------------------------------
 
-
-
-# کلید پیش‌فرض مدل‌ها
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# مسیر فایل‌های استاتیک (CSS, JS, تصاویر)
-
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-
-# اگر فولدر static پروژه داری
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+STATIC_ROOT = BASE_DIR / "staticfiles" # Used for collectstatic command
 
-# برای جمع‌آوری فایل‌ها (collectstatic)
-STATIC_ROOT = BASE_DIR / "staticfiles"
+# Media files (User uploads)
+MEDIA_URL = '/media/'
+if DEBUG:
+    MEDIA_ROOT = BASE_DIR / "media"
+else:
+    MEDIA_ROOT = "/var/www/django-app/media/"
 
+# --------------------------------------------------------------------------------
+# EMAIL CONFIGURATION (SMTP)
+# --------------------------------------------------------------------------------
 
-
-
-# تنظیمات ایمیل (برای ارسال ایمیل تأیید و ...)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
@@ -179,73 +283,38 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 EMAIL_TIMEOUT = 20
 
-
-# لیست مدیران سایت (برای دریافت ارورها و ایمیل‌های مهم)
+# Admins to receive error reports
 ADMINS = [
     ('Admin', os.getenv('ADMIN_EMAIL')),
 ]
 
+# --------------------------------------------------------------------------------
+# SECURITY SETTINGS (SSL, HSTS, CSRF, COOKIES)
+# --------------------------------------------------------------------------------
 
-# تنظیمات مربوط به احراز هویت و OAuth 
-
-AUTHENTICATION_BACKENDS = [  
-    'social_core.backends.google.GoogleOAuth2',
-    'django.contrib.auth.backends.ModelBackend',           # بک‌اند پیش‌فرض جنگو
-    'social_core.backends.linkedin.LinkedinOAuth2',   # برای لینکدین
-    'social_core.backends.xing.XingOAuth',           # ⚠ این Xing هست، برای X (توییتر) باید از توییتر استفاده کنیم
-    'social_core.backends.twitter.TwitterOAuth',     # برای X (توییتر)
-    'social_core.backends.github.GithubOAuth2',
-    'social_core.backends.facebook.FacebookOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-
-]
-
-
-# GitHub OAuth
-SOCIAL_AUTH_GITHUB_KEY = os.getenv('SOCIAL_AUTH_GITHUB_KEY')
-SOCIAL_AUTH_GITHUB_SECRET = os.getenv('SOCIAL_AUTH_GITHUB_SECRET')
-SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
-
-
-# Google OAuth
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
-
-# LinkedIn OAuth
-SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY')
-SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET')
-
-# Facebook OAuth
-SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('SOCIAL_AUTH_FACEBOOK_KEY')
-SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET')
-
-# Twitter OAuth
-SOCIAL_AUTH_TWITTER_KEY = os.getenv('SOCIAL_AUTH_TWITTER_KEY')
-SOCIAL_AUTH_TWITTER_SECRET = os.getenv('SOCIAL_AUTH_TWITTER_SECRET')
-
-LOGIN_URL = '/auth/ru/'
-LOGIN_REDIRECT_URL = '/auth/check_profile/'      # یا هر جایی که می‌خوای بعد از لاگین بره
-LOGOUT_REDIRECT_URL = '/'
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-    'https://www.googleapis.com/auth/userinfo.email',
-]
-
-SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # one week
-SESSION_SAVE_EVERY_REQUEST = True
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+# Cross-Site Request Forgery (CSRF)
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', 'https://kingfood.ca').split(',')
-SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False') == 'True'
 CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'False') == 'True'
+CSRF_COOKIE_HTTPONLY = os.getenv("CSRF_COOKIE_HTTPONLY", 'True') == 'True'
 
-MEDIA_URL = '/media/'
-if DEBUG:
-    MEDIA_ROOT = BASE_DIR / "media"
-else:
-    MEDIA_ROOT = "/var/www/django-app/media/"
+# SSL & HTTPS Redirects
+SECURE_SSL_REDIRECT = env_bool("SECURE_SSL_REDIRECT", True)
 
-# تنظیمات Inbox پرداخت (برای بررسی پرداخت‌های ایمیلی)
+# HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", 31536000))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool("SECURE_HSTS_INCLUDE_SUBDOMAINS", True)
+SECURE_HSTS_PRELOAD = env_bool("SECURE_HSTS_PRELOAD", True)
+
+# Cross-Origin Policies
+SECURE_CROSS_ORIGIN_OPENER_POLICY = os.getenv(
+    "SECURE_CROSS_ORIGIN_OPENER_POLICY",
+    "same-origin"
+)
+
+# --------------------------------------------------------------------------------
+# CUSTOM APPLICATION SETTINGS
+# --------------------------------------------------------------------------------
+
+# Payment Inbox Settings (For checking email-based payments)
 PAYMENT_INBOX_USERNAME = os.getenv('PAYMENT_INBOX_USERNAME')
 PAYMENT_INBOX_PASSWORD = os.getenv('PAYMENT_INBOX_PASSWORD')

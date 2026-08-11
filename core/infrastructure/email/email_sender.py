@@ -19,7 +19,7 @@ class EmailSender:
         title: str,
         body_html: str,
         brand_color: str = "#E63939",
-        logo_url: str = "https://kingfood.ca/static/images/logo.png",
+        logo_url: str = "https://kingfood.ca/static/images/logo.webp",
         cta_text: str | None = None,
         action_url: str | None = None,
     ) -> str:

@@ -3,7 +3,23 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from .product import Product
 import uuid
+import secrets
 from core.infrastructure.models.user_location import UserLocation
+
+class OrderReviewRequest(models.Model):
+    order = models.OneToOneField('Order', on_delete=models.CASCADE, related_name='review_request')
+    token = models.CharField(max_length=64, unique=True, editable=False)
+    is_submitted = models.BooleanField(default=False)
+    sent_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.token:
+            self.token = secrets.token_urlsafe(48)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Review request for Order #{self.order.order_code}"
 
 class Order(models.Model):
     STATUS_CHOICES = [

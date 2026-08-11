@@ -56,7 +56,7 @@ class Product(models.Model):
     )
 
     # عکس منو
-    menu_image = models.ImageField(upload_to='menu_images/', default='default_food.jpg')
+    menu_image = models.ImageField(upload_to='menu_images/', default='default_food.webp')
 
     # دسته‌بندی
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='slowfood')

@@ -414,7 +414,7 @@
         {% if order.user.profile and order.user.profile.avatar and order.user.profile.avatar.name != 'default_avatar.png' %}
           <img src="{{ order.user.profile.avatar.url }}" class="kf-avatar" alt="Avatar">
         {% else %}
-          <img src="{% static 'images/profile-7.jpg' %}" class="kf-avatar" alt="Avatar">
+          <img src="{% static 'images/profile-7.webp' %}" class="kf-avatar" alt="Avatar">
         {% endif %}
         <div>
           <div class="kf-user-name">{{ order.user.first_name }} {{ order.user.last_name }}</div>

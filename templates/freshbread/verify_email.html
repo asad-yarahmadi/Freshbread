@@ -269,6 +269,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
   <form method="post" action="{% url 'verify_email' %}">
     {% csrf_token %}
+    {% if next %}
+    <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
     <div class="form-group">
       <i class="fa fa-key"></i>
       <input type="text" name="code" placeholder="Enter 6-digit code" maxlength="6" required autofocus />

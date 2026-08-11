@@ -1,0 +1,296 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Badge Explorer – Kingfood</title>
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --bg: #f4f1ed;
+      --card: #ffffff;
+      --ink: #1c1714;
+      --ink-2: #5a504a;
+      --ink-3: #9e948d;
+      --orange: #e8541c;
+      --orange-light: #fdf0ea;
+      --teal: #0f8080;
+      --teal-light: #e3f5f5;
+      --red: #c42b2b;
+      --red-light: #fbeaea;
+      --green: #1a7a52;
+      --green-light: #e4f5ee;
+      --border: #ede7e0;
+      --radius: 20px;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    .kf-page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 36px 20px 80px;
+    }
+
+    .kf-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .kf-back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .kf-title {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .kf-stats {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 24px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 32px;
+    }
+
+    .kf-stat {
+      text-align: center;
+    }
+
+    .kf-stat-value {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--orange);
+    }
+
+    .kf-stat-label {
+      font-size: 13px;
+      color: var(--ink-3);
+      font-weight: 600;
+    }
+
+    .kf-category {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .kf-category-head {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .kf-category-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--orange-light);
+      color: var(--orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .kf-category-title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .kf-category-desc {
+      color: var(--ink-3);
+      font-size: 13px;
+    }
+
+    .kf-badge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      padding: 20px 24px;
+    }
+
+    .kf-badge-card {
+      padding: 20px;
+      border-radius: 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .kf-badge-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .kf-badge-card.earned {
+      border-color: var(--green);
+      background: var(--green-light);
+    }
+
+    .kf-badge-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      background: linear-gradient(135deg, var(--orange), #ff7a45);
+      font-size: 32px;
+      color: white;
+      box-shadow: 0 4px 10px rgba(232,84,28,0.25);
+    }
+
+    .kf-badge-card.earned .kf-badge-icon {
+      background: linear-gradient(135deg, #1a7a52, #2d9b6d);
+      box-shadow: 0 4px 10px rgba(26,122,82,0.25);
+    }
+
+    .kf-badge-name {
+      font-weight: 800;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .kf-badge-desc {
+      font-size: 12px;
+      color: var(--ink-3);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .kf-badge-progress-wrap {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .kf-badge-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--orange), #ff7a45);
+      border-radius: 100px;
+      transition: width 0.4s ease;
+    }
+
+    .kf-badge-card.earned .kf-badge-progress-bar {
+      background: linear-gradient(90deg, #1a7a52, #2d9b6d);
+    }
+
+    .kf-badge-progress-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-3);
+      text-align: center;
+    }
+
+    @media (max-width: 580px) {
+      .kf-page { padding: 20px 12px 60px; }
+      .kf-badge-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+{% include 'freshbread/header.html' %}
+
+<div class="kf-page">
+  <div class="kf-header">
+    <a href="{% url 'profile' %}" class="kf-back-btn">
+      <i class="bi bi-arrow-left"></i> Back to Profile
+    </a>
+  </div>
+
+  <h1 class="kf-title">Badge Explorer</h1>
+
+  <div class="kf-stats">
+    <div class="kf-stat">
+      <div class="kf-stat-value">{{ total_earned }}</div>
+      <div class="kf-stat-label">Earned Badges</div>
+    </div>
+    <div class="kf-stat">
+      <div class="kf-stat-value">{{ total_badges }}</div>
+      <div class="kf-stat-label">Total Badges</div>
+    </div>
+  </div>
+
+  {% for cat in categories %}
+  <div class="kf-category">
+    <div class="kf-category-head">
+      <div class="kf-category-icon">
+        <i class="bi bi-award-fill"></i>
+      </div>
+      <div>
+        <div class="kf-category-title">{{ cat.category.name }}</div>
+        {% if cat.category.description %}
+        <div class="kf-category-desc">{{ cat.category.description }}</div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="kf-badge-grid">
+      {% for item in cat.badges %}
+      <div class="kf-badge-card {% if item.type == 'earned' %}earned{% endif %}">
+        <div class="kf-badge-icon">
+          {% if item.badge.icon_svg %}
+            <img src="{{ item.badge.icon_svg.url }}" alt="{{ item.badge.name }}" style="width: 40px; height: 40px;">
+          {% elif item.badge.icon_webp %}
+            <img src="{{ item.badge.icon_webp.url }}" alt="{{ item.badge.name }}" style="width: 40px; height: 40px;">
+          {% else %}
+            <i class="bi bi-trophy-fill"></i>
+          {% endif %}
+        </div>
+        <div class="kf-badge-name">{{ item.badge.name }}</div>
+        {% if item.badge.description %}
+        <div class="kf-badge-desc">{{ item.badge.description }}</div>
+        {% endif %}
+        {% if item.badge.requirement %}
+        <div class="kf-badge-desc"><strong>Goal:</strong> {{ item.badge.requirement }}</div>
+        {% endif %}
+        <div class="kf-badge-progress-wrap">
+          <div class="kf-badge-progress-bar" style="width: {{ item.progress }}%;"></div>
+        </div>
+        <div class="kf-badge-progress-text">{{ item.progress|floatformat:0 }}%</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+
+{% include 'freshbread/footer.html' %}
+
+</body>
+</html>

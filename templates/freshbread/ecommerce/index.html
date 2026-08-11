@@ -22,13 +22,13 @@
     <meta property="og:description" content="Kingfood — handmade breads, cakes and foods. Explore our special menu, fast and slow foods, and make a reservation.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'index' %}">
-    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/slider-01.jpg' %}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/slider-01.webp' %}">
     <meta property="og:site_name" content="Kingfood">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Kingfood - Experience more Tastes!">
     <meta name="twitter:description" content="Kingfood — handmade breads, cakes and foods. Explore our special menu, fast and slow foods, and make a reservation.">
-    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/slider-01.jpg' %}">
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/slider-01.webp' %}">
 
     <!-- Site Icons -->
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
@@ -51,7 +51,7 @@
       "@type": "Organization",
       "name": "Kingfood",
       "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'index' %}",
-      "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo.png' %}"
+      "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo.webp' %}"
     }
     </script>
 
@@ -69,11 +69,11 @@
 		<ul class="slides-container">
 			<!-- Always show the default first slide -->
 			<li class="text-center">
-				<img src="{% static 'images/slider-01.jpg' %}" alt="Kingfood hero image 1">
+				<img src="{% static 'images/slider-01.webp' %}" alt="Kingfood hero image 1">
 				<div class="container">
 					<div class="row">
 						<div class="col-md-12">
-							<h1 class="m-b-20"><strong>Welcome To <br> Kingfood</strong></h1>
+							<h1 class="m-b-20"><strong>Welcome To Kingfood<br> Iranian restaurant</strong></h1>
 							<p class="m-b-40">King Food, based in Ottawa, specializes in producing and serving high-quality <strong>Persian dishes </strong>, fast food, bread, cakes, pastries, desserts, and appetizers.</p>
 							<p><a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'menu' %}">reservation</a></p>
 						</div>
@@ -87,7 +87,7 @@
 						{% if slide.image %}
 							<img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}">
 						{% else %}
-							<img src="{% static 'images/slider-01.jpg' %}" alt="{{ slide.title|default:'Slide' }}">
+							<img src="{% static 'images/slider-01.webp' %}" alt="{{ slide.title|default:'Slide' }}">
 						{% endif %}
 						<div class="container">
 							<div class="row">
@@ -109,7 +109,7 @@
 			{% else %}
 				<!-- Show default slides 2 and 3 if no custom slides -->
 				<li class="text-center">
-					<img src="{% static 'images/slider-02.jpg' %}" alt="Kingfood hero image 2">
+					<img src="{% static 'images/slider-02.webp' %}" alt="Kingfood hero image 2">
 					<div class="container">
 						<div class="row">
 							<div class="col-md-12">
@@ -121,7 +121,7 @@
 					</div>
 				</li>
 				<li class="text-center">
-					<img src="{% static 'images/slider-03.jpg' %}" alt="Kingfood hero image 3">
+					<img src="{% static 'images/slider-03.webp' %}" alt="Kingfood hero image 3">
 					<div class="container">
 						<div class="row">
 							<div class="col-md-12">
@@ -146,7 +146,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-12">
-                    <img src="{% static 'images/about-img2.jpg' %}" alt="About Kingfood" class="img-fluid">
+                    <img src="{% static 'images/about-img2.webp' %}" alt="About Kingfood" class="img-fluid">
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-12 text-center">
 					<div class="inner-column">
@@ -301,7 +301,7 @@
 						<div class="carousel-inner mt-4">
 							<div class="carousel-item text-center active">
 								<div class="img-box p-1 border rounded-circle m-auto">
-                                    <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-1.jpg' %}" alt="Customer profile 1">
+                                    <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-1.webp' %}" alt="Customer profile 1">
 								</div>
 								<h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Paul Mitchel</strong></h5>
 								<h6 class="text-dark m-0">Web Developer</h6>
@@ -309,7 +309,7 @@
 							</div>
 							<div class="carousel-item text-center">
 								<div class="img-box p-1 border rounded-circle m-auto">
-                                    <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-3.jpg' %}" alt="Customer profile 2">
+                                    <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-3.webp' %}" alt="Customer profile 2">
 								</div>
 								<h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Steve Fonsi</strong></h5>
 								<h6 class="text-dark m-0">Web Designer</h6>
@@ -317,7 +317,7 @@
 							</div>
 							<div class="carousel-item text-center">
 								<div class="img-box p-1 border rounded-circle m-auto">
-                                    <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-7.jpg' %}" alt="Customer profile 3">
+                                    <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-7.webp' %}" alt="Customer profile 3">
 								</div>
 								<h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Daniel vebar</strong></h5>
 								<h6 class="text-dark m-0">Seo Analyst</h6>

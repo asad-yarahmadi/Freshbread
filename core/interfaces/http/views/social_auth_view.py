@@ -11,6 +11,10 @@ def oauth_google_view(request):
 def complete_social_profile_view(request):
     # Lazy import
     from core.application.services.social_auth_service import social_auth_service
+    from django.utils.http import url_has_allowed_host_and_scheme
+    from urllib.parse import urlparse
+
+    next_url = request.session.get('next_url', '')
 
     try:
         if request.method == "POST":
@@ -19,11 +23,18 @@ def complete_social_profile_view(request):
                 data=request.POST
             )
             messages.success(request, "Profile completed successfully ✅")
+            if next_url:
+                parsed_next = urlparse(next_url)
+                if url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+                    if 'next_url' in request.session:
+                        del request.session['next_url']
+                    return redirect(next_url)
             return redirect("profile")
 
         return render(request, "freshbread/social_auth/complete_profile1.html", {
             "email": request.session.get("social_email"),
             "provider": request.session.get("social_provider"),
+            "next": next_url
         })
 
     except Exception as e:

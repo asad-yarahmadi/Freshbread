@@ -1,0 +1,231 @@
+{% load static %}{% load badge_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badge Explorer - Kingfood</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        :root {
+            --badge-width: 120px;
+            --badge-height: 120px;
+            --icon-size: 64px;
+            --border-radius: 16px;
+            --progress-height: 8px;
+            --spacing: 1rem;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #fdfaf5, #f8f1e9);
+        }
+        
+        .explorer-section {
+            padding: 70px 0;
+        }
+        
+        .explorer-container {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 12px 40px rgba(139, 69, 19, 0.08);
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .page-title {
+            font-weight: 700;
+            color: #4a2c0b;
+            margin-bottom: 2rem;
+        }
+        
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4a2c0b;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0e6dc;
+        }
+        
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: var(--spacing);
+        }
+        
+        .badge-card {
+            position: relative;
+            background: #fff;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .badge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .badge-card.earned {
+            border: 2px solid #28a745;
+        }
+        
+        .badge-card.in-progress {
+            border: 2px solid #ffc107;
+        }
+        
+        .badge-card.locked {
+            opacity: 0.6;
+            filter: grayscale(100%);
+        }
+        
+        .badge-icon {
+            width: var(--icon-size);
+            height: var(--icon-size);
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        .badge-name {
+            font-weight: 600;
+            color: #4a2c0b;
+            margin-bottom: 0.25rem;
+        }
+        
+        .badge-level {
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .badge-description {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .progress-bar-container {
+            margin-top: 0.5rem;
+            height: var(--progress-height);
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+        
+        .remaining-text {
+            font-size: 0.7rem;
+            color: #868e96;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    {% include 'freshbread/header.html' %}
+    <h2></h2><br>
+    <h2></h2><br>
+    
+    <section class="explorer-section">
+        <div class="explorer-container">
+            <h1 class="page-title"><i class="bi bi-trophy me-2"></i>Badge Explorer</h1>
+            
+            {% if categories %}
+                {% for category in categories %}
+                    <h2 class="category-title">{{ category.name }}</h2>
+                    {% if category.description %}
+                        <p class="text-muted mb-3">{{ category.description }}</p>
+                    {% endif %}
+                    
+                    <div class="badge-grid">
+                        {% for badge in category.badges.all %}
+                            {% if badge.is_public and badge.is_active %}
+                                <div class="badge-card {% if badge.id in earned_badge_ids %}earned{% else %}in-progress{% endif %}">
+                                    <div class="badge-icon" style="background-color: {{ badge.color }}20; color: {{ badge.color }};">
+                                        {% if badge.icon_url %}
+                                            <img src="{{ badge.icon_url }}" alt="{{ badge.name }}" class="img-fluid" style="max-width: 80%; max-height: 80%;">
+                                        {% else %}
+                                            <i class="bi bi-award"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="badge-name">{{ badge.name }}</div>
+                                    <span class="badge-level" style="background-color: {{ badge.color }}30; color: {{ badge.color }};">
+                                        {{ badge.get_level_display }}
+                                    </span>
+                                    <div class="badge-description">{{ badge.description|truncatewords:15 }}</div>
+                                    
+                                    {% if badge.id in earned_badge_ids %}
+                                        <div class="mt-2 text-success"><i class="bi bi-check-circle-fill"></i> Earned</div>
+                                    {% else %}
+                                        {% with progress=progress_dict|get_item:badge.id %}
+                                            {% if progress %}
+                                                <div class="progress-bar-container">
+                                                    <div class="progress-bar" style="width: {{ progress.progress_percentage }}%;"></div>
+                                                </div>
+                                                <div class="progress-text">{{ progress.current_progress }} / {{ badge.progress_target }}</div>
+                                                <div class="remaining-text">
+                                                    {{ progress.progress_percentage|remaining_percentage|floatformat:0 }}% remaining
+                                                </div>
+                                            {% endif %}
+                                        {% endwith %}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    {% if category.name == "Foods" %}
+                        <p class="text-muted mt-3"><em>If he gets one of these two badges, exclusive discounts of more than 40% will be activated for him. And as a thank you, he will be sent two free dishes of his choice!</em></p>
+                    {% elif category.name == "Food Comments" %}
+                        <p class="text-muted mt-3"><em>If these two are activated, because this user has had useful comments and has been verified, they will receive the Pro tag next to their name and will appear wherever they leave a comment. In addition, they will be sent a free dessert with their next order.</em></p>
+                    {% elif category.name == "Blog Comments" %}
+                        <p class="text-muted mt-3"><em>This user has become one of the most active members of the King Food community. If they receive one of these two badges, the Community Voice badge will be displayed on their public profile and they will receive a free drink with their next order.</em></p>
+                    {% elif category.name == "Blog Views" %}
+                        <p class="text-muted mt-3"><em>This user is very interested in learning and reading educational content. If they receive one of these two badges, they will have access to special content, exclusive training, and selected articles from King Food.</em></p>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-trophy display-1 text-muted mb-3"></i>
+                    <h4 class="text-muted mb-2">No badges available yet</h4>
+                    <p class="text-secondary">Check back later for new badges!</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+    
+    {% include 'freshbread/footer.html' %}
+    
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script>
+        // Simple template filter to get item from dict
+        // Since Django doesn't have a built-in way, we'll handle via JavaScript
+    </script>
+</body>
+</html>

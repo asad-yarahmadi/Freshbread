@@ -11,10 +11,14 @@ def complete_profile_view(request):
     # Lazy imports
     from core.application.services.profile_service import profile_service
     from core.application.security.ddos_checker import ddos_checker
+    from django.utils.http import url_has_allowed_host_and_scheme
+    from urllib.parse import urlparse
 
     blocked = ddos_checker.check(request)
     if blocked:
         return blocked
+
+    next_url = request.session.get('next_url', '')
 
     if request.method == "POST":
         try:
@@ -23,19 +27,27 @@ def complete_profile_view(request):
                 first_name=request.POST.get("first_name", ""),
                 last_name=request.POST.get("last_name", "")
             )
+            if next_url:
+                parsed_next = urlparse(next_url)
+                if url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+                    if 'next_url' in request.session:
+                        del request.session['next_url']
+                    return redirect(next_url)
             return redirect("index")
         except Exception as e:
             messages.error(request, str(e))
 
-    return render(request, "freshbread/profile/complete_profile.html")
+    return render(request, "freshbread/profile/complete_profile.html", {"next": next_url})
 
-@login_required
 @login_required
 def profile(request):
     from core.application.services.order_service import OrderService
-    from core.infrastructure.models import Profile
+    from core.infrastructure.models import Profile, Badge, UserBadge
+    from core.application.services.badge_service import get_user_badge_progress, initialize_badges
     import random, string
 
+    initialize_badges()
+    
     orders = OrderService.get_user_orders(request.user)
 
     # فرض می‌کنیم orders لیست dict است → از کلید استفاده کن
@@ -57,12 +69,42 @@ def profile(request):
         profile.referral_code = rc
         profile.save(update_fields=["referral_code"])
 
+    # Get badge data
+    badge_progress = get_user_badge_progress(request.user)
+    earned_badge_ids = UserBadge.objects.filter(user=request.user).values_list('badge_id', flat=True)
+    all_badges = Badge.objects.filter(is_active=True).order_by('category', 'level')
+    
+    # Prepare display badges
+    display_badges = []
+    for badge in all_badges:
+        progress = 0
+        category_data = badge_progress.get(badge.category.name.lower().replace(' ', '_'), {})
+        if category_data:
+            current_count = category_data.get('current_count', 0)
+            if badge.progress_target > 0:
+                progress = min((current_count / badge.progress_target) * 100, 100)
+        
+        display_badges.append({
+            'badge': badge,
+            'type': 'earned' if badge.id in earned_badge_ids else 'locked',
+            'progress': progress
+        })
+    
+    # Stats
+    total_badges = all_badges.count()
+    total_earned = len(earned_badge_ids)
+    
     context = {
         "orders": orders,               # اگر هنوز لازم داری
         "active_orders": active_orders,
         "delivered_orders": delivered_orders,
         "cancelled_orders": cancelled_orders,
         "profile": profile,
+        "display_badges": display_badges[:6],  # Show first 6 badges
+        "badge_stats": {
+            "total_badges": total_badges,
+            "total_earned": total_earned
+        }
     }
 
     return render(request, "freshbread/profile/pf.html", context)
@@ -235,6 +277,7 @@ def public_user_profile(request, user_id: int):
     bio = prof.bio or "hi there! im using Freshbread."
     from core.infrastructure.models import BlogPost
     authored_blogs = BlogPost.objects.filter(author=target, is_published=True).order_by('-created_at')
+    
     return render(
         request,
         "freshbread/profile/user_public.html",
@@ -244,4 +287,51 @@ def public_user_profile(request, user_id: int):
             "bio": bio,
             "authored_blogs": authored_blogs,
         },
+    )
+
+@login_required
+def badge_explorer(request):
+    from core.infrastructure.models import Badge, UserBadge, BadgeCategory
+    from core.application.services.badge_service import get_user_badge_progress, initialize_badges
+
+    initialize_badges()
+    
+    categories = BadgeCategory.objects.filter(is_public=True).order_by('sort_order', 'name')
+    earned_badge_ids = UserBadge.objects.filter(user=request.user).values_list('badge_id', flat=True)
+    badge_progress = get_user_badge_progress(request.user)
+    
+    category_data = []
+    for category in categories:
+        badges = Badge.objects.filter(category=category, is_active=True).order_by('level')
+        badge_list = []
+        for badge in badges:
+            progress = 0
+            cat_key = category.name.lower().replace(' ', '_')
+            if cat_key in badge_progress:
+                current_count = badge_progress[cat_key].get('current_count', 0)
+                if badge.progress_target > 0:
+                    progress = min((current_count / badge.progress_target) * 100, 100)
+            
+            badge_list.append({
+                'badge': badge,
+                'type': 'earned' if badge.id in earned_badge_ids else 'locked',
+                'progress': progress
+            })
+        
+        category_data.append({
+            'category': category,
+            'badges': badge_list
+        })
+    
+    total_badges = Badge.objects.filter(is_active=True).count()
+    total_earned = len(earned_badge_ids)
+    
+    return render(
+        request,
+        "freshbread/profile/badge_explorer.html",
+        {
+            "categories": category_data,
+            "total_badges": total_badges,
+            "total_earned": total_earned
+        }
     )

@@ -10,5 +10,6 @@ urlpatterns = [
     path('<slug:slug>/like/', blog_like, name='blog_like'),
     path('<slug:slug>/edit/', blog_edit, name='blog_edit'),
     path('<slug:slug>/delete/', blog_delete, name='blog_delete'),
+    path('<slug:slug>/update-view-progress/', update_blog_view_progress, name='update_blog_view_progress'),
     path('<slug:slug>/', blog_details, name='blog_details'),
 ]

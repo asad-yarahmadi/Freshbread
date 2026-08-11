@@ -140,7 +140,7 @@
                   {% if slide.image %}
                   <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}">
                   {% else %}
-                  <img src="{% static 'images/slider-01.jpg' %}" alt="Default">
+                  <img src="{% static 'images/slider-01.webp' %}" alt="Default">
                   {% endif %}
                   <div class="container">
                     <div class="row">
@@ -160,7 +160,7 @@
                 </li>
                 {% empty %}
                 <li class="text-center">
-                  <img src="{% static 'images/slider-01.jpg' %}" alt="Default">
+                  <img src="{% static 'images/slider-01.webp' %}" alt="Default">
                   <div class="container">
                     <div class="row">
                       <div class="col-md-12">
@@ -186,12 +186,12 @@
                   {% if slide.image %}
                   <img src="{{ slide.image.url }}" alt="{{ slide.title|default:'Slide' }}">
                   {% else %}
-                  <img src="{% static 'images/slider-01.jpg' %}" alt="Default">
+                  <img src="{% static 'images/slider-01.webp' %}" alt="Default">
                   {% endif %}
                 </li>
                 {% empty %}
                 <li class="text-center">
-                  <img src="{% static 'images/slider-01.jpg' %}" alt="Default">
+                  <img src="{% static 'images/slider-01.webp' %}" alt="Default">
                 </li>
                 {% endfor %}
               </ul>

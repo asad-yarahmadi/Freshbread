@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from ..decorators import admin_login_protect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from core.infrastructure.models import BlogReview, Review
+from core.infrastructure.models import BlogReview, Review, OrderReviewRequest, Order
 from core.infrastructure.email.email_sender import email_sender
 from django.urls import reverse
 @admin_login_protect
@@ -172,3 +172,52 @@ def reply_review(request, review_id):
     )
     messages.success(request, "Your reply was submitted and will appear after approval.")
     return redirect('food_de', slug=parent.product.slug)
+
+def submit_order_review(request, token):
+    from core.interfaces.forms.auth_forms import ReviewForm
+    from core.application.services.review_service import ReviewService
+    review_request = get_object_or_404(OrderReviewRequest, token=token)
+    order = review_request.order
+    
+    if review_request.is_submitted:
+        # If already submitted, redirect to the first product with a success message
+        first_item = order.items.first()
+        if first_item:
+            messages.success(request, "Thank you! Your review has been registered.")
+            return redirect('food_de', slug=first_item.product.slug)
+        return redirect('menu')
+    
+    if request.method == 'POST':
+        # Get products from the order
+        products = [item.product for item in order.items.all()]
+        rating = int(request.POST.get('rating', 5))
+        comment = (request.POST.get('comment') or '').strip()
+        images = request.FILES.getlist('images')
+        
+        # Create a review for each product in the order
+        for product in products:
+            try:
+                ReviewService.create_review(
+                    product.slug,
+                    {'rating': rating, 'comment': comment},
+                    images if product == products[0] else [],
+                    order.user
+                )
+            except Exception as e:
+                print(f"Error creating review for {product}: {e}")
+        
+        # Mark review request as submitted
+        review_request.is_submitted = True
+        review_request.save()
+        
+        messages.success(request, "Thank you! Your reviews have been submitted for approval.")
+        
+        # Redirect to the first product's page
+        if products:
+            return redirect('food_de', slug=products[0].slug)
+        return redirect('menu')
+    
+    return render(request, 'freshbread/order_review.html', {
+        'review_request': review_request,
+        'order': order
+    })

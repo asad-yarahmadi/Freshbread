@@ -141,6 +141,7 @@ def cancel_order(request, order_id):
 @admin_login_protect
 def order_info(request, order_id):
     from core.infrastructure.repositories.order_repository import OrderRepository
+    from core.infrastructure.models import ClaimedBadgeReward
     order = OrderRepository.get_order_by_id(order_id)
     discount_used = None
     try:
@@ -151,11 +152,13 @@ def order_info(request, order_id):
         discount_used = DiscountCode.objects.filter(owner=order.user, used_at__isnull=False, used_at__gte=window_start, used_at__lte=window_end).order_by('-used_at').first()
     except Exception:
         discount_used = None
-    return render(request, 'freshbread/order/order_info.html', {'order': order, 'discount_used': discount_used})
+    claimed_rewards = ClaimedBadgeReward.objects.filter(order=order).select_related('badge')
+    return render(request, 'freshbread/order/order_info.html', {'order': order, 'discount_used': discount_used, 'claimed_rewards': claimed_rewards})
 
 @login_required
 def order_detail(request, order_code):
     from core.infrastructure.repositories.order_repository import OrderRepository
+    from core.infrastructure.models import ClaimedBadgeReward
     order = OrderRepository.get_order_by_code(order_code)
     if not order:
         messages.error(request, "Order not found.")
@@ -172,7 +175,8 @@ def order_detail(request, order_code):
         discount_used = DiscountCode.objects.filter(owner=order.user, used_at__isnull=False, used_at__gte=window_start, used_at__lte=window_end).order_by('-used_at').first()
     except Exception:
         discount_used = None
-    return render(request, "freshbread/order/order_info1.html", {"order": order, "discount_used": discount_used})
+    claimed_rewards = ClaimedBadgeReward.objects.filter(order=order).select_related('badge')
+    return render(request, "freshbread/order/order_info1.html", {"order": order, "discount_used": discount_used, "claimed_rewards": claimed_rewards})
 
 @login_required
 def locations_manage_view(request):
@@ -313,6 +317,7 @@ def admin_order_accept(request, review_id):
         messages.error(request, "Not allowed.")
         return redirect("admin_order_reviews")
     from core.infrastructure.models import ManualOrderRequest, UsedPaymentReference, Order, OrderItem, Product
+    from core.application.services.badge_service import get_available_rewards, claim_reward
     import json
     from decimal import Decimal, InvalidOperation
     try:
@@ -368,6 +373,14 @@ def admin_order_accept(request, review_id):
                         dc.delete()
                     except Exception:
                         pass
+    except Exception:
+        pass
+    
+    # Claim available rewards
+    try:
+        available_rewards = get_available_rewards(review.user)
+        for badge in available_rewards:
+            claim_reward(review.user, badge, order)
     except Exception:
         pass
 
