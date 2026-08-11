@@ -2,10 +2,10 @@
 freshbread/__pycache__/
 *.py[codz]
 *$py.class
-
+/staticfiles
 # C extensions
 *.so
-
+media/
 # Distribution / packaging
 .Python
 build/
