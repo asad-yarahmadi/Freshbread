@@ -5,7 +5,9 @@ class EmailAlertSender:
     ADMINS = [
         'kingfoodca@gmail.com',
         'programing.mahdi@gmail.com',
-        'parsafahhim1390@gmail.com',
+        'asadyarahmadi@gmail.com',
+        'kazemimina55@gmail.com'
+
     ]
 
     def send(self, subject, message):

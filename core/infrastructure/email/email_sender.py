@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-
+ 
 class EmailSender:
     def _base_subject(self, base_subject: str) -> str:
         base_subject = base_subject or ""
