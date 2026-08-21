@@ -1,146 +1,371 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en"><!-- Basic -->
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
-   
-    <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
- 
-     <!-- Site Metas -->
-    <title>Contact - Kingfood</title>  
-    <meta name="keywords" content="Contact Kingfood, Ottawa bakery contact, Ottawa bakery phone, bakery email, local bakery">
-    <meta name="description" content="Get in touch with Kingfood in Ottawa. Call, email, or visit us for inquiries, orders, and reservations.">
-    <meta name="author" content="Kingfood">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Site Icons -->
-    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+  <title>Contact – Kingfood</title>
+  <meta name="keywords" content="Contact Kingfood, Ottawa bakery contact, Ottawa bakery phone, bakery email, local bakery">
+  <meta name="description" content="Get in touch with Kingfood in Ottawa. Call, email, or visit us for inquiries, orders, and reservations.">
+  <meta name="author" content="Kingfood">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">    
-	<!-- Site CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
-    <!-- Responsive CSS -->
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
 
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ContactPage",
-      "name": "Contact Kingfood",
-      "url": "{{ request.build_absolute_uri }}"
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Kingfood",
+    "url": "{{ request.build_absolute_uri }}"
+  }
+  </script>
+
+  <style>
+    :root {
+      --accent: #e74c3c;
+      --accent-hover: #c0392b;
+      --bg: #f5f5f7;
+      --card: rgba(255, 255, 255, 0.82);
+      --ink: #1a1a1a;
+      --ink-2: #555;
+      --ink-3: #888;
+      --border: rgba(0, 0, 0, 0.07);
+      --radius: 20px;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
     }
-    </script>
 
-  </head>
+    body {
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    /* Page title */
+    .all-page-title {
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.92), rgba(192, 57, 43, 0.88)),
+                  url('{% static "images/slider-01.webp" %}') center/cover no-repeat;
+      padding: 130px 0 70px;
+      text-align: center;
+    }
+    .all-page-title h1 {
+      font-weight: 800;
+      font-size: 2.6rem;
+      color: #fff;
+      text-shadow: 0 4px 18px rgba(0,0,0,0.25);
+      letter-spacing: -0.5px;
+    }
+
+    /* Contact section */
+    .contact-box {
+      background: var(--bg);
+      padding: 70px 0 90px;
+    }
+
+    .heading-title h2 {
+      font-weight: 800;
+      font-size: 2.2rem;
+      letter-spacing: -0.4px;
+    }
+    .heading-title p {
+      color: var(--ink-2);
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    /* Glass cards */
+    .kf-card {
+      background: var(--card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.75rem 1.8rem;
+      height: 100%;
+      transition: all 0.3s ease;
+    }
+    .kf-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.1);
+    }
+
+    .kf-card h4 {
+      font-weight: 800;
+      font-size: 1.25rem;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.2px;
+    }
+
+    .kf-card h5 {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 0.75rem;
+      color: var(--accent);
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 1rem;
+      font-size: 0.98rem;
+      color: var(--ink-2);
+      line-height: 1.5;
+    }
+    .contact-item i {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: 10px;
+      background: rgba(231, 76, 60, 0.1);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+    }
+    .contact-item a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .contact-item a:hover {
+      text-decoration: underline;
+    }
+    .contact-item strong {
+      color: var(--ink);
+    }
+
+    .hours-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .hours-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+      color: var(--ink-2);
+    }
+    .hours-list li:last-child { border-bottom: none; }
+    .hours-list .day {
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .hours-list .closed {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Support card */
+    .support-desc {
+      color: var(--ink-2);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin-bottom: 1.4rem;
+    }
+
+    .btn-ticket {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff !important;
+      border: none;
+      border-radius: 50px;
+      padding: 0.7rem 1.5rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 6px 16px rgba(231, 76, 60, 0.25);
+    }
+    .btn-ticket:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(231, 76, 60, 0.3);
+      color: #fff !important;
+    }
+
+    .btn-tickets {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--ink-2) !important;
+      border: 1.5px solid var(--border);
+      border-radius: 50px;
+      padding: 0.65rem 1.4rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      margin-left: 8px;
+    }
+    .btn-tickets:hover {
+      border-color: var(--ink);
+      color: var(--ink) !important;
+      background: rgba(0,0,0,0.03);
+    }
+
+    #back-to-top {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      color: var(--ink) !important;
+      font-size: 1.3rem;
+      transition: all 0.3s;
+    }
+    #back-to-top:hover {
+      background: var(--accent) !important;
+      color: #fff !important;
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 768px) {
+      .all-page-title {
+        padding: 110px 0 55px;
+      }
+      .all-page-title h1 { font-size: 2rem; }
+      .btn-tickets {
+        margin-left: 0;
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+      }
+      .btn-ticket {
+        display: flex;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
 <body>
 {% include 'freshbread/header.html' %}
 
-<!-- Start header -->
+<!-- Page Title -->
+<div class="all-page-title page-breadcrumb">
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1>Contact Kingfood</h1>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Contact -->
+<div class="contact-box">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="heading-title text-center">
+          <h2>Get in Touch</h2>
+          <p>Kingfood welcomes your questions, feedback, and special requests. You can contact us by phone, email, or visit us in Ottawa, Ontario. Whether you need catering, custom cakes, or reservation details, our team is happy to assist you.</p>
+        </div>
+      </div>
+    </div>
 
-	
-	<!-- Start All Pages -->
-	<div class="all-page-title page-breadcrumb">
-		<div class="container text-center">
-			<div class="row">
-				<div class="col-lg-12">
-                    <h1>Contact Kingfood</h1>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End All Pages -->
-	
-	<!-- Start Contact -->
-	<!-- <div class="map-full"></div> -->
-	<div class="contact-box">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="heading-title text-center">
-                        <h2>Contact Kingfood</h2>
-                        <p>Kingfood welcomes your questions, feedback, and special requests. You can contact us by phone, email, or visit us in Ottawa, Ontario. Whether you need catering, custom cakes, or reservation details, our team is happy to assist you. We value our customers and aim to respond promptly to all inquiries.</p>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-			  <div class="col-md-6 mb-4">
-				<div class="card p-4" style="border-radius:16px;">
-				  <h4 class="mb-3">Contact Information</h4>
-				  <p class="mb-2"><i class="fa fa-volume-control-phone me-2"></i><strong>Phone:</strong> <a href="tel:+1(514)984-4773">+1 (514) 984 4773</a></p>
-				  <p class="mb-2"><i class="fa fa-envelope me-2"></i><strong>Email:</strong> <a href="mailto:kingfoodca@gmail.com">kingfoodca@gmail.com</a></p>
-				  <p class="mb-2"><i class="fa fa-map-marker me-2"></i><strong>Location:</strong> <a href="https://maps.app.goo.gl/yqUCSJmBp1GEvMMY8">2935 Richmond Rd, Ottawa, ON K2B 8C9، Canada</a></p>
-				  <div class="mt-3">
-					<h5>Opening Hours</h5>
-					<p><span class="text-color">Monday:</span> 8:AM - 8:PM</p>
-					<p><span class="text-color">Tuesday:</span> 8:AM - 8:PM</p>
-					<p><span class="text-color">Wednesday:</span> 8:AM - 8:PM</p>
-					<p><span class="text-color">Friday:</span> Closed</p>
-					<p><span class="text-color">Saturday:</span> Closed</p>
-					<p><span class="text-color">Sunday:</span> 8:AM - 5:PM</p>
-				  </div>
-				</div>
-			  </div>
-			  <div class="col-md-6 mb-4">
-				<div class="card p-4" style="border-radius:16px;">
-				  <h4 class="mb-3">Need Help?</h4>
-				  <p class="text-muted">Create a support ticket and our admins will reply via the ticket and email.</p>
-				  <a href="{% url 'ticket_new' %}" class="btn btn-primary">Open Support Ticket</a>
-				  <a href="{% url 'tickets' %}" class="btn btn-outline-secondary ms-2">My Tickets</a>
-				</div>
-			  </div>
-			</div>
-		</div>
-	</div>
-	<!-- End Contact -->
-	
-	<!-- Start Contact info -->
+    <div class="row">
+      <!-- Contact Info -->
+      <div class="col-md-6 mb-4">
+        <div class="kf-card">
+          <h4><i class="fas fa-address-card me-2" style="color:var(--accent)"></i> Contact Information</h4>
 
-	<!-- End Contact info -->
-	
-	<!-- Start Footer -->
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <div>
+              <strong>Phone</strong><br>
+              <a href="tel:+15149844773">+1 (514) 984 4773</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <strong>Email</strong><br>
+              <a href="mailto:kingfoodca@gmail.com">kingfoodca@gmail.com</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <strong>Location</strong><br>
+              <a href="https://maps.app.goo.gl/yqUCSJmBp1GEvMMY8" target="_blank" rel="noopener">
+                2935 Richmond Rd, Ottawa, ON K2B 8C9, Canada
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h5>Opening Hours</h5>
+            <ul class="hours-list">
+              <li><span class="day">Monday</span> <span>8 AM – 8 PM</span></li>
+              <li><span class="day">Tuesday</span> <span>8 AM – 8 PM</span></li>
+              <li><span class="day">Wednesday</span> <span>8 AM – 8 PM</span></li>
+              <li><span class="day">Thursday</span> <span>8 AM – 8 PM</span></li>
+              <li><span class="day">Friday</span> <span class="closed">Closed</span></li>
+              <li><span class="day">Saturday</span> <span class="closed">Closed</span></li>
+              <li><span class="day">Sunday</span> <span>8 AM – 5 PM</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support -->
+      <div class="col-md-6 mb-4">
+        <div class="kf-card">
+          <h4><i class="fas fa-headset me-2" style="color:var(--accent)"></i> Need Help?</h4>
+          <p class="support-desc">
+            Create a support ticket and our admins will reply via the ticket system and email. Perfect for order issues, special requests, or general questions.
+          </p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'ticket_new' %}" class="btn-ticket">
+              <i class="fas fa-ticket-alt"></i> Open Support Ticket
+            </a>
+            <a href="{% url 'tickets' %}" class="btn-tickets">
+              <i class="fas fa-list"></i> My Tickets
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% include 'freshbread/footer.html' %}
-	<!-- End Footer -->
-	
-	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
-	<!-- ALL JS FILES -->
-	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-	<script src="{% static 'js/popper.min.js' %}"></script>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <!-- ALL PLUGINS -->
-	
-	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
-	<script src="{% static 'js/images-loded.min.js' %}"></script>
-	<script src="{% static 'js/isotope.min.js' %}"></script>
-	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
-	<script src="{% static 'js/jquery.mapify.js' %}"></script>
-	<script src="{% static 'js/form-validator.min.js' %}"></script>
-    <script src="{% static 'js/contact-form-script.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_NEW_API_KEY&callback=initMap" async defer></script>
+<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
-	<script>
-		$('.map-full').mapify({
-			points: [
-				{
-					lat: 40.7143528,
-					lng: -74.0059731,
-					marker: true,
-					title: 'Marker title',
-					infoWindow: 'Kingfood bakery'
-				}
-			]
-		});	
-	</script>
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+<script src="{% static 'js/images-loded.min.js' %}"></script>
+<script src="{% static 'js/isotope.min.js' %}"></script>
+<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+<script src="{% static 'js/form-validator.min.js' %}"></script>
+<script src="{% static 'js/contact-form-script.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
 </body>
 </html>

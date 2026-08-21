@@ -2,159 +2,245 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Blogs - Kingfood</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Blogs – Kingfood</title>
 
-    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --accent: #e74c3c;
+      --accent-hover: #c0392b;
+      --bg: #f5f5f7;
+      --card: rgba(255, 255, 255, 0.8);
+      --ink: #1a1a1a;
+      --ink-2: #555;
+      --ink-3: #888;
+      --border: rgba(0, 0, 0, 0.07);
+      --radius: 18px;
+      --shadow: 0 10px 36px rgba(0, 0, 0, 0.07);
+    }
 
-    <style>
-        :root {
-            --primary:    #e67e22;
-            --primary-dark:#d35400;
-            --light-bg:   #fdfaf5;
-            --card-bg:    #ffffff;
-            --text-muted: #6c757d;
-        }
+    body {
+      background: var(--bg);
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+    }
 
-        body {
-            background: var(--light-bg);
-            font-family: system-ui, -apple-system, sans-serif;
-            min-height: 100vh;
-        }
+    /* Header bar */
+    .page-header {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 1.75rem 0;
+      margin-bottom: 2.25rem;
+    }
 
-        .page-header {
-            background: white;
-            padding: 2rem 0;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 2.5rem;
-        }
+    .page-title {
+      font-weight: 800;
+      font-size: 1.75rem;
+      color: var(--ink);
+      margin: 0;
+      letter-spacing: -0.3px;
+    }
 
-        .page-title {
-            font-weight: 700;
-            color: #222;
-            margin: 0;
-        }
+    .btn-create {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff !important;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 18px rgba(231, 76, 60, 0.25);
+      text-decoration: none;
+    }
+    .btn-create:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(231, 76, 60, 0.3);
+      color: #fff !important;
+    }
 
-        .blog-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-            transition: all 0.25s ease;
-            margin-bottom: 1.6rem;
-            border: 1px solid #f0f0f0;
-        }
+    /* Alerts */
+    .alert {
+      border-radius: 14px;
+      border: none;
+    }
 
-        .blog-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
-        }
+    /* Cards */
+    .blog-card {
+      background: var(--card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.05);
+      transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-bottom: 1.5rem;
+      height: 100%;
+    }
+    .blog-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+      border-color: rgba(231, 76, 60, 0.18);
+    }
 
-        .card-body {
-            padding: 1.6rem 1.8rem;
-        }
+    .card-body {
+      padding: 1.5rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
 
-        .blog-title {
-            font-size: 1.32rem;
-            font-weight: 600;
-            margin: 0 0 0.9rem;
-            color: #222;
-            line-height: 1.35;
-        }
+    .blog-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0 0 0.75rem;
+      line-height: 1.35;
+    }
+    .blog-title a {
+      color: var(--ink);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .blog-title a:hover { color: var(--accent); }
 
-        .blog-title a {
-            color: inherit;
-            text-decoration: none;
-        }
+    .meta {
+      color: var(--ink-3);
+      font-size: 0.88rem;
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .meta i {
+      width: 1.3em;
+      text-align: center;
+      color: var(--accent);
+    }
 
-        .blog-title a:hover {
-            color: var(--primary);
-        }
+    .status-badge {
+      font-size: 0.78rem;
+      padding: 0.35em 0.85em;
+      border-radius: 50px;
+      font-weight: 600;
+    }
+    .status-published {
+      background: rgba(34, 197, 94, 0.12);
+      color: #15803d;
+    }
+    .status-draft {
+      background: rgba(234, 179, 8, 0.15);
+      color: #a16207;
+    }
 
-        .meta {
-            color: var(--text-muted);
-            font-size: 0.92rem;
-            margin-bottom: 1rem;
-        }
+    .stats {
+      display: flex;
+      gap: 1.1rem;
+      font-size: 0.9rem;
+      color: var(--ink-3);
+    }
+    .stats i { margin-right: 3px; }
 
-        .meta i {
-            width: 1.4em;
-            text-align: center;
-        }
+    .action-buttons {
+      margin-top: auto;
+      padding-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
 
-        .status-badge {
-            font-size: 0.82rem;
-            padding: 0.38em 0.9em;
-            border-radius: 30px;
-            font-weight: 500;
-        }
+    .action-btn {
+      font-size: 0.85rem;
+      padding: 0.45rem 0.95rem;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
 
-        .status-published {
-            background: #d4edda;
-            color: #155724;
-        }
+    .btn-edit {
+      background: var(--accent);
+      color: #fff !important;
+      border: none;
+    }
+    .btn-edit:hover {
+      background: var(--accent-hover);
+      color: #fff !important;
+      transform: translateY(-1px);
+    }
 
-        .status-draft {
-            background: #fff3cd;
-            color: #856404;
-        }
+    .btn-delete {
+      background: rgba(220, 38, 38, 0.1);
+      color: #dc2626 !important;
+      border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+    .btn-delete:hover {
+      background: #dc2626;
+      color: #fff !important;
+      border-color: #dc2626;
+    }
 
-        .stats {
-            display: flex;
-            gap: 1.4rem;
-            margin: 1rem 0 1.4rem;
-            font-size: 0.95rem;
-            color: var(--text-muted);
-        }
+    .btn-preview {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--ink-2) !important;
+      border: 1px solid var(--border);
+    }
+    .btn-preview:hover {
+      background: var(--ink);
+      color: #fff !important;
+      border-color: var(--ink);
+    }
 
-        .action-btn {
-            font-size: 0.88rem;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
+    /* Empty state */
+    .empty-state {
+      background: var(--card);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius);
+      padding: 4rem 2rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      max-width: 480px;
+      margin: 2rem auto;
+    }
+    .empty-state i {
+      font-size: 3.5rem;
+      color: rgba(0, 0, 0, 0.12);
+      margin-bottom: 1rem;
+    }
 
-        .btn-preview {
-            background: #6c757d;
-            border-color: #6c757d;
-        }
-
-        .btn-preview:hover {
-            background: #5a6268;
-            border-color: #545b62;
-        }
-
-        .empty-state {
-            background: white;
-            border-radius: 16px;
-            padding: 4rem 2rem;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            color: var(--text-muted);
-        }
-
-        .empty-state i {
-            font-size: 3.8rem;
-            color: #dee2e6;
-            margin-bottom: 1.2rem;
-        }
-
-        @media (max-width: 576px) {
-            .stats {
-                flex-direction: column;
-                gap: 0.6rem;
-            }
-            .action-buttons .btn {
-                width: 100%;
-                margin-bottom: 0.6rem;
-            }
-        }
-    </style>
+    @media (max-width: 576px) {
+      .page-title { font-size: 1.4rem; }
+      .action-buttons .action-btn {
+        flex: 1;
+        justify-content: center;
+      }
+      .stats {
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -162,83 +248,80 @@
 <h2></h2><br>
 <h2></h2><br>
 <div class="page-header">
-    <div class="container">
-        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
-            <h1 class="page-title">My Blogs</h1>
-            <a href="{% url 'blog_add' %}" class="btn btn-success px-4 py-2">
-                <i class="fas fa-plus me-2"></i> Create New Blog
-            </a>
-        </div>
+  <div class="container">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+      <h1 class="page-title">My Blogs</h1>
+      <a href="{% url 'blog_add' %}" class="btn-create">
+        <i class="fas fa-plus"></i> Create New Blog
+      </a>
     </div>
+  </div>
 </div>
 
 <div class="container mb-5">
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
 
-    {% if posts %}
-        <div class="row">
-            {% for p in posts %}
-            <div class="col-lg-6 col-xl-4">
-                <div class="blog-card h-100">
-                    <div class="card-body d-flex flex-column">
-                        <h3 class="blog-title">
-                            <a href="{% url 'blog_details' slug=p.slug %}">{{ p.title|default:"Untitled Post" }}</a>
-                        </h3>
+  {% if posts %}
+    <div class="row g-3">
+      {% for p in posts %}
+        <div class="col-lg-6 col-xl-4">
+          <div class="blog-card">
+            <div class="card-body">
+              <h3 class="blog-title">
+                <a href="{% url 'blog_details' slug=p.slug %}">{{ p.title|default:"Untitled Post" }}</a>
+              </h3>
 
-                        <div class="meta">
-                            <div><i class="far fa-calendar-alt"></i> {{ p.created_at|date:"M d, Y" }}</div>
-                            {% if p.updated_at %}
-                            <div><i class="far fa-clock"></i> Last edit: {{ p.updated_at|date:"M d, Y" }}</div>
-                            {% endif %}
-                        </div>
+              <div class="meta">
+                <div><i class="far fa-calendar-alt"></i> {{ p.created_at|date:"M d, Y" }}</div>
+                {% if p.updated_at %}
+                  <div><i class="far fa-clock"></i> Last edit: {{ p.updated_at|date:"M d, Y" }}</div>
+                {% endif %}
+              </div>
 
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="status-badge {% if p.is_published %}status-published{% else %}status-draft{% endif %}">
-                                {% if p.is_published %}Published{% else %}Draft{% endif %}
-                            </span>
-                            <div class="stats">
-                                <span><i class="fas fa-heart"></i> {{ p.likes_count|default:0 }}</span>
-                                <span><i class="fas fa-eye"></i> {{ p.views_count|default:0 }}</span>
-                            </div>
-                        </div>
-
-                        <div class="action-buttons mt-auto d-flex gap-2 flex-wrap">
-                            <a href="{% url 'blog_edit' slug=p.slug %}" class="btn btn-primary action-btn">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            <a href="{% url 'blog_delete' slug=p.slug %}" class="btn btn-danger action-btn">
-                                <i class="fas fa-trash-alt"></i> Delete
-                            </a>
-                            <a href="{% url 'blog_details' slug=p.slug %}" class="btn btn-preview action-btn text-white">
-                                <i class="fas fa-eye"></i> Preview
-                            </a>
-                        </div>
-                    </div>
+              <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <span class="status-badge {% if p.is_published %}status-published{% else %}status-draft{% endif %}">
+                  {% if p.is_published %}Published{% else %}Draft{% endif %}
+                </span>
+                <div class="stats">
+                  <span><i class="fas fa-heart text-danger"></i> {{ p.likes_count|default:0 }}</span>
+                  <span><i class="fas fa-eye"></i> {{ p.views_count|default:0 }}</span>
                 </div>
+              </div>
+
+              <div class="action-buttons">
+                <a href="{% url 'blog_edit' slug=p.slug %}" class="action-btn btn-edit">
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'blog_delete' slug=p.slug %}" class="action-btn btn-delete">
+                  <i class="fas fa-trash-alt"></i> Delete
+                </a>
+                <a href="{% url 'blog_details' slug=p.slug %}" class="action-btn btn-preview">
+                  <i class="fas fa-eye"></i> Preview
+                </a>
+              </div>
             </div>
-            {% endfor %}
+          </div>
         </div>
-
-        <!-- می‌توانید اینجا pagination اضافه کنید -->
-
-    {% else %}
-        <div class="empty-state">
-            <i class="far fa-newspaper"></i>
-            <h4 class="mt-3 mb-3">You haven't created any blogs yet</h4>
-            <p class="text-muted mb-4">Start sharing your stories today!</p>
-            <a href="{% url 'blog_add' %}" class="btn btn-success btn-lg px-5">
-                <i class="fas fa-plus me-2"></i> Create Your First Blog
-            </a>
-        </div>
-    {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <i class="far fa-newspaper"></i>
+      <h4 class="mt-2 mb-2 fw-bold">You haven't created any blogs yet</h4>
+      <p class="text-muted mb-4">Start sharing your stories today!</p>
+      <a href="{% url 'blog_add' %}" class="btn-create">
+        <i class="fas fa-plus"></i> Create Your First Blog
+      </a>
+    </div>
+  {% endif %}
 
 </div>
 

@@ -1,708 +1,348 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en"><!-- Basic -->
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" conStent="IE=edge">   
-   
-    <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
- 
-     <!-- Site Metas -->
-    <title>About - Kingfood</title>  
-    <meta name="keywords" content="Kingfood, Ottawa bakery, artisan bread, handmade cakes, local bakery, fresh pastries">
-    <meta name="description" content="Learn about Kingfood in Ottawa, our story, values, and commitment to fresh handmade bread and pastries.">
-    <meta name="author" content="Kingfood">
-    <meta name="robots" content="index,follow">
-    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="About Kingfood">
-    <meta property="og:description" content="Learn about Kingfood in Ottawa, our story, values, and commitment to fresh handmade bread and pastries.">
-    <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    <meta property="og:site_name" content="Kingfood">
-    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/about-img2.webp' %}">
+  <title>About – Kingfood</title>
+  <meta name="keywords" content="Kingfood, Ottawa bakery, artisan bread, handmade cakes, local bakery, fresh pastries">
+  <meta name="description" content="Learn about Kingfood in Ottawa, our story, values, and commitment to fresh handmade bread and pastries.">
+  <meta name="author" content="Kingfood">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="About Kingfood">
-    <meta name="twitter:description" content="Learn about Kingfood in Ottawa, our story, values, and commitment to fresh handmade bread and pastries.">
-    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/about-img2.webp' %}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="About Kingfood">
+  <meta property="og:description" content="Learn about Kingfood in Ottawa, our story, values, and commitment to fresh handmade bread and pastries.">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:site_name" content="Kingfood">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/about-img2.webp' %}">
 
-    <!-- Site Icons -->
-    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About Kingfood">
+  <meta name="twitter:description" content="Learn about Kingfood in Ottawa, our story, values, and commitment to fresh handmade bread and pastries.">
+  <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/about-img2.webp' %}">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">    
-	<!-- Site CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
-    <!-- Responsive CSS -->
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
 
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "AboutPage",
-      "name": "About Kingfood Bakery",
-      "url": "{{ request.build_absolute_uri }}",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Kingfood Bakery",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Ottawa",
-          "addressRegion": "ON",
-          "addressCountry": "CA"
-        }
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Kingfood Bakery",
+    "url": "{{ request.build_absolute_uri }}",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Kingfood Bakery",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Ottawa",
+        "addressRegion": "ON",
+        "addressCountry": "CA"
       }
     }
-    </script>
+  }
+  </script>
 
-  <style>/* === 🛒 Modern Cart Dropdown with Smooth Transition & Backdrop === */
-.cart-count {
-  position: absolute;
-  top: 0;
-  right: -5px;
-  background: #dc3545;
-  color: #fff;
-  font-size: 13px;
-  border-radius: 50%;
-  padding: 2px 7px;
-  font-weight: 600;
-  display: inline-block;
-  box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
-}
-
-#cart-menu { position: relative; display:inline-block; }
-.cart-count {
-  position: absolute; top: -6px; right: -10px;
-  background:#e60023;color:#fff;font-size:11px;padding:2px 6px;border-radius:12px;font-weight:700;
-}
-
-/* popup */
-.cart-popup {
-  position: absolute;
-  top: 120%;
-  right: 0;
-  width: 360px;
-  background: rgba(255,255,255,0.95);
-  border-radius: 14px;
-  padding: 14px;
-  box-shadow: 0 12px 36px rgba(0,0,0,0.16);
-  display: none;
-  z-index: 1200;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
-#cart-menu:hover .cart-popup { display:block; }
-
-/* tag */
-.cart-tag {
-  display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(0,0,0,0.06);font-weight:600;margin-bottom:10px;
-}
-
-/* items */
-.cart-items { max-height:320px; overflow-y:auto; padding-right:6px; margin-bottom:10px; }
-.cart-item { display:flex; gap:12px; align-items:flex-start; padding:8px 4px; border-radius:10px; }
-.cart-img { width:64px;height:64px;object-fit:cover;border-radius:8px; flex-shrink:0; }
-.item-info { flex:1; min-width:0; }
-
-/* name */
-.item-info .name { margin:0 0 6px 0; font-weight:600; font-size:0.95rem; color:#111; }
-
-/* price + discount */
-.price-final { margin:0; font-weight:700; color:#1aa34a; font-size:1rem; }
-.discount-label { margin:4px 0 0 0; font-size:0.85rem; color:#d40000; opacity:0.95; }
-
-/* qty */
-.quantity-control { display:flex; align-items:center; gap:8px; margin-top:8px; }
-.quantity-control button {
-  width:30px;height:30px;border-radius:8px;border:1px solid #e0e0e0;background:#fafafa; cursor:pointer;
-  font-size:18px; font-weight:700; line-height:1;
-}
-.quantity { min-width:26px; text-align:center; font-weight:700; }
-
-/* footer */
-.cart-total-row { display:flex; justify-content:space-between; font-weight:700; padding-top:8px; border-top:1px solid #eee; margin-top:8px; }
-.btn-continue { width:100%; margin-top:8px; padding:10px 0; border-radius:10px; border:none; background:linear-gradient(135deg,#007bff,#0056d6); color:#fff; font-weight:700; cursor:pointer; }
-.btn-continue:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(0,86,214,0.18); }
-
-/* scrollbar */
-.cart-items::-webkit-scrollbar{ width:6px; }
-.cart-items::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.12); border-radius:8px; }
-
-.item-info {
-  flex: 1;
-}
-
-.name {
-  font-weight: 500;
-  margin: 0;
-  font-size: 0.95rem;
-}
-
-.price {
-  font-weight: 600;
-  margin: 2px 0;
-}
-
-.original-price {
-  font-size: 0.8rem;
-}
-
-.quantity-control {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 5px;
-}
-
-.quantity-control button {
-  width: 25px;
-  height: 25px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #f5f5f5;
-  cursor: pointer;
-  font-weight: bold;
-  line-height: 1;
-}
-
-.quantity {
-  min-width: 20px;
-  text-align: center;
-}
-
-
-
-/* NAME */
-.info .name {
-    font-weight: 600;
-    font-size: 14px;
-    margin: 0 0 4px 0;
-}
-
-/* PRICE — NO DISCOUNT */
-.price-normal {
-    font-size: 14px;
-    font-weight: 700;
-    color: #28a745;
-    margin: 0;
-}
-
-/* PRICE — DISCOUNTED (RED STRIKED) */
-.price-discount {
-    color: #d40000;
-    font-size: 13px;
-    font-weight: 600;
-    margin: 0;
-    text-decoration: line-through;
-    opacity: 0.8;
-}
-
-/* PRICE — FINAL (GREEN) */
-.price-final {
-    color: #1aa34a;
-    font-size: 15px;
-    font-weight: 700;
-    margin: 2px 0 0 0;
-}
-
-/* TOTAL */
-.cart-total-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 8px 0;
-    border-top: 1px solid #ececec;
-    margin-bottom: 12px;
-}
-
-/* CONTINUE BUTTON */
-.btn-continue {
-    width: 100%;
-    padding: 11px;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-continue:hover {
-    background: #0056b3;
-}
-
-/* === Item Info === */
-.item-info {
-  flex: 1;
-}
-
-.item-info .name {
-  margin: 0;
-  font-weight: 600;
-  font-size: 15px;
-  color: #333;
-}
-
-.item-info .price {
-  margin: 3px 0 0;
-  color: #28a745;
-  font-size: 14px;
-}
-
-/* === Quantity Control === */
-.quantity-control {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.quantity-control button {
-  border: none;
-  background: #e9ecef;
-  color: #333;
-  border-radius: 6px;
-  padding: 3px 8px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.quantity-control button:hover {
-  background: #007bff;
-  color: #fff;
-  transform: translateY(-1px);
-}
-/* موقعیت صحیح کنار آیکن */
-/* کانتینر اصلی */
-#cart-menu {
-    position: relative;
-    display: inline-block;
-}
-
-/* پاپ‌آپ کارت */
-#cart-menu .cart-popup {
-    position: absolute;
-    top: 130%;
-    right: 0;
-    width: 340px;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-radius: 18px;
-    padding: 16px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
-    border: 1px solid rgba(255,255,255,0.4);
-    
-    display: none;
-    z-index: 999;
-
-    /* انیمیشن */
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.25s ease-out;
-}
-
-/* نمایش با Hover */
-#cart-menu:hover .cart-popup {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* آیتم‌ها */
-.cart-items {
-    max-height: 260px;
-    overflow-y: auto;
-    padding-right: 6px;
-    margin-bottom: 14px;
-}
-
-/* اسکرول شیک */
-.cart-items::-webkit-scrollbar {
-    width: 6px;
-}
-.cart-items::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.3);
-    border-radius: 10px;
-}
-.cart-items::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.2);
-    border-radius: 10px;
-}
-
-/* هر آیتم */
-.cart-items .item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 6px;
-    margin-bottom: 8px;
-    background: rgba(255,255,255,0.55);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-/* فوتر */
-.cart-popup-footer a {
-    display: block;
-    text-align: center;
-    padding: 12px;
-    background: linear-gradient(135deg, #007bff, #0056d6);
-    color: white !important;
-    border-radius: 14px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 15px;
-    transition: 0.25s;
-}
-
-.cart-popup-footer a:hover {
-    background: linear-gradient(135deg, #0056d6, #003c9f);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
-}
-
-
-/* ===== نوار دور تصویر وقتی تخفیف دارد ===== */
-.discount-border {
-    position: relative;
-    display: inline-block;
-    border-radius: 12px;
-    padding: 0; /* نوار کاملاً چسبیده به تصویر */
-
-    border: 3px solid transparent;
-    background: linear-gradient(#ffffff, #ffffff) padding-box,
-                linear-gradient(45deg, #ff4d4d, #ff9900, #ff4d4d) border-box;
-}
-
-.discount-border img {
-    border-radius: 12px;
-}
-
-
-/* ===== علامت درصد سه‌بعدی بالا ===== */
-.discount-symbol-3d {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 45px;
-    font-weight: 900;
-    color: #ffffff;
-
-    text-shadow: 
-        1px 1px 0 #990000,
-        2px 2px 0 #770000,
-        3px 3px 0 #550000,
-        4px 4px 5px rgba(0,0,0,0.45);
-
-    transform: rotateX(15deg) rotateY(-15deg);
-    animation: percentJump 1.4s infinite ease-in-out;
-}
-
-/* انیمیشن بالا–پایین درصد */
-@keyframes percentJump {
-    0%   { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-    50%  { transform: translateY(-8px) rotateX(10deg) rotateY(-10deg); }
-    100% { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-}
-
-
-/* ===== باکس تخفیف که با hover ظاهر می‌شود ===== */
-.discount-amount {
-    margin-left: 8px;
-    font-weight: bold;
-    color: #ffffff;
-
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: 0.25s;
-
-    background: #ff0000;
-    padding: 3px 8px;
-    border-radius: 6px;
-    border: 1px solid #ff0000;
-    font-size: 14px;
-    box-shadow: 0 1px 4px rgba(255, 0, 0, 0.25);
-}
-
-/* فعال شدن باکس تخفیف هنگام hover کارت */
-.product-card:hover .discount-amount {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-
-/* ===== ظاهر کلی کارت ===== */
-.product-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-}
-
-.product-card img {
-    border-radius: 12px;
-    width: 100%;
-}
-
-
-
-/* ===== هماهنگی ریسپانسیو (اختیاری) ===== */
-@media (max-width: 576px) {
-    .discount-symbol-3d {
-        font-size: 26px;
-        top: 5px;
-        right: 6px;
+  <style>
+    :root {
+      --accent: #e74c3c;
+      --accent-hover: #c0392b;
+      --bg: #f5f5f7;
+      --card: rgba(255, 255, 255, 0.8);
+      --ink: #1a1a1a;
+      --ink-2: #555;
+      --radius: 22px;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
     }
-    .discount-amount {
-        font-size: 12px;
-        padding: 2px 6px;
+
+    body { background: var(--bg); color: var(--ink); }
+
+    /* Page title */
+    .all-page-title {
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.92), rgba(192, 57, 43, 0.88)),
+                  url('{% static "images/about-img2.webp" %}') center/cover no-repeat;
+      padding: 130px 0 70px;
+      text-align: center;
     }
-}
+    .all-page-title h1 {
+      font-weight: 800;
+      font-size: 2.6rem;
+      color: #fff;
+      text-shadow: 0 4px 18px rgba(0,0,0,0.25);
+      letter-spacing: -0.5px;
+    }
 
+    /* About section */
+    .about-section-box {
+      background: var(--bg);
+      padding: 80px 0;
+    }
 
+    .about-section-box img {
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+      height: 100%;
+      min-height: 360px;
+      object-fit: cover;
+    }
 
-.discount-border img {
-    border-radius: 12px;
-}
-/* ===== نوار مارپیچی دور تصویر فقط در حالت تخفیف ===== */
-.twisted-border {
-    position: relative;
-    display: inline-block;
-    border-radius: 12px;
-    padding: 0;
-    overflow: visible;
-}
+    .about-section-box .inner-column {
+      background: var(--card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2.5rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-/* ساخت نوار طنابی با pseudo-element */
-.twisted-border::before {
-    content: "";
-    position: absolute;
-    inset: -4px; /* ضخامت نوار */
-    border-radius: 14px;
+    .about-section-box h1 {
+      font-weight: 800;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .about-section-box h1 span { color: var(--accent); }
 
-    background: repeating-linear-gradient(
-        45deg,
-        #ff3b3b 0 6px,
-        #ff9900 6px 12px
-    );
+    .about-section-box h4 {
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 1.1rem;
+    }
 
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
+    .about-section-box p {
+      color: var(--ink-2);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+    }
 
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
+    .about-section-box .btn-outline-new-white {
+      background: var(--accent) !important;
+      border: none !important;
+      color: #fff !important;
+      border-radius: 50px !important;
+      padding: 0.7rem 1.6rem !important;
+      font-weight: 600;
+      margin: 0.3rem 0.3rem 0.3rem 0;
+      transition: all 0.25s;
+      display: inline-block;
+    }
+    .about-section-box .btn-outline-new-white:hover {
+      background: var(--accent-hover) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+    }
 
-    padding: 4px;
-}
+    /* Menu section */
+    .menu-box {
+      background: var(--bg);
+      padding: 70px 0 90px;
+    }
 
-/* تصویر داخل نوار */
-.twisted-border img {
-    display: block;
-    border-radius: 12px;
-}
+    .heading-title h2 {
+      font-weight: 800;
+      font-size: 2.2rem;
+      letter-spacing: -0.4px;
+    }
+    .heading-title p {
+      color: var(--ink-2);
+      max-width: 680px;
+      margin: 0 auto;
+    }
 
+    .special-menu .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 2.25rem;
+    }
+    .special-menu .button-group button {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 50px;
+      padding: 0.55rem 1.35rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--ink);
+      transition: all 0.25s;
+      cursor: pointer;
+    }
+    .special-menu .button-group button:hover,
+    .special-menu .button-group button.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(231, 76, 60, 0.25);
+    }
 
-/* ===== درصد سه‌بعدی بالا ===== */
-.discount-symbol-3d {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 40px;
-    font-weight: 900;
-    color: white;
+    /* Product cards use styles from custom.css */
 
-    text-shadow:
-        1px 1px 0 #a00000,
-        2px 2px 0 #760000,
-        4px 4px 5px rgba(0, 0, 0, 0.45);
+    #back-to-top {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      color: var(--ink) !important;
+      font-size: 1.3rem;
+      transition: all 0.3s;
+    }
+    #back-to-top:hover {
+      background: var(--accent) !important;
+      color: #fff !important;
+      transform: translateY(-3px);
+    }
 
-    transform: rotateX(15deg) rotateY(-15deg);
-    animation: percentJump 1.4s infinite ease-in-out;
-}
-
-/* انیمیشن بالا پایین درصد */
-@keyframes percentJump {
-    0%   { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-    50%  { transform: translateY(-8px) rotateX(10deg) rotateY(-10deg); }
-    100% { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-}
-
-
-/* ===== باکس تخفیف Hover ===== */
-.discount-amount {
-    margin-left: 8px;
-    font-weight: bold;
-    color: #b30000;
-
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: 0.25s;
-
-    background: #ffe6e6;
-    padding: 3px 8px;
-    border-radius: 6px;
-    border: 1px solid #ff4d4d;
-    font-size: 14px;
-    box-shadow: 0 1px 4px rgba(255, 0, 0, 0.25);
-}
-
-.product-card:hover .discount-amount {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-</style>
+    @media (max-width: 991.98px) {
+      .about-section-box img {
+        min-height: 280px;
+        margin-bottom: 1.5rem;
+      }
+      .all-page-title {
+        padding: 110px 0 55px;
+      }
+      .all-page-title h1 { font-size: 2rem; }
+    }
+  </style>
 </head>
 <body>
 {% include 'freshbread/header.html' %}
 
-<!-- Start header -->
-
-
-	
-	<!-- Start header -->
-	<div class="all-page-title page-breadcrumb">
-		<div class="container text-center">
-			<div class="row">
-				<div class="col-lg-12">
-                    <h1>About Kingfood</h1>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End header -->
-	
-	<!-- Start About -->
-	<div class="about-section-box">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6 col-md-6 col-sm-12">
-                    <img src="{% static 'images/about-img2.webp' %}" alt="Kingfood team preparing Kingfood" class="img-fluid">
-				</div>
-				<div class="col-lg-6 col-md-6 col-sm-12 text-center">
-					<div class="inner-column">
-                        <h1>Welcome To <span>Kingfood</span></h1>
-						<h4>Little Story</h4>
-                        <p>Kingfood Bakery was founded in 2020 with a passion for handmade, high-quality baked goods. What started as a personal journey in baking has grown into a community-focused local bakery in Ottawa, Ontario. We use fresh ingredients, traditional techniques, and creative recipes to deliver delicious bread, cakes, and pastries every day. Whether you are visiting in person or exploring our menu online, we strive to offer a warm, welcoming experience and authentic flavors that make every bite special.</p>
-						<a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'reservation' %}">Reservation</a>
-						<a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'releases_list' %}">Release notes</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End About -->
-	
-	<!-- Start Menu -->
-<div class="menu-box">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="heading-title text-center">
-                    <h2>Kingfood Menu</h2>
-                    <p>At Kingfood, our menu is crafted with care and creativity. We offer freshly baked artisan bread, classic pastries, homemade cakes, and specialty items made daily with premium ingredients. Browse our menu to find your favorites or try something new from our seasonal selections.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="special-menu text-center">
-                    <div class="button-group filter-button-group">
-                        <button class="active" data-filter="*">All</button>
-                        <button data-filter=".iranianfood">Iranian foods</button>
-                        <button data-filter=".fastfood">Fast foods</button>
-                        <button data-filter=".bread">Bread</button>
-                        <button data-filter=".pastries">Pastries</button>
-                        <button data-filter=".cake">Cakes</button>
-                        <button data-filter=".appetizer">Appetizer</button>
-                        <button data-filter=".dessert">Dessert</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<div class="row special-list">
-    {% for product in products %}
-        <div class="col-lg-4 col-md-6 special-grid {{ product.category }}">
-            <div class="gallery-single fix product-card {% if product.discount_percent %}discount-border{% endif %}">
-                
-                <div class="image-wrapper position-relative {% if product.discount_percent %}discount-border{% endif %}">
-
-                    <img src="{{ product.menu_image.url }}" class="img-fluid" alt="{{ product.name }}">
-                    
-                    {% if product.discount_percent %}
-                    <!-- علامت % سه‌بعدی بالا -->
-                    <div class="discount-symbol-3d">%</div>
-                    {% endif %}
-                </div>
-
-                <div class="why-text">
-                    <h4>{{ product.name }}{% if not product.available %} <span class="badge bg-secondary ms-2">Not Available</span>{% endif %}</h4>
-                    <p>{{ product.description|safe }}</p>
-
-                    <h5>
-                        {% if product.discount_percent %}
-                            <span class="text-muted"><del>${{ product.original_price }}</del></span>
-                            <span class="text-success fw-bold ms-2">${{ product.price }}</span>
-
-                            <!-- عدد تخفیف که با hover ظاهر می‌شود -->
-                            <span class="discount-amount">{{ product.discount_percent }}%</span>
-                        {% else %}
-                            <span class="text-success">${{ product.price }}</span>
-                        {% endif %}
-                    </h5>
-
-                    <a href="{% url 'food_de' slug=product.slug %}" class="btn btn-warning text-white mt-2">
-                        View Details
-                    </a>
-                </div>
-
-            </div>
-        </div>
-    {% endfor %}
-</div>
-
-
+<!-- Page Title -->
+<div class="all-page-title page-breadcrumb">
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1>About Kingfood</h1>
+      </div>
     </div>
+  </div>
 </div>
-	<!-- End Menu -->
 
-	<!-- Start Contact info -->
+<!-- About -->
+<div class="about-section-box">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 col-md-6 col-sm-12 mb-4 mb-md-0">
+        <img src="{% static 'images/about-img2.webp' %}" alt="Kingfood team preparing Kingfood" class="img-fluid">
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 text-center">
+        <div class="inner-column">
+          <h1>Welcome To <span>Kingfood</span></h1>
+          <h4>Little Story</h4>
+          <p>Kingfood Bakery was founded in 2020 with a passion for handmade, high-quality baked goods. What started as a personal journey in baking has grown into a community-focused local bakery in Ottawa, Ontario. We use fresh ingredients, traditional techniques, and creative recipes to deliver delicious bread, cakes, and pastries every day. Whether you are visiting in person or exploring our menu online, we strive to offer a warm, welcoming experience and authentic flavors that make every bite special.</p>
+          <div>
+            <a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'reservation' %}">Reservation</a>
+            <a class="btn btn-lg btn-circle btn-outline-new-white" href="{% url 'releases_list' %}">Release notes</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-	<!-- End Contact info -->
-	
-	<!-- Start Footer -->
+<!-- Menu -->
+<div class="menu-box">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="heading-title text-center">
+          <h2>Kingfood Menu</h2>
+          <p>At Kingfood, our menu is crafted with care and creativity. We offer freshly baked artisan bread, classic pastries, homemade cakes, and specialty items made daily with premium ingredients. Browse our menu to find your favorites or try something new from our seasonal selections.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="special-menu text-center">
+          <div class="button-group filter-button-group">
+            <button class="active" data-filter="*">All</button>
+            <button data-filter=".iranianfood">Iranian foods</button>
+            <button data-filter=".fastfood">Fast foods</button>
+            <button data-filter=".bread">Bread</button>
+            <button data-filter=".pastries">Pastries</button>
+            <button data-filter=".cake">Cakes</button>
+            <button data-filter=".appetizer">Appetizer</button>
+            <button data-filter=".dessert">Dessert</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row special-list">
+      {% for product in products %}
+        <div class="col-lg-4 col-md-6 special-grid {{ product.category }} mb-4">
+          <div class="gallery-single fix product-card {% if product.discount_percent %}discount-border{% endif %}">
+            <div class="image-wrapper position-relative">
+              <img src="{{ product.menu_image.url }}" class="img-fluid" alt="{{ product.name }}">
+              {% if product.discount_percent %}
+                <div class="discount-symbol-3d">%</div>
+              {% endif %}
+            </div>
+            <div class="why-text">
+              <h4>
+                {{ product.name }}
+                {% if not product.available %}
+                  <span class="badge bg-secondary ms-2">Not Available</span>
+                {% endif %}
+              </h4>
+              <p>{{ product.description|safe }}</p>
+              <h5>
+                {% if product.discount_percent %}
+                  <span class="text-muted"><del>${{ product.original_price }}</del></span>
+                  <span class="text-success fw-bold ms-2">${{ product.price }}</span>
+                  <span class="discount-amount">{{ product.discount_percent }}%</span>
+                {% else %}
+                  <span class="text-success">${{ product.price }}</span>
+                {% endif %}
+              </h5>
+              <a href="{% url 'food_de' slug=product.slug %}" class="btn btn-warning text-white mt-2">
+                View Details
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
 {% include 'freshbread/footer.html' %}
-	<!-- End Footer -->	
-	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
-	<!-- ALL JS FILES -->
-	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-	<script src="{% static 'js/popper.min.js' %}"></script>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <!-- ALL PLUGINS -->
-	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
-	<script src="{% static 'js/images-loded.min.js' %}"></script>
-	<script src="{% static 'js/isotope.min.js' %}"></script>
-	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
-	<script src="{% static 'js/form-validator.min.js' %}"></script>
-    <script src="{% static 'js/contact-form-script.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
+<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+<script src="{% static 'js/images-loded.min.js' %}"></script>
+<script src="{% static 'js/isotope.min.js' %}"></script>
+<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+<script src="{% static 'js/form-validator.min.js' %}"></script>
+<script src="{% static 'js/contact-form-script.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
 </body>
 </html>

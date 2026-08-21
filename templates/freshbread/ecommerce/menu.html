@@ -1,933 +1,607 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en"><!-- Basic -->
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
-   
-    <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
- 
-     <!-- Site Metas -->
-    <title> Menu - Kingfood</title>  
-    <meta name="keywords" content="Kingfood menu, Ottawa bakery menu, artisan bread menu, handmade cakes, bakery special, fast food, slow food, bread, pastries, seasonal menu">
-    <meta name="description" content="Discover the menu of Kingfood in Ottawa, featuring artisan bread, cakes, pastries, and special dishes.">
-    <meta name="author" content="Kingfood">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Site Icons -->
-    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+  <title>Menu - Kingfood</title>
+  <meta name="keywords" content="Kingfood menu, Ottawa bakery menu, artisan bread menu, handmade cakes, bakery special, fast food, slow food, bread, pastries, seasonal menu">
+  <meta name="description" content="Discover the menu of Kingfood in Ottawa, featuring artisan bread, cakes, pastries, and special dishes.">
+  <meta name="author" content="Kingfood">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">    
-	<!-- Site CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
-    <!-- Responsive CSS -->
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
 
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Menu",
-      "name": "Kingfood Menu",
-      "url": "{{ request.build_absolute_uri }}"
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <!-- Responsive CSS -->
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Menu",
+    "name": "Kingfood Menu",
+    "url": "{{ request.build_absolute_uri }}"
+  }
+  </script>
+
+  <style>
+    /* ========== Page-specific Glass Styles ========== */
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.45);
+      --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+      --accent: #e74c3c;
+      --accent-hover: #c0392b;
+      --text-dark: #1a1a1a;
+      --text-muted: #555;
+      --radius-lg: 24px;
+      --radius-md: 16px;
     }
-    </script>
 
-  </head>
-<style>/* === 🛒 Modern Cart Dropdown with Smooth Transition & Backdrop === */
-.cart-count {
-  position: absolute;
-  top: 0;
-  right: -5px;
-  background: #dc3545;
-  color: #fff;
-  font-size: 13px;
-  border-radius: 50%;
-  padding: 2px 7px;
-  font-weight: 600;
-  display: inline-block;
-  box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
-}
+    body {
+      background: #f5f5f7;
+    }
 
-#cart-menu { position: relative; display:inline-block; }
-.cart-count {
-  position: absolute; top: -6px; right: -10px;
-  background:#e60023;color:#fff;font-size:11px;padding:2px 6px;border-radius:12px;font-weight:700;
-}
+    /* ----- Breadcrumb / Page Title ----- */
+    .all-page-title {
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.9), rgba(192, 57, 43, 0.85)),
+                  url('{% static "images/slider-01.webp" %}') center/cover no-repeat;
+      padding: 140px 0 80px;
+      position: relative;
+    }
 
-/* popup */
-.cart-popup {
-  position: absolute;
-  top: 120%;
-  right: 0;
-  width: 360px;
-  background: rgba(255,255,255,0.95);
-  border-radius: 14px;
-  padding: 14px;
-  box-shadow: 0 12px 36px rgba(0,0,0,0.16);
-  display: none;
-  z-index: 1200;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
-#cart-menu:hover .cart-popup { display:block; }
+    .all-page-title h1 {
+      font-weight: 800;
+      font-size: 2.8rem;
+      color: #fff;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      letter-spacing: -0.5px;
+    }
 
-/* tag */
-.cart-tag {
-  display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(0,0,0,0.06);font-weight:600;margin-bottom:10px;
-}
+    /* ----- Menu Section ----- */
+    .menu-box {
+      background: #f5f5f7;
+      padding: 80px 0 100px;
+    }
 
-/* items */
-.cart-items { max-height:320px; overflow-y:auto; padding-right:6px; margin-bottom:10px; }
-.cart-item { display:flex; gap:12px; align-items:flex-start; padding:8px 4px; border-radius:10px; }
-.cart-img { width:64px;height:64px;object-fit:cover;border-radius:8px; flex-shrink:0; }
-.item-info { flex:1; min-width:0; }
+    .heading-title h2 {
+      font-weight: 800;
+      font-size: 2.3rem;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.75rem;
+    }
 
-/* name */
-.item-info .name { margin:0 0 6px 0; font-weight:600; font-size:0.95rem; color:#111; }
+    .heading-title p {
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+    }
 
-/* price + discount */
-.price-final { margin:0; font-weight:700; color:#1aa34a; font-size:1rem; }
-.discount-label { margin:4px 0 0 0; font-size:0.85rem; color:#d40000; opacity:0.95; }
+    /* Filter Buttons - Glass Pills */
+    .special-menu .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 2.5rem;
+    }
 
-/* qty */
-.quantity-control { display:flex; align-items:center; gap:8px; margin-top:8px; }
-.quantity-control button {
-  width:30px;height:30px;border-radius:8px;border:1px solid #e0e0e0;background:#fafafa; cursor:pointer;
-  font-size:18px; font-weight:700; line-height:1;
-}
-.quantity { min-width:26px; text-align:center; font-weight:700; }
+    .special-menu .button-group button {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 50px;
+      padding: 0.55rem 1.4rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text-dark);
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      cursor: pointer;
+    }
 
-/* footer */
-.cart-total-row { display:flex; justify-content:space-between; font-weight:700; padding-top:8px; border-top:1px solid #eee; margin-top:8px; }
-.btn-continue { width:100%; margin-top:8px; padding:10px 0; border-radius:10px; border:none; background:linear-gradient(135deg,#007bff,#0056d6); color:#fff; font-weight:700; cursor:pointer; }
-.btn-continue:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(0,86,214,0.18); }
+    .special-menu .button-group button:hover,
+    .special-menu .button-group button.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(231, 76, 60, 0.25);
+    }
 
-/* scrollbar */
-.cart-items::-webkit-scrollbar{ width:6px; }
-.cart-items::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.12); border-radius:8px; }
+    /* Product Cards - Glass */
+    .product-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
 
-.item-info {
-  flex: 1;
-}
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+      border-color: rgba(231, 76, 60, 0.25);
+    }
 
-.name {
-  font-weight: 500;
-  margin: 0;
-  font-size: 0.95rem;
-}
+    .product-card .image-wrapper {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
 
-.price {
-  font-weight: 600;
-  margin: 2px 0;
-}
+    .product-card .image-wrapper img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
 
-.original-price {
-  font-size: 0.8rem;
-}
+    .product-card:hover .image-wrapper img {
+      transform: scale(1.06);
+    }
 
-.quantity-control {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 5px;
-}
+    .product-card .why-text {
+      padding: 1.4rem 1.5rem 1.6rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
 
-.quantity-control button {
-  width: 25px;
-  height: 25px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #f5f5f5;
-  cursor: pointer;
-  font-weight: bold;
-  line-height: 1;
-}
+    .product-card .why-text h4 {
+      font-weight: 700;
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+    }
 
-.quantity {
-  min-width: 20px;
-  text-align: center;
-}
+    .product-card .why-text p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      flex: 1;
+      margin-bottom: 0.8rem;
+    }
 
+    .product-card .why-text h5 {
+      margin-bottom: 1rem;
+    }
 
+    .product-card .btn-warning {
+      background: var(--accent) !important;
+      border: none !important;
+      border-radius: 50px !important;
+      padding: 0.55rem 1.4rem !important;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      align-self: flex-start;
+    }
 
-/* NAME */
-.info .name {
-    font-weight: 600;
-    font-size: 14px;
-    margin: 0 0 4px 0;
-}
+    .product-card .btn-warning:hover {
+      background: var(--accent-hover) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(231, 76, 60, 0.3);
+    }
 
-/* PRICE — NO DISCOUNT */
-.price-normal {
-    font-size: 14px;
-    font-weight: 700;
-    color: #28a745;
-    margin: 0;
-}
-
-/* PRICE — DISCOUNTED (RED STRIKED) */
-.price-discount {
-    color: #d40000;
-    font-size: 13px;
-    font-weight: 600;
-    margin: 0;
-    text-decoration: line-through;
-    opacity: 0.8;
-}
-
-/* PRICE — FINAL (GREEN) */
-.price-final {
-    color: #1aa34a;
-    font-size: 15px;
-    font-weight: 700;
-    margin: 2px 0 0 0;
-}
-
-/* TOTAL */
-.cart-total-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 8px 0;
-    border-top: 1px solid #ececec;
-    margin-bottom: 12px;
-}
-
-/* CONTINUE BUTTON */
-.btn-continue {
-    width: 100%;
-    padding: 11px;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-continue:hover {
-    background: #0056b3;
-}
-
-/* === Item Info === */
-.item-info {
-  flex: 1;
-}
-
-.item-info .name {
-  margin: 0;
-  font-weight: 600;
-  font-size: 15px;
-  color: #333;
-}
-
-.item-info .price {
-  margin: 3px 0 0;
-  color: #28a745;
-  font-size: 14px;
-}
-
-/* === Quantity Control === */
-.quantity-control {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.quantity-control button {
-  border: none;
-  background: #e9ecef;
-  color: #333;
-  border-radius: 6px;
-  padding: 3px 8px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.quantity-control button:hover {
-  background: #007bff;
-  color: #fff;
-  transform: translateY(-1px);
-}
-/* موقعیت صحیح کنار آیکن */
-/* کانتینر اصلی */
-#cart-menu {
-    position: relative;
-    display: inline-block;
-}
-
-/* پاپ‌آپ کارت */
-#cart-menu .cart-popup {
-    position: absolute;
-    top: 130%;
-    right: 0;
-    width: 340px;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-radius: 18px;
-    padding: 16px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
-    border: 1px solid rgba(255,255,255,0.4);
-    
-    display: none;
-    z-index: 999;
-
-    /* انیمیشن */
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.25s ease-out;
-}
-
-/* نمایش با Hover */
-#cart-menu:hover .cart-popup {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* آیتم‌ها */
-.cart-items {
-    max-height: 260px;
-    overflow-y: auto;
-    padding-right: 6px;
-    margin-bottom: 14px;
-}
-
-/* اسکرول شیک */
-.cart-items::-webkit-scrollbar {
-    width: 6px;
-}
-.cart-items::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.3);
-    border-radius: 10px;
-}
-.cart-items::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.2);
-    border-radius: 10px;
-}
-
-/* هر آیتم */
-.cart-items .item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 6px;
-    margin-bottom: 8px;
-    background: rgba(255,255,255,0.55);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-/* فوتر */
-.cart-popup-footer a {
-    display: block;
-    text-align: center;
-    padding: 12px;
-    background: linear-gradient(135deg, #007bff, #0056d6);
-    color: white !important;
-    border-radius: 14px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 15px;
-    transition: 0.25s;
-}
-
-.cart-popup-footer a:hover {
-    background: linear-gradient(135deg, #0056d6, #003c9f);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
-}
-
-
-/* ===== نوار دور تصویر وقتی تخفیف دارد ===== */
-.discount-border {
-    position: relative;
-    display: inline-block;
-    border-radius: 12px;
-    padding: 0; /* نوار کاملاً چسبیده به تصویر */
-
-    border: 3px solid transparent;
-    background: linear-gradient(#ffffff, #ffffff) padding-box,
-                linear-gradient(45deg, #ff4d4d, #ff9900, #ff4d4d) border-box;
-}
-
-.discount-border img {
-    border-radius: 12px;
-}
-
-
-/* ===== علامت درصد سه‌بعدی بالا ===== */
-.discount-symbol-3d {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 45px;
-    font-weight: 900;
-    color: #ffffff;
-
-    text-shadow: 
-        1px 1px 0 #990000,
-        2px 2px 0 #770000,
-        3px 3px 0 #550000,
-        4px 4px 5px rgba(0,0,0,0.45);
-
-    transform: rotateX(15deg) rotateY(-15deg);
-    animation: percentJump 1.4s infinite ease-in-out;
-}
-
-/* انیمیشن بالا–پایین درصد */
-@keyframes percentJump {
-    0%   { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-    50%  { transform: translateY(-8px) rotateX(10deg) rotateY(-10deg); }
-    100% { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-}
-
-
-/* ===== باکس تخفیف که با hover ظاهر می‌شود ===== */
-.discount-amount {
-    margin-left: 8px;
-    font-weight: bold;
-    color: #ffffff;
-
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: 0.25s;
-
-    background: #ff0000;
-    padding: 3px 8px;
-    border-radius: 6px;
-    border: 1px solid #ff0000;
-    font-size: 14px;
-    box-shadow: 0 1px 4px rgba(255, 0, 0, 0.25);
-}
-
-/* فعال شدن باکس تخفیف هنگام hover کارت */
-.product-card:hover .discount-amount {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-
-/* ===== ظاهر کلی کارت ===== */
-.product-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-}
-
-.product-card img {
-    border-radius: 12px;
-    width: 100%;
-}
-
-
-
-/* ===== هماهنگی ریسپانسیو (اختیاری) ===== */
-@media (max-width: 576px) {
+    /* Discount Badge */
     .discount-symbol-3d {
-        font-size: 26px;
-        top: 5px;
-        right: 6px;
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: var(--accent);
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.15rem;
+      box-shadow: 0 6px 16px rgba(231, 76, 60, 0.4);
+      z-index: 2;
+      animation: percentJump 1.6s infinite ease-in-out;
     }
+
+    @keyframes percentJump {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
     .discount-amount {
-        font-size: 12px;
-        padding: 2px 6px;
+      display: inline-block;
+      background: rgba(231, 76, 60, 0.12);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 50px;
+      margin-left: 0.4rem;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: all 0.25s ease;
     }
-}
 
+    .product-card:hover .discount-amount {
+      opacity: 1;
+      transform: translateX(0);
+    }
 
+    /* ----- Quote Section ----- */
+    .qt-box {
+      position: relative;
+      padding: 90px 0;
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+    }
 
-.discount-border img {
-    border-radius: 12px;
-}
-/* ===== نوار مارپیچی دور تصویر فقط در حالت تخفیف ===== */
-.twisted-border {
-    position: relative;
-    display: inline-block;
-    border-radius: 12px;
-    padding: 0;
-    overflow: visible;
-}
+    .qt-box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(4px);
+    }
 
-/* ساخت نوار طنابی با pseudo-element */
-.twisted-border::before {
-    content: "";
-    position: absolute;
-    inset: -4px; /* ضخامت نوار */
-    border-radius: 14px;
+    .qt-box .container {
+      position: relative;
+      z-index: 2;
+    }
 
-    background: repeating-linear-gradient(
-        45deg,
-        #ff3b3b 0 6px,
-        #ff9900 6px 12px
-    );
+    .qt-box .lead {
+      font-size: 1.55rem;
+      font-weight: 500;
+      font-style: italic;
+      color: #fff;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
 
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
+    .qt-box span.lead {
+      font-style: normal;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      display: block;
+      margin-top: 1rem;
+    }
 
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
+    /* ----- Reviews ----- */
+    .customer-reviews-box {
+      background: #f5f5f7;
+      padding: 90px 0 100px;
+    }
 
-    padding: 4px;
-}
+    .customer-reviews-box .carousel-item {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      box-shadow: var(--glass-shadow);
+    }
 
-/* تصویر داخل نوار */
-.twisted-border img {
-    display: block;
-    border-radius: 12px;
-}
+    .customer-reviews-box .img-box {
+      width: 90px;
+      height: 90px;
+      border: 3px solid rgba(231, 76, 60, 0.3) !important;
+      overflow: hidden;
+    }
 
+    .customer-reviews-box .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-/* ===== درصد سه‌بعدی بالا ===== */
-.discount-symbol-3d {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    font-size: 40px;
-    font-weight: 900;
-    color: white;
+    .customer-reviews-box .carousel-control-prev,
+    .customer-reviews-box .carousel-control-next {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 1;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
 
-    text-shadow:
-        1px 1px 0 #a00000,
-        2px 2px 0 #760000,
-        4px 4px 5px rgba(0, 0, 0, 0.45);
+    .customer-reviews-box .carousel-control-prev { left: -20px; }
+    .customer-reviews-box .carousel-control-next { right: -20px; }
 
-    transform: rotateX(15deg) rotateY(-15deg);
-    animation: percentJump 1.4s infinite ease-in-out;
-}
+    .customer-reviews-box .carousel-control-prev i,
+    .customer-reviews-box .carousel-control-next i {
+      color: var(--text-dark);
+      font-size: 1.3rem;
+    }
 
-/* انیمیشن بالا پایین درصد */
-@keyframes percentJump {
-    0%   { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-    50%  { transform: translateY(-8px) rotateX(10deg) rotateY(-10deg); }
-    100% { transform: translateY(0) rotateX(15deg) rotateY(-15deg); }
-}
+    /* Back to top */
+    #back-to-top {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      color: var(--text-dark) !important;
+      font-size: 1.3rem;
+      transition: all 0.3s ease;
+    }
 
+    #back-to-top:hover {
+      background: var(--accent) !important;
+      color: #fff !important;
+      transform: translateY(-3px);
+    }
 
-/* ===== باکس تخفیف Hover ===== */
-.discount-amount {
-    margin-left: 8px;
-    font-weight: bold;
-    color: #b30000;
+    /* Responsive */
+    @media (max-width: 991.98px) {
+      .all-page-title {
+        padding: 120px 0 60px;
+      }
+      .all-page-title h1 {
+        font-size: 2.2rem;
+      }
+      .customer-reviews-box .carousel-control-prev { left: 5px; }
+      .customer-reviews-box .carousel-control-next { right: 5px; }
+    }
 
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: 0.25s;
+    @media (max-width: 767.98px) {
+      .heading-title h2 {
+        font-size: 1.9rem;
+      }
+      .product-card .image-wrapper img {
+        height: 200px;
+      }
+      .discount-symbol-3d {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
 
-    background: #ffe6e6;
-    padding: 3px 8px;
-    border-radius: 6px;
-    border: 1px solid #ff4d4d;
-    font-size: 14px;
-    box-shadow: 0 1px 4px rgba(255, 0, 0, 0.25);
-}
-
-.product-card:hover .discount-amount {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-</style>
 <body>
-  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
-
- -->	{% if messages %}
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const messages = [
-        {% for message in messages %}
-        {
-            text: "{{ message|escapejs }}",
-            tag: "{{ message.tags }}"
-        },
-        {% endfor %}
-    ];
-
-    // تابع تعیین رنگ و آیکن بر اساس نوع پیام
-    function getAlertColors(tag) {
-        switch (tag) {
-            case 'success':
-                return { bg: '#22c55e', text: '#fff', icon: 'success' }; // سبز
-            case 'error':
-                return { bg: '#dc2626', text: '#fff', icon: 'error' };   // قرمز
-            case 'warning':
-                return { bg: '#facc15', text: '#000', icon: 'warning' }; // زرد
-            default:
-                return { bg: '#facc15', text: '#000', icon: 'warning' };    // آبی
-        }
-    }
-
-    // تابع برای تشخیص موبایل
-    function isMobile() {
-        return window.innerWidth < 768;
-    }
-
-    // تابع نمایش پیام‌ها به ترتیب
-    function showNextMessage(index = 0) {
-        if (index >= messages.length) return;
-
-        const colors = getAlertColors(messages[index].tag);
-        const mobile = isMobile();
-
-        Swal.fire({
-            title: messages[index].text,
-            icon: colors.icon,
-            background: colors.bg,
-            color: colors.text,
-            timer: 7000,
-            timerProgressBar: true,
-            showConfirmButton: false,
-            toast: !mobile, // در دسکتاپ toast باشه، در موبایل وسط صفحه
-            position: mobile ? 'center' : 'top-end',
-            customClass: {
-                popup: mobile ? 'swal-wide' : ''
-            },
-            showClass: { popup: 'animate__animated animate__fadeInDown' },
-            hideClass: { popup: 'animate__animated animate__fadeOutUp' },
-            didOpen: (popup) => {
-                popup.addEventListener('mouseenter', Swal.stopTimer);
-                popup.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        }).then(() => {
-            showNextMessage(index + 1);
-        });
-    }
-
-    showNextMessage();
-});
-</script>
-
-<style>
-/* برای موبایل، پنجره کمی بزرگ‌تر بشه */
-.swal-wide {
-    width: 90% !important;
-    font-size: 1.1rem !important;
-}
-</style>
-{% endif %}
-
-<!-- Start header -->
-{% include 'freshbread/header.html' %}
-
-	
-	<!-- Start All Pages -->
-	<div class="all-page-title page-breadcrumb">
-		<div class="container text-center">
-			<div class="row">
-				<div class="col-lg-12">
-                    <h1>Kingfood Menu</h1>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End All Pages -->
-	
-	<!-- Start Menu -->
-<div class="menu-box">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="heading-title text-center">
-                    <h2>Kingfood Menu</h2>
-                    <p>At Kingfood, our menu is crafted with care and creativity. We offer freshly baked artisan bread, classic pastries, homemade cakes, and specialty items made daily with premium ingredients. Browse our menu to find your favorites or try something new from our seasonal selections.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="special-menu text-center">
-                    <div class="button-group filter-button-group">
-                        <button class="active" data-filter="*">All</button>
-                        <button data-filter=".iranianfood">Iranian foods</button>
-                        <button data-filter=".fastfood">Fast foods</button>
-                        <button data-filter=".bread">Bread</button>
-                        <button data-filter=".pastries">Pastries</button>
-                        <button data-filter=".cake">Cakes</button>
-                        <button data-filter=".appetizer">Appetizer</button>
-                        <button data-filter=".dessert">Dessert</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<div class="row special-list">
-    {% for product in products %}
-        <div class="col-lg-4 col-md-6 special-grid {{ product.category }}">
-            <div class="gallery-single fix product-card {% if product.discount_percent %}discount-border{% endif %}">
-                
-                <div class="image-wrapper position-relative {% if product.discount_percent %}discount-border{% endif %}">
-
-                    <img src="{{ product.menu_image.url }}" class="img-fluid" alt="{{ product.name }}">
-                    
-                    {% if product.discount_percent %}
-                    <!-- علامت % سه‌بعدی بالا -->
-                    <div class="discount-symbol-3d">%</div>
-                    {% endif %}
-                </div>
-
-                <div class="why-text">
-                    <h4>{{ product.name }}{% if not product.available %} <span class="badge bg-secondary ms-2">Not Available</span>{% endif %}</h4>
-                    <p>{{ product.description|safe }}</p>
-
-                    <h5>
-                        {% if product.discount_percent %}
-                            <span class="text-muted"><del>${{ product.original_price }}</del></span>
-                            <span class="text-success fw-bold ms-2">${{ product.price }}</span>
-
-                            <!-- عدد تخفیف که با hover ظاهر می‌شود -->
-                            <span class="discount-amount">{{ product.discount_percent }}%</span>
-                        {% else %}
-                            <span class="text-success">${{ product.price }}</span>
-                        {% endif %}
-                    </h5>
-
-                    <a href="{% url 'food_de' slug=product.slug %}" class="btn btn-warning text-white mt-2">
-                        View Details
-                    </a>
-                </div>
-
-            </div>
-        </div>
-    {% endfor %}
-</div>
-
-
-    </div>
-</div>
-	
-	<!-- Start QT -->
-	<div class="qt-box qt-background">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8 ml-auto mr-auto text-left">
-					<p class="lead ">
-						" If you're not the one cooking, stay out of the way and compliment the chef. "
-					</p>
-					<span class="lead">Michael Strahan</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End QT -->
-	
-	<!-- Start Customer Reviews -->
-	<div class="customer-reviews-box">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="heading-title text-center">
-						<h2>Customer Reviews</h2>
-						<p>You can know Reviews from our Customers(you can add too!)</p>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-8 mr-auto ml-auto text-center">
-					<div id="reviews" class="carousel slide" data-ride="carousel">
-						<div class="carousel-inner mt-4">
-							<div class="carousel-item text-center active">
-								<div class="img-box p-1 border rounded-circle m-auto">
-									<img class="d-block w-100 rounded-circle" src="{% static 'images/profile-1.webp' %}" alt="">
-								</div>
-								<h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Paul Mitchel</strong></h5>
-								<h6 class="text-dark m-0">Web Developer</h6>
-								<p class="m-0 pt-3">It has a lot of delicious food. It also has a very strong website designer. Overall, thank you.</p>
-							</div>
-							<div class="carousel-item text-center">
-								<div class="img-box p-1 border rounded-circle m-auto">
-									<img class="d-block w-100 rounded-circle" src="{% static 'images/profile-3.webp' %}" alt="">
-								</div>
-								<h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Steve Fonsi</strong></h5>
-								<h6 class="text-dark m-0">Web Designer</h6>
-								<p class="m-0 pt-3">It has good food and user interface. Thanks.</p>
-							</div>
-							<div class="carousel-item text-center">
-								<div class="img-box p-1 border rounded-circle m-auto">
-									<img class="d-block w-100 rounded-circle" src="{% static 'images/profile-7.webp' %}" alt="">
-								</div>
-								<h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Daniel vebar</strong></h5>
-								<h6 class="text-dark m-0">Seo Analyst</h6>
-								<p class="m-0 pt-3">Good and tasty food and fast foods. I think in Ottawa its the best Fast food and bakery here.</p>
-							</div>
-						</div>
-						<a class="carousel-control-prev" href="#reviews" role="button" data-slide="prev">
-							<i class="fa fa-angle-left" aria-hidden="true"></i>
-							<span class="sr-only">Previous</span>
-						</a>
-						<a class="carousel-control-next" href="#reviews" role="button" data-slide="next">
-							<i class="fa fa-angle-right" aria-hidden="true"></i>
-							<span class="sr-only">Next</span>
-						</a>
-                    </div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End Customer Reviews -->
-	
-	<!-- Start Contact info -->
-
-	<!-- End Contact info -->
-	
-	<!-- Start Footer -->
-{% include 'freshbread/footer.html' %}
-	<!-- End Footer -->
-
-	
-	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
-
-	<!-- ALL JS FILES -->
-	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-	<script src="{% static 'js/popper.min.js' %}"></script>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <!-- ALL PLUGINS -->
-	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
-	<script src="{% static 'js/images-loded.min.js' %}"></script>
-	<script src="{% static 'js/isotope.min.js' %}"></script>
-	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
-	<script src="{% static 'js/form-validator.min.js' %}"></script>
-    <script src="{% static 'js/contact-form-script.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
-	<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  const popup = document.getElementById("cart-popup");
-  const cartCountElem = document.getElementById("cart-count");
-  const cartTotalElem = document.getElementById("cart-total");
-  const continueBtn = document.getElementById("continue-shopping");
-
-  if (!popup) return;
-
-  // ----- Helpers -----
-  function calcItemTotals(item) {
-    const price = parseFloat(item.dataset.price);   // قیمت نهایی
-    const qty = parseInt(item.querySelector(".quantity").textContent);
-    const itemTotal = price * qty;
-    item.querySelector(".price-value").textContent = price.toFixed(2);
-    item.querySelector(".item-total-value").textContent = itemTotal.toFixed(2);
-    return itemTotal;
-  }
-
-  function updateCartTotal() {
-    let total = 0;
-    popup.querySelectorAll(".cart-item").forEach(item => total += calcItemTotals(item));
-    if (cartTotalElem) cartTotalElem.textContent = "$" + total.toFixed(2);
-  }
-
-  function updateCartCount() {
-    if (!cartCountElem) return;
-    let count = 0;
-    popup.querySelectorAll(".cart-item .quantity").forEach(q => count += parseInt(q.textContent));
-    if (count > 0) {
-      cartCountElem.style.display = "inline-block";
-      cartCountElem.textContent = count;
-    } else {
-      cartCountElem.style.display = "none";
-    }
-  }
-
-  // مقداردهی اولیه
-  updateCartTotal();
-  updateCartCount();
-
-  // ----- رویدادهای داخل پاپ‌آپ فقط روی دکمه‌ها -----
-  popup.addEventListener("click", function (e) {
-
-    // دکمه‌های افزایش/کاهش فقط همینجا هندل شوند
-    const incBtn = e.target.closest(".increase");
-    const decBtn = e.target.closest(".decrease");
-
-    if (incBtn || decBtn) {
-      e.stopPropagation(); // نذار کلیک به والدین بره
-
-      const item = e.target.closest(".cart-item");
-      const slug = item.dataset.slug;
-      const quantityElem = item.querySelector(".quantity");
-
-      let qty = parseInt(quantityElem.textContent);
-      if (incBtn) qty++;
-      if (decBtn) qty--;
-
-      // محدودیت تعداد
-      qty = Math.max(0, Math.min(qty, 5));
-
-      fetch(`/set_cart_quantity/${slug}/${qty}/`, {
-        method: "POST",
-        headers: {
-          "X-CSRFToken": "{{ csrf_token }}",
-          "X-Requested-With": "XMLHttpRequest"
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          if (qty === 0) {
-            item.remove();
-          } else {
-            quantityElem.textContent = qty;
+  {% if messages %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+      const messages = [
+          {% for message in messages %}
+          { text: "{{ message|escapejs }}", tag: "{{ message.tags }}" },
+          {% endfor %}
+      ];
+      function getAlertColors(tag) {
+          switch (tag) {
+              case 'success': return { bg: '#22c55e', text: '#fff', icon: 'success' };
+              case 'error': return { bg: '#dc2626', text: '#fff', icon: 'error' };
+              case 'warning': return { bg: '#facc15', text: '#000', icon: 'warning' };
+              default: return { bg: '#facc15', text: '#000', icon: 'warning' };
           }
-          updateCartTotal();
-          updateCartCount();
-        }
-      })
-      .catch(err => console.error("Error:", err));
-
-      return; // چون این کلیک هندل شد، رفتار دیگری نداشته باشه
-    }
-
-    // دکمه Continue Shopping → فقط همین مسیر
-    if (e.target.closest("#continue-shopping")) {
-      e.stopPropagation();
-      window.location.href = "{% url 'menu' %}";
-      return;
-    }
-
-    // هر کلیک دیگری داخل پاپ‌آپ هیچ کاری نکنه (ممنوعیت ریدایرکت)
-    // توجه: قبلاً اینجا ریدایرکت به رزرو داشتی؛ حذف شد تا داخل پاپ‌آپ امن باشد.
+      }
+      function isMobile() { return window.innerWidth < 768; }
+      function showNextMessage(index = 0) {
+          if (index >= messages.length) return;
+          const colors = getAlertColors(messages[index].tag);
+          const mobile = isMobile();
+          Swal.fire({
+              title: messages[index].text,
+              icon: colors.icon,
+              background: colors.bg,
+              color: colors.text,
+              timer: 7000,
+              timerProgressBar: true,
+              showConfirmButton: false,
+              toast: !mobile,
+              position: mobile ? 'center' : 'top-end',
+              customClass: { popup: mobile ? 'swal-wide' : '' },
+              showClass: { popup: 'animate__animated animate__fadeInDown' },
+              hideClass: { popup: 'animate__animated animate__fadeOutUp' },
+              didOpen: (popup) => {
+                  popup.addEventListener('mouseenter', Swal.stopTimer);
+                  popup.addEventListener('mouseleave', Swal.resumeTimer);
+              }
+          }).then(() => { showNextMessage(index + 1); });
+      }
+      showNextMessage();
   });
+  </script>
+  <style>
+  .swal-wide { width: 90% !important; font-size: 1.1rem !important; }
+  </style>
+  {% endif %}
 
-  // ----- کلیک بیرون از پاپ‌آپ → اگر لازم است کاری انجام بده -----
-  // اگر می‌خوای بیرون کلیک شد صفحه رزرو بره، این بخش را فعال کن.
-  // اگر فقط می‌خوای پاپ‌آپ بسته بشه، همینجا می‌تونی کلاس/استایل را تغییر بدی.
-  document.addEventListener("click", function (e) {
-    const clickedInside = e.target.closest("#cart-popup");
-    if (!clickedInside) {
-      // نمونه: رفتن به رزرو (اگر این رفتار مد نظرته)
-      // window.location.href = "{% url 'reservation' %}";
+  <!-- Header -->
+  {% include 'freshbread/header.html' %}
 
-      // یا اگر فقط بستن پاپ‌آپ مد نظرته و با CSS کلاس داری:
-      // popup.classList.remove("is-open");
-    }
-      const headerCartIcon = document.querySelector(".fa-shopping-cart"); 
-    // یا هر selector واقعی آیکونت در هدر (مثلاً #cart-icon یا .nav-cart)
+  <!-- Page Title -->
+  <div class="all-page-title page-breadcrumb">
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1>Kingfood Menu</h1>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    if (headerCartIcon) {
-        headerCartIcon.addEventListener("click", function (e) {
-            e.preventDefault();
-            window.location.href = "{% url 'reservation' %}";
-        });
-    }
-});
+  <!-- Menu Section -->
+  <div class="menu-box">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="heading-title text-center">
+            <h2>Kingfood Menu</h2>
+            <p>At Kingfood, our menu is crafted with care and creativity. We offer freshly baked artisan bread, classic pastries, homemade cakes, and specialty items made daily with premium ingredients. Browse our menu to find your favorites or try something new from our seasonal selections.</p>
+          </div>
+        </div>
+      </div>
 
-});
-</script>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="special-menu text-center">
+            <div class="button-group filter-button-group">
+              <button class="active" data-filter="*">All</button>
+              <button data-filter=".iranianfood">Iranian foods</button>
+              <button data-filter=".fastfood">Fast foods</button>
+              <button data-filter=".bread">Bread</button>
+              <button data-filter=".pastries">Pastries</button>
+              <button data-filter=".cake">Cakes</button>
+              <button data-filter=".appetizer">Appetizer</button>
+              <button data-filter=".dessert">Dessert</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row special-list">
+        {% for product in products %}
+          <div class="col-lg-4 col-md-6 special-grid {{ product.category }} mb-4">
+            <div class="gallery-single fix product-card {% if product.discount_percent %}discount-border{% endif %}">
+              <div class="image-wrapper position-relative">
+                <img src="{{ product.menu_image.url }}" class="img-fluid" alt="{{ product.name }}">
+                {% if product.discount_percent %}
+                  <div class="discount-symbol-3d">%</div>
+                {% endif %}
+              </div>
+
+              <div class="why-text">
+                <h4>
+                  {{ product.name }}
+                  {% if not product.available %}
+                    <span class="badge bg-secondary ms-2">Not Available</span>
+                  {% endif %}
+                </h4>
+                <p>{{ product.description|safe }}</p>
+
+                <h5>
+                  {% if product.discount_percent %}
+                    <span class="text-muted"><del>${{ product.original_price }}</del></span>
+                    <span class="text-success fw-bold ms-2">${{ product.price }}</span>
+                    <span class="discount-amount">{{ product.discount_percent }}%</span>
+                  {% else %}
+                    <span class="text-success">${{ product.price }}</span>
+                  {% endif %}
+                </h5>
+
+                <a href="{% url 'food_de' slug=product.slug %}" class="btn btn-warning text-white mt-2">
+                  View Details
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Quote -->
+  <div class="qt-box qt-background">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 ml-auto mr-auto text-left">
+          <p class="lead">
+            " If you're not the one cooking, stay out of the way and compliment the chef. "
+          </p>
+          <span class="lead">Michael Strahan</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews -->
+  <div class="customer-reviews-box">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="heading-title text-center">
+            <h2>Customer Reviews</h2>
+            <p>You can know Reviews from our Customers (you can add too!)</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 mr-auto ml-auto text-center">
+          <div id="reviews" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner mt-4">
+              <div class="carousel-item text-center active">
+                <div class="img-box p-1 border rounded-circle m-auto">
+                  <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-1.webp' %}" alt="Customer profile 1">
+                </div>
+                <h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Paul Mitchel</strong></h5>
+                <h6 class="text-dark m-0">Web Developer</h6>
+                <p class="m-0 pt-3">It has a lot of delicious food. It also has a very strong website designer. Overall, thank you.</p>
+              </div>
+              <div class="carousel-item text-center">
+                <div class="img-box p-1 border rounded-circle m-auto">
+                  <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-3.webp' %}" alt="Customer profile 2">
+                </div>
+                <h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Steve Fonsi</strong></h5>
+                <h6 class="text-dark m-0">Web Designer</h6>
+                <p class="m-0 pt-3">It has good food and user interface. Thanks.</p>
+              </div>
+              <div class="carousel-item text-center">
+                <div class="img-box p-1 border rounded-circle m-auto">
+                  <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-7.webp' %}" alt="Customer profile 3">
+                </div>
+                <h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Daniel vebar</strong></h5>
+                <h6 class="text-dark m-0">Seo Analyst</h6>
+                <p class="m-0 pt-3">Good and tasty food and fast foods. I think in Ottawa its the best Fast food and bakery here.</p>
+              </div>
+            </div>
+            <a class="carousel-control-prev" href="#reviews" role="button" data-slide="prev">
+              <i class="fa fa-angle-left" aria-hidden="true"></i>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#reviews" role="button" data-slide="next">
+              <i class="fa fa-angle-right" aria-hidden="true"></i>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  {% include 'freshbread/footer.html' %}
+
+  <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+
+  <!-- JS -->
+  <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+  <script src="{% static 'js/images-loded.min.js' %}"></script>
+  <script src="{% static 'js/isotope.min.js' %}"></script>
+  <script src="{% static 'js/baguetteBox.min.js' %}"></script>
+  <script src="{% static 'js/form-validator.min.js' %}"></script>
+  <script src="{% static 'js/contact-form-script.js' %}"></script>
+  <script src="{% static 'js/custom.js' %}"></script>
 </body>
 </html>

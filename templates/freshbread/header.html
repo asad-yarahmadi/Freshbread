@@ -1,15 +1,15 @@
 {% load static %}
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">    
-	<!-- Site CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
-    <!-- Responsive CSS -->
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">    
+<!-- Site CSS -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">    
+<!-- Responsive CSS -->
+<link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+<link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4/animate.min.css">
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% if messages %}
@@ -59,196 +59,195 @@ document.addEventListener("DOMContentLoaded", function() {
 .swal-wide { width: 90% !important; font-size: 1.1rem !important; }
 </style>
 {% endif %}
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
-   
-    <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
- 
-     <!-- Site Metas -->
-    <title>Kingfood - Exprince more Tastes!</title>  
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">   
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Site Icons -->
-    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+<title>Kingfood - Exprince more Tastes!</title>  
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
 
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+<link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+<link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
 
-
-<header class="top-navbar">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <img src="{% static 'images/logo.png' %}" alt="Logo" style="width: 225px; height: 80px; object-fit: contain;" />
-
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbars-rs-food"
-        aria-controls="navbars-rs-food"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbars-rs-food">
-        <ul class="navbar-nav ml-auto align-items-center">
-          <li class="nav-item {% if request.resolver_match.url_name == 'index' %}active{% endif %}"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
-          <li class="nav-item {% if request.resolver_match.url_name == 'menu' %}active{% endif %}"><a class="nav-link" href="{% url 'menu' %}">Menu</a></li>
-          
-          <li class="nav-item dropdown {% if request.resolver_match.url_name == 'stuff' or request.resolver_match.url_name == 'gallery' or request.resolver_match.url_name == 'about' or request.resolver_match.url_name == 'coming_soon' %}active{% endif %}">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdown-pages" data-toggle="dropdown">Pages</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown-pages">
-              <a class="dropdown-item" href="{% url 'stuff' %}">Stuff</a>
-              <a class="dropdown-item" href="{% url 'gallery' %}">Gallery</a>
-              <a class="dropdown-item" href="{% url 'about' %}">About</a>
-              <a class="dropdown-item" href="{% url 'tickets' %}">Support</a>
-
-            </div>
-          </li>
-
-          <li class="nav-item dropdown {% if request.resolver_match.url_name == 'blog' or request.resolver_match.url_name == 'blog_manage' %}active{% endif %}">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdown-blog" data-toggle="dropdown">Blog</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown-blog">
-              <a class="dropdown-item" href="{% url 'blog' %}">Blog</a>
-              <a class="dropdown-item" href="{% url 'blog_manage' %}">Manage blogs</a>
-            </div>
-          </li>
-
-          <li class="nav-item {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
-
-          {% if user.is_authenticated and user.is_staff %}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-danger font-weight-bold" href="#" id="dropdown-admin" data-toggle="dropdown">
-              Admin CP
-            </a>
-            <div class="dropdown-menu" aria-labelledby="dropdown-admin">
-              <a class="dropdown-item" href="{% url 'manage' %}">Manage Foods</a>
-              <a class="dropdown-item" href="{% url 'review_check' %}">Review Check</a>
-              <a class="dropdown-item" href="{% url 'admin_email' %}">Massage Sender</a>
-              <a class="dropdown-item" href="{% url 'admin_order_reviews' %}">Order check</a>
-              <a class="dropdown-item" href="{% url 'manage_orders' %}">Orders manage</a>
-              <a class="dropdown-item" href="/admin_adminali_admin/infrastructure/galleryimage/">Manage Gallery</a>
-              <a class="dropdown-item" href="{% url 'admin_users' %}">Users manage</a>
-              <a class="dropdown-item" href="{% url 'admin_tickets' %}">Tickets manage</a>
-              <a class="dropdown-item" href="{% url 'manage_slideshow' %}">Manage Slides</a>
-              <a class="dropdown-item text-danger" href="{% url 'admin_security' %}">Security</a>
-              
-            </div>
-          </li>
-          {% endif %}
-
-          <li class="nav-item dropdown position-relative" id="cart-menu">
-  <a class="nav-link d-flex align-items-center cart-link" href="{% url 'reservation' %}">
-    <i class="fa fa-shopping-cart fa-lg cart-icon"></i>
-    <span class="cart-text">Cart</span>
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
 
 
 
-    {% if cart_items|length > 0 %}
-      <span id="cart-count" class="cart-count">{{ cart_items|length }}</span>
-    {% endif %}
-  </a>
+<!-- ========== Island Glass Header ========== -->
+<header class="island-header">
+  <nav class="navbar navbar-expand-lg island-nav" id="islandNavbar">
+    <a class="navbar-brand" href="{% url 'index' %}">
+      <img src="{% static 'images/logo.png' %}" alt="Kingfood Logo" class="logo-img" />
+    </a>
 
+    <button
+      class="navbar-toggler island-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbars-rs-food"
+      aria-controls="navbars-rs-food"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <!-- popup -->
-  <div id="cart-popup" class="cart-popup shadow-lg" role="menu" aria-label="Cart popup">
-    <span class="cart-text">Cart</span>
+    <div class="collapse navbar-collapse" id="navbars-rs-food">
+      <ul class="navbar-nav ml-auto align-items-lg-center">
+        <li class="nav-item {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'index' %}">Home</a>
+        </li>
+        <li class="nav-item {% if request.resolver_match.url_name == 'menu' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'menu' %}">Menu</a>
+        </li>
 
+        <li class="nav-item dropdown {% if request.resolver_match.url_name == 'stuff' or request.resolver_match.url_name == 'gallery' or request.resolver_match.url_name == 'about' or request.resolver_match.url_name == 'coming_soon' %}active{% endif %}">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown-pages" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Pages
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdown-pages">
+            <a class="dropdown-item" href="{% url 'stuff' %}">Stuff</a>
+            <a class="dropdown-item" href="{% url 'gallery' %}">Gallery</a>
+            <a class="dropdown-item" href="{% url 'about' %}">About</a>
+            <a class="dropdown-item" href="{% url 'tickets' %}">Support</a>
+          </div>
+        </li>
 
-    <div class="cart-items">
-      {% if cart_items %}
-        {% for item in cart_items %}
-        <div class="cart-item"
-             data-slug="{{ item.product.slug }}"
-             data-price="{{ item.product.price|floatformat:2 }}"
-             data-original="{{ item.product.original_price|default:item.product.price|floatformat:2 }}">
+        <li class="nav-item dropdown {% if request.resolver_match.url_name == 'blog' or request.resolver_match.url_name == 'blog_manage' %}active{% endif %}">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown-blog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Blog
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdown-blog">
+            <a class="dropdown-item" href="{% url 'blog' %}">Blog</a>
+            <a class="dropdown-item" href="{% url 'blog_manage' %}">Manage blogs</a>
+          </div>
+        </li>
 
-  
-  <!-- تصویر محصول -->
-  <img src="{{ item.product.menu_image.url }}" alt="{{ item.product.name }}" class="cart-img">
+        <li class="nav-item {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
+          <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+        </li>
 
-  <div class="item-info">
-    <!-- نام محصول -->
-    <p class="name">{{ item.product.name }}</p>
+        {% if user.is_authenticated and user.is_staff %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle admin-link" href="#" id="dropdown-admin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Admin CP
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdown-admin">
+            <a class="dropdown-item" href="{% url 'manage' %}">Manage Foods</a>
+            <a class="dropdown-item" href="{% url 'review_check' %}">Review Check</a>
+            <a class="dropdown-item" href="{% url 'admin_email' %}">Massage Sender</a>
+            <a class="dropdown-item" href="{% url 'admin_order_reviews' %}">Order check</a>
+            <a class="dropdown-item" href="{% url 'manage_orders' %}">Orders manage</a>
+            <a class="dropdown-item" href="/admin_adminali_admin/infrastructure/galleryimage/">Manage Gallery</a>
+            <a class="dropdown-item" href="{% url 'admin_users' %}">Users manage</a>
+            <a class="dropdown-item" href="{% url 'admin_tickets' %}">Tickets manage</a>
+            <a class="dropdown-item" href="{% url 'manage_slideshow' %}">Manage Slides</a>
+            <a class="dropdown-item text-danger" href="{% url 'admin_security' %}">Security</a>
+          </div>
+        </li>
+        {% endif %}
 
-    <!-- قیمت نهایی -->
-    <p class="price-final">
-      $<span class="price-value">{{ item.product.price|floatformat:2 }}</span>
-    </p>
-
-    <!-- اگر تخفیف داشت -->
-    {% if item.discount_amount > 0 %}
-      <p class="discount-label text-danger">
-        - $<span class="discount-value">{{ item.discount_amount|floatformat:2 }}</span> Off
-      </p>
-    {% endif %}
-
-    <!-- کنترل تعداد -->
-    <div class="quantity-control">
-      <button class="decrease" type="button" aria-label="Decrease">−</button>
-      <span class="quantity">{{ item.quantity }}</span>
-      <button class="increase" type="button" aria-label="Increase">+</button>
-    </div>
-
-    <!-- جمع هر آیتم -->
-    <p class="item-total">
-      Item Total: $<span class="item-total-value">{{ item.item_total|floatformat:2 }}</span>
-    </p>
-  </div>
-</div>
-
-        {% endfor %}
-      {% else %}
-        <p class="empty-cart">🛒 Your cart is empty.</p>
-      {% endif %}
-    </div>
-
-    <div class="cart-popup-footer">
-      <div class="cart-total-row">
-        <span>Total:</span>
-        <span id="cart-total">$0.00</span>
-      </div>
-      <div class="cart-buttons">
-        <button id="continue-shopping" class="btn-continue" type="button">Continue Shopping</button>
-      </div>
-    </div>
-  </div>
-</li>
-          <!-- Profile -->
-          <li class="nav-item ml-2">
-            {% if user.is_authenticated %}
-              <a class="nav-link" href="{% url 'profile' %}">
-                <i class="fas fa-user-circle"></i>
-              </a>
-            {% else %}
-              <a class="nav-link font-weight-bold" href="{% url 'ru' %}">
-                Login
-              </a>
+        <!-- Cart -->
+        <li class="nav-item dropdown position-relative" id="cart-menu">
+          <a class="nav-link cart-link" href="{% url 'reservation' %}" id="cartToggle">
+            <i class="fa fa-shopping-cart fa-lg"></i>
+            <span class="cart-text">Cart</span>
+            {% if cart_items|length > 0 %}
+              <span id="cart-count" class="cart-count">{{ cart_items|length }}</span>
             {% endif %}
-          </li>
+          </a>
 
-        </ul>
-      </div>
+          <div id="cart-popup" class="cart-popup shadow-lg" role="menu" aria-label="Cart popup">
+            <span class="cart-text">Your Cart</span>
+
+            <div class="cart-items">
+              {% if cart_items %}
+                {% for item in cart_items %}
+                <div class="cart-item"
+                     data-slug="{{ item.product.slug }}"
+                     data-price="{{ item.product.price|floatformat:2 }}"
+                     data-original="{{ item.product.original_price|default:item.product.price|floatformat:2 }}">
+                  <img src="{{ item.product.menu_image.url }}" alt="{{ item.product.name }}" class="cart-img">
+                  <div class="item-info">
+                    <p class="name">{{ item.product.name }}</p>
+                    <p class="price-final">
+                      $<span class="price-value">{{ item.product.price|floatformat:2 }}</span>
+                    </p>
+                    {% if item.discount_amount > 0 %}
+                      <p class="discount-label text-danger">
+                        - $<span class="discount-value">{{ item.discount_amount|floatformat:2 }}</span> Off
+                      </p>
+                    {% endif %}
+                    <div class="quantity-control">
+                      <button class="decrease" type="button" aria-label="Decrease">−</button>
+                      <span class="quantity">{{ item.quantity }}</span>
+                      <button class="increase" type="button" aria-label="Increase">+</button>
+                    </div>
+                    <p class="item-total">
+                      Item Total: $<span class="item-total-value">{{ item.item_total|floatformat:2 }}</span>
+                    </p>
+                  </div>
+                </div>
+                {% endfor %}
+              {% else %}
+                <p class="empty-cart">🛒 Your cart is empty.</p>
+              {% endif %}
+            </div>
+
+            <div class="cart-popup-footer">
+              <div class="cart-total-row">
+                <span>Total:</span>
+                <span id="cart-total">$0.00</span>
+              </div>
+              <div class="cart-buttons">
+                <button id="continue-shopping" class="btn-continue" type="button">Continue Shopping</button>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Profile / Login -->
+        <li class="nav-item ml-lg-2 mt-2 mt-lg-0">
+          {% if user.is_authenticated %}
+            <a class="nav-link profile-link" href="{% url 'profile' %}" title="Profile">
+              <i class="fas fa-user-circle"></i>
+            </a>
+          {% else %}
+            <a class="nav-link login-btn" href="{% url 'ru' %}">Login</a>
+          {% endif %}
+        </li>
+      </ul>
     </div>
   </nav>
 </header>
-<!-- scripts are loaded in footer.html to avoid duplication -->
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+  // ----- Island scroll effect -----
+  const islandNav = document.getElementById("islandNavbar");
+  window.addEventListener("scroll", function () {
+    if (window.scrollY > 20) {
+      islandNav.classList.add("scrolled");
+    } else {
+      islandNav.classList.remove("scrolled");
+    }
+  });
+
+  // ----- Cart logic (همان منطق قبلی) -----
   const popup = document.getElementById("cart-popup");
   const cartCountElem = document.getElementById("cart-count");
   const cartTotalElem = document.getElementById("cart-total");
-  const continueBtn = document.getElementById("continue-shopping");
+  const cartMenu = document.getElementById("cart-menu");
+  const cartToggle = document.getElementById("cartToggle");
+
   if (!popup) return;
+
   function calcItemTotals(item) {
     const price = parseFloat(item.dataset.price);
     const qty = parseInt(item.querySelector(".quantity").textContent);
@@ -257,27 +256,51 @@ document.addEventListener("DOMContentLoaded", function () {
     item.querySelector(".item-total-value").textContent = itemTotal.toFixed(2);
     return itemTotal;
   }
+
   function updateCartTotal() {
     let total = 0;
     popup.querySelectorAll(".cart-item").forEach(item => total += calcItemTotals(item));
     if (cartTotalElem) cartTotalElem.textContent = "$" + total.toFixed(2);
   }
+
   function updateCartCount() {
     if (!cartCountElem) return;
     let count = 0;
     popup.querySelectorAll(".cart-item .quantity").forEach(q => count += parseInt(q.textContent));
     if (count > 0) {
-      cartCountElem.style.display = "inline-block";
+      cartCountElem.style.display = "flex";
       cartCountElem.textContent = count;
     } else {
       cartCountElem.style.display = "none";
     }
   }
+
   updateCartTotal();
   updateCartCount();
+
+  // باز/بسته کردن popup روی موبایل با کلیک
+  if (cartToggle) {
+    cartToggle.addEventListener("click", function (e) {
+      // روی دسکتاپ فقط به صفحه رزرو می‌رود، روی موبایل popup را toggle می‌کند
+      if (window.innerWidth < 992) {
+        e.preventDefault();
+        cartMenu.classList.toggle("show-popup");
+      }
+      // روی دسکتاپ اجازه می‌دهیم لینک کار کند (یا می‌توانید همیشه popup نشان دهید)
+    });
+  }
+
+  // بستن popup با کلیک بیرون
+  document.addEventListener("click", function (e) {
+    if (cartMenu && !cartMenu.contains(e.target)) {
+      cartMenu.classList.remove("show-popup");
+    }
+  });
+
   popup.addEventListener("click", function (e) {
     const incBtn = e.target.closest(".increase");
     const decBtn = e.target.closest(".decrease");
+
     if (incBtn || decBtn) {
       e.stopPropagation();
       const item = e.target.closest(".cart-item");
@@ -287,14 +310,22 @@ document.addEventListener("DOMContentLoaded", function () {
       if (incBtn) qty++;
       if (decBtn) qty--;
       qty = Math.max(0, Math.min(qty, 5));
+
       fetch(`/cart/set_cart_quantity/${slug}/${qty}/`, {
         method: "POST",
-        headers: { "X-CSRFToken": "{{ csrf_token }}", "X-Requested-With": "XMLHttpRequest" }
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+          "X-Requested-With": "XMLHttpRequest"
+        }
       })
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          if (qty === 0) { item.remove(); } else { quantityElem.textContent = qty; }
+          if (qty === 0) {
+            item.remove();
+          } else {
+            quantityElem.textContent = qty;
+          }
           updateCartTotal();
           updateCartCount();
         }
@@ -302,18 +333,12 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch(err => console.error("Error:", err));
       return;
     }
+
     if (e.target.closest("#continue-shopping")) {
       e.stopPropagation();
       window.location.href = "{% url 'menu' %}";
       return;
     }
   });
-  const headerCartIcon = document.querySelector(".fa-shopping-cart");
-  if (headerCartIcon) {
-    headerCartIcon.addEventListener("click", function (e) {
-      e.preventDefault();
-      window.location.href = "{% url 'reservation' %}";
-    });
-  }
 });
 </script>

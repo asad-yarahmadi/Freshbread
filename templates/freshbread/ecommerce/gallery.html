@@ -1,106 +1,225 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en"><!-- Basic -->
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
-   
-    <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
- 
-     <!-- Site Metas -->
-    <title> Gallery - Kingfood</title>  
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Site Icons -->
-    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+  <title>Gallery – Kingfood</title>
+  <meta name="keywords" content="Kingfood gallery, Ottawa bakery photos, food photography">
+  <meta name="description" content="Explore the Kingfood gallery – photos of our handmade bread, cakes, pastries and bakery moments.">
+  <meta name="author" content="Kingfood">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'cp.min.css' %}">    
-	<!-- Site CSS -->
-    <link rel="stylesheet" href="{% static 'cs' %}">    
-    <!-- Responsive CSS -->
-    <link rel="stylesheet" href="{% static 'cve.css' %}">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css' %}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
 
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
 
-  </head>
+  <style>
+    :root {
+      --accent: #e74c3c;
+      --accent-hover: #c0392b;
+      --bg: #f5f5f7;
+      --card: rgba(255, 255, 255, 0.8);
+      --ink: #1a1a1a;
+      --ink-2: #555;
+      --radius: 18px;
+      --shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    /* Page title */
+    .all-page-title {
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.92), rgba(192, 57, 43, 0.88)),
+                  url('{% static "images/slider-01.webp" %}') center/cover no-repeat;
+      padding: 130px 0 70px;
+      text-align: center;
+    }
+    .all-page-title h1 {
+      font-weight: 800;
+      font-size: 2.6rem;
+      color: #fff;
+      text-shadow: 0 4px 18px rgba(0,0,0,0.25);
+      letter-spacing: -0.5px;
+    }
+
+    /* Gallery */
+    .gallery-box {
+      background: var(--bg);
+      padding: 70px 0 90px;
+    }
+
+    .heading-title h2 {
+      font-weight: 800;
+      font-size: 2.2rem;
+      letter-spacing: -0.4px;
+    }
+    .heading-title p {
+      color: var(--ink-2);
+      max-width: 560px;
+      margin: 0 auto 2rem;
+    }
+
+    .tz-gallery .row {
+      margin: 0 -10px;
+    }
+    .tz-gallery .row > [class*="col-"] {
+      padding: 10px;
+    }
+
+    .tz-gallery a.lightbox {
+      display: block;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      position: relative;
+      background: var(--card);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .tz-gallery a.lightbox::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(231, 76, 60, 0);
+      transition: background 0.3s ease;
+      pointer-events: none;
+    }
+    .tz-gallery a.lightbox:hover {
+      transform: scale(1.03);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.14);
+    }
+    .tz-gallery a.lightbox:hover::after {
+      background: rgba(231, 76, 60, 0.12);
+    }
+
+    .tz-gallery img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.45s ease;
+    }
+    .tz-gallery a.lightbox:hover img {
+      transform: scale(1.06);
+    }
+
+    .gallery-empty {
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 3.5rem 2rem;
+      text-align: center;
+      max-width: 420px;
+      margin: 0 auto;
+      color: var(--ink-2);
+    }
+
+    #back-to-top {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      color: var(--ink) !important;
+      font-size: 1.3rem;
+      transition: all 0.3s;
+    }
+    #back-to-top:hover {
+      background: var(--accent) !important;
+      color: #fff !important;
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 768px) {
+      .all-page-title {
+        padding: 110px 0 55px;
+      }
+      .all-page-title h1 { font-size: 2rem; }
+      .tz-gallery img { height: 220px; }
+    }
+
+    @media (max-width: 576px) {
+      .tz-gallery img { height: 200px; }
+    }
+  </style>
+</head>
 <body>
 {% include 'freshbread/header.html' %}
-<!-- Start header -->
-<!-- Start Gallery -->
-<h2></h2><br>
-<h2></h2><br>
-	<div class="all-page-title page-breadcrumb">
-		<div class="container text-center">
-			<div class="row">
-				<div class="col-lg-12">
-					<h1>Gallary</h1>
-				</div>
-			</div>
-		</div>
-	</div>
+
+<!-- Page Title -->
+<div class="all-page-title page-breadcrumb">
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1>Gallery</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gallery -->
 <div class="gallery-box">
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="heading-title text-center">
-						<h2>Gallery</h2>
-						<p>Here, I shared My New Exprinces</p>
-					</div>
-				</div>
-			</div>
-            <div class="tz-gallery">
-                <div class="row">
-                    {% if images %}
-                        {% for img in images %}
-                        <div class="col-sm-6 col-md-4 col-lg-4">
-                            <a class="lightbox" href="{{ img.image.url }}">
-                                <img class="img-fluid" src="{{ img.image.url }}" alt="{{ img.title|default:'Gallery Image' }}">
-                            </a>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="col-12 text-center">
-                            <p>No gallery images yet.</p>
-                        </div>
-                    {% endif %}
-                </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="heading-title text-center">
+          <h2>Our Gallery</h2>
+          <p>Moments from our bakery — fresh bread, cakes, and the craft behind every bite.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tz-gallery">
+      <div class="row">
+        {% if images %}
+          {% for img in images %}
+            <div class="col-sm-6 col-md-4 col-lg-4">
+              <a class="lightbox" href="{{ img.image.url }}">
+                <img class="img-fluid" src="{{ img.image.url }}" alt="{{ img.title|default:'Gallery Image' }}" loading="lazy">
+              </a>
             </div>
-		</div>
-	</div>
-	<!-- End Gallery -->
-	<!-- End Customer Reviews -->
-	
-	<!-- Start Contact info -->
+          {% endfor %}
+        {% else %}
+          <div class="col-12">
+            <div class="gallery-empty">
+              <p class="mb-0">No gallery images yet.</p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
 
-	<!-- End Contact info -->
-	
-	<!-- Start Footer -->
 {% include 'freshbread/footer.html' %}
-	<!-- End Footer -->
-	
-	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
-	<!-- ALL JS FILES -->
-	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-	<script src="{% static 'js/popper.min.js' %}"></script>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <!-- ALL PLUGINS -->
-	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
-	<script src="{% static 'js/images-loded.min.js' %}"></script>
-	<script src="{% static 'js/isotope.min.js' %}"></script>
-	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
-	<script src="{% static 'js/form-validator.min.js' %}"></script>
-    <script src="{% static 'js/contact-form-script.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
+<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+<script src="{% static 'js/images-loded.min.js' %}"></script>
+<script src="{% static 'js/isotope.min.js' %}"></script>
+<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+<script src="{% static 'js/form-validator.min.js' %}"></script>
+<script src="{% static 'js/contact-form-script.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
 </body>
 </html>

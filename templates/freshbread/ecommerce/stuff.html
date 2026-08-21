@@ -1,247 +1,355 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en"><!-- Basic -->
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
-   
-    <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
- 
-     <!-- Site Metas -->
-    <title>Our team - Kingfood</title>  
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Site Icons -->
-    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+  <title>Our Team – Kingfood</title>
+  <meta name="keywords" content="Kingfood team, Ottawa bakery staff">
+  <meta name="description" content="Meet the Kingfood team – the people behind your favorite handmade bread, cakes and pastries.">
+  <meta name="author" content="Kingfood">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">    
-	<!-- Site CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
-    <!-- Responsive CSS -->
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
 
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+  <style>
+    :root {
+      --accent: #e74c3c;
+      --accent-hover: #c0392b;
+      --bg: #f5f5f7;
+      --card: rgba(255, 255, 255, 0.82);
+      --ink: #1a1a1a;
+      --ink-2: #555;
+      --ink-3: #888;
+      --border: rgba(0, 0, 0, 0.07);
+      --radius: 22px;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    /* Page title */
+    .all-page-title {
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.92), rgba(192, 57, 43, 0.88)),
+                  url('{% static "images/slider-01.webp" %}') center/cover no-repeat;
+      padding: 130px 0 70px;
+      text-align: center;
+    }
+    .all-page-title h1 {
+      font-weight: 800;
+      font-size: 2.6rem;
+      color: #fff;
+      text-shadow: 0 4px 18px rgba(0,0,0,0.25);
+      letter-spacing: -0.5px;
+    }
+
+    /* Team section */
+    .stuff-box {
+      background: var(--bg);
+      padding: 80px 0 60px;
+    }
+
+    .heading-title h2 {
+      font-weight: 800;
+      font-size: 2.2rem;
+      letter-spacing: -0.4px;
+    }
+    .heading-title p {
+      color: var(--ink-2);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+
+    .our-team > img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.45s ease;
+    }
+    .our-team:hover > img {
+      transform: scale(1.04);
+    }
+
+    .team-content {
+      padding: 1.5rem 1.4rem 1.75rem;
+    }
+
+    .team-content .title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin: 0 0 0.3rem;
+      color: var(--ink);
+    }
+
+    .team-content .post {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 1.1rem;
+    }
+
+    /* Social buttons */
+    .social {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      font-size: 16px;
+      color: var(--ink-2);
+      background: rgba(0, 0, 0, 0.04);
+      border-radius: 50%;
+      text-decoration: none;
+      transition: all 0.22s ease;
+      border: 1px solid var(--border);
+    }
+    .social-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(231, 76, 60, 0.3);
+    }
+
+    /* Locked / disabled */
+    .locked .social-btn.disabled-link {
+      background: rgba(0, 0, 0, 0.04) !important;
+      color: #bbb !important;
+      border-color: rgba(0, 0, 0, 0.06) !important;
+      cursor: not-allowed;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .locked .social-btn.disabled-link:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Reviews */
+    .customer-reviews-box {
+      background: var(--bg);
+      padding: 70px 0 90px;
+    }
+    .customer-reviews-box .carousel-item {
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: var(--radius);
+      padding: 2.2rem 1.8rem;
+      box-shadow: var(--shadow);
+    }
+    .customer-reviews-box .img-box {
+      width: 90px;
+      height: 90px;
+      border: 3px solid rgba(231, 76, 60, 0.25) !important;
+      overflow: hidden;
+    }
+    .customer-reviews-box .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .customer-reviews-box .carousel-control-prev,
+    .customer-reviews-box .carousel-control-next {
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 1;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    }
+    .customer-reviews-box .carousel-control-prev { left: -10px; }
+    .customer-reviews-box .carousel-control-next { right: -10px; }
+    .customer-reviews-box .carousel-control-prev i,
+    .customer-reviews-box .carousel-control-next i {
+      color: var(--ink);
+      font-size: 1.2rem;
+    }
+
+    #back-to-top {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      color: var(--ink) !important;
+      font-size: 1.3rem;
+      transition: all 0.3s;
+    }
+    #back-to-top:hover {
+      background: var(--accent) !important;
+      color: #fff !important;
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 768px) {
+      .all-page-title {
+        padding: 110px 0 55px;
+      }
+      .all-page-title h1 { font-size: 2rem; }
+      .our-team > img { height: 240px; }
+      .customer-reviews-box .carousel-control-prev { left: 4px; }
+      .customer-reviews-box .carousel-control-next { right: 4px; }
+    }
+  </style>
 </head>
-<style>
-.social-icons {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.social-icons li {
-  line-height: 1;
-}
-
-/* دکمه پایه (برای همه) */
-.social-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;           /* اندازه دکمه */
-  height: 44px;
-  font-size: 20px;       /* اندازه آیکون */
-  color: #333;
-  background-color: #f8f9fa;   /* پس‌زمینه روشن عادی */
-  border-radius: 50%;          /* دایره‌ای */
-  text-decoration: none;
-  transition: all 0.2s ease;
-  border: 1px solid #dee2e6;   /* حاشیه نازک */
-}
-
-.social-btn:hover {
-  background-color: #e9ecef;
-  color: #007bff;
-  transform: translateY(-2px);  /* کمی بالا بیاد موقع هاور */
-}
-
-/* حالت قفل شده – کل دکمه توسی */
-.locked .social-btn.disabled-link {
-  background-color: #e9ecef !important;   /* پس‌زمینه توسی روشن */
-  color: #6c757d !important;              /* آیکون توسی تیره */
-  border-color: #ced4da !important;
-  cursor: not-allowed;
-  opacity: 0.75;                          /* کمی محو برای حس غیرفعال */
-  pointer-events: none;                   /* کلیک کامل غیرفعال */
-}
-
-/* موقع هاور هم تغییری نده */
-.locked .social-btn.disabled-link:hover {
-  background-color: #e9ecef !important;
-  color: #6c757d !important;
-  transform: none;
-  opacity: 0.75;
-}
-
-</style>
 <body>
 {% include 'freshbread/header.html' %}
 
+<!-- Page Title -->
+<div class="all-page-title page-breadcrumb">
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1>Our Team</h1>
+      </div>
+    </div>
+  </div>
+</div>
 
-<!-- Start header -->
+<!-- Team -->
+<div class="stuff-box">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="heading-title text-center">
+          <h2>Meet the Team</h2>
+          <p>Our team works hard so you can enjoy every bite!</p>
+        </div>
+      </div>
+    </div>
 
+    <div class="row justify-content-center">
+      <div class="col-md-4 col-sm-6">
+        <div class="our-team">
+          <img src="{% static 'images/DE.webp' %}" alt="Mahdi yar">
+          <div class="team-content">
+            <h3 class="title">𝓜𝓪𝓱𝓭𝓲 𝔂𝓪𝓻.</h3>
+            <span class="post">Web Designer & Developer</span>
+            <ul class="social">
+              <li class="locked">
+                <a href="#" class="social-btn disabled-link" title="This team member doesn't have this platform">
+                  <i class="fab fa-google"></i>
+                </a>
+              </li>
+              <li class="locked">
+                <a href="#" class="social-btn disabled-link" title="This team member doesn't have this platform">
+                  <i class="fab fa-twitter"></i>
+                </a>
+              </li>
+              <li class="locked">
+                <a href="#" class="social-btn disabled-link" title="This team member doesn't have this platform">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-	
-	<!-- Start All Pages -->
-	<div class="all-page-title page-breadcrumb">
-		<div class="container text-center">
-			<div class="row">
-				<div class="col-lg-12">
-					<h1>Stuff</h1>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End All Pages -->
-	
-	<!-- Start Stuff -->
-	<div class="stuff-box">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="heading-title text-center">
-						<h2>Stuff</h2>
-						<p>Our team try for your enjoy!</p>
-					</div>
-				</div>
-			</div>
-			<div class="row">
+<!-- Reviews -->
+<div class="customer-reviews-box">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="heading-title text-center">
+          <h2>Customer Reviews</h2>
+          <p>See what our customers say — you can add yours too!</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8 mr-auto ml-auto text-center">
+        <div id="reviews" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner mt-4">
+            <div class="carousel-item text-center active">
+              <div class="img-box p-1 border rounded-circle m-auto">
+                <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-1.webp' %}" alt="">
+              </div>
+              <h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Paul Mitchel</strong></h5>
+              <h6 class="text-dark m-0">Web Developer</h6>
+              <p class="m-0 pt-3">It has a lot of delicious food. It also has a very strong website designer. Overall, thank you.</p>
+            </div>
+            <div class="carousel-item text-center">
+              <div class="img-box p-1 border rounded-circle m-auto">
+                <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-3.webp' %}" alt="">
+              </div>
+              <h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Steve Fonsi</strong></h5>
+              <h6 class="text-dark m-0">Web Designer</h6>
+              <p class="m-0 pt-3">It has good food and user interface. Thanks.</p>
+            </div>
+            <div class="carousel-item text-center">
+              <div class="img-box p-1 border rounded-circle m-auto">
+                <img class="d-block w-100 rounded-circle" src="{% static 'images/profile-7.webp' %}" alt="">
+              </div>
+              <h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Daniel vebar</strong></h5>
+              <h6 class="text-dark m-0">Seo Analyst</h6>
+              <p class="m-0 pt-3">Good and tasty food and fast foods. I think in Ottawa its the best Fast food and bakery here.</p>
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#reviews" role="button" data-slide="prev">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#reviews" role="button" data-slide="next">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-				<div class="col-md-4 col-sm-6">
-					<div class="our-team">
-						<img src="{% static 'images/DE.webp' %}">
-						<div class="team-content">
-							<h3 class="title">𝓜𝓪𝓱𝓭𝓲 𝔂𝓪𝓻.</h3>
-							<span class="post">Web Designer & Developer</span>
-							<ul class="social">
-							<li class="locked">
-    								<a 
-    								  href="#" 
-    								  class="social-btn disabled-link"
-    								  title="This Stuff doesn't have this platform's account"
-    								>
-    								  <i class="fab fa-google"></i>
-    								</a>
-  								</li>  <!-- قفل شده -->
-  								<li class="locked">
-    								<a 
-    								  href="#" 
-    								  class="social-btn disabled-link"
-    								  title="This Stuff doesn't have this platform's account"
-    								>
-    								  <i class="fab fa-twitter"></i>
-    								</a>
-  								</li>
-
-								  <li class="locked">
-								    <a 
-								      href="#" 
-								      class="social-btn disabled-link"
-								      title="This Stuff doesn't have this platform's account">
-								      <i class="fab fa-facebook-f"></i>
-								    </a>
-								  </li>
-							</ul>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
-	</div>
-	<!-- End Stuff -->
-	
-	<!-- Start Customer Reviews -->
-	<div class="customer-reviews-box">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="heading-title text-center">
-						<h2>Customer Reviews</h2>
-						<p>You can know Reviews from our Customers(you can add too!)</p>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-8 mr-auto ml-auto text-center">
-					<div id="reviews" class="carousel slide" data-ride="carousel">
-						<div class="carousel-inner mt-4">
-							<div class="carousel-item text-center active">
-								<div class="img-box p-1 border rounded-circle m-auto">
-									<img class="d-block w-100 rounded-circle" src="{% static 'images/profile-1.webp' %}" alt="">
-								</div>
-								<h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Paul Mitchel</strong></h5>
-								<h6 class="text-dark m-0">Web Developer</h6>
-								<p class="m-0 pt-3">It has a lot of delicious food. It also has a very strong website designer. Overall, thank you.</p>
-							</div>
-							<div class="carousel-item text-center">
-								<div class="img-box p-1 border rounded-circle m-auto">
-									<img class="d-block w-100 rounded-circle" src="{% static 'images/profile-3.webp' %}" alt="">
-								</div>
-								<h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Steve Fonsi</strong></h5>
-								<h6 class="text-dark m-0">Web Designer</h6>
-								<p class="m-0 pt-3">It has good food and user interface. Thanks.</p>
-							</div>
-							<div class="carousel-item text-center">
-								<div class="img-box p-1 border rounded-circle m-auto">
-									<img class="d-block w-100 rounded-circle" src="{% static 'images/profile-7.webp' %}" alt="">
-								</div>
-								<h5 class="mt-4 mb-0"><strong class="text-warning text-uppercase">Daniel vebar</strong></h5>
-								<h6 class="text-dark m-0">Seo Analyst</h6>
-								<p class="m-0 pt-3">Good and tasty food and fast foods. I think in Ottawa its the best Fast food and bakery here.</p>
-							</div>
-						</div>
-						<a class="carousel-control-prev" href="#reviews" role="button" data-slide="prev">
-							<i class="fa fa-angle-left" aria-hidden="true"></i>
-							<span class="sr-only">Previous</span>
-						</a>
-						<a class="carousel-control-next" href="#reviews" role="button" data-slide="next">
-							<i class="fa fa-angle-right" aria-hidden="true"></i>
-							<span class="sr-only">Next</span>
-						</a>
-                    </div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End Customer Reviews -->
-	
-	<!-- Start Contact info -->
-
-	<!-- End Contact info -->
-	
-	<!-- Start Footer -->
 {% include 'freshbread/footer.html' %}
-	<!-- End Footer -->
 
-	
-	<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+<a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
-	<!-- ALL JS FILES -->
-	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-	<script src="{% static 'js/popper.min.js' %}"></script>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <!-- ALL PLUGINS -->
-	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
-	<script src="{% static 'js/images-loded.min.js' %}"></script>
-	<script src="{% static 'js/isotope.min.js' %}"></script>
-	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
-	<script src="{% static 'js/form-validator.min.js' %}"></script>
-    <script src="{% static 'js/contact-form-script.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+<script src="{% static 'js/images-loded.min.js' %}"></script>
+<script src="{% static 'js/isotope.min.js' %}"></script>
+<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+<script src="{% static 'js/form-validator.min.js' %}"></script>
+<script src="{% static 'js/contact-form-script.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
 </body>
 </html>

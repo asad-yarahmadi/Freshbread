@@ -1,88 +1,151 @@
 {% load static %}
-	<div class="contact-imfo-box">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4">
-					<i class="fa fa-volume-control-phone"></i>
-					<div class="overflow-hidden">
-						<h4>Phone</h4>
-						<p class="lead">
-							+1 (514) 984 4773
-						</p>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<i class="fa fa-envelope"></i>
-					<div class="overflow-hidden">
-						<h4>Email</h4>
-						<p class="lead">
-							kingfoodca@gmail.com
-						</p>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<i class="fa fa-map-marker"></i>
-					<div class="overflow-hidden">
-						<h4>Location</h4>
-						<p class="lead">
-							2935 Richmond Rd, Ottawa, ON K2B 8C9، Canada
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-<footer class="footer-area bg-f">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-3 col-md-6">
-        <h3>About Us</h3>
-        <p>I srart to work on 2020. I have been making a lot of cakes and foods. In that time I was in University and doing some works about it and becuase of that I didn't have alot of time for making foods. So I could make some cake and foods for myself. Becuase of that I learnd How to cook. Then I gratued from university and I have more time to Make Foods and Cakes.</p>
-        <p>Finally I'm here to make some foods and sell it to you with the Best price!</p>
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <h3>Opening hours</h3>
-        <p><span class="text-color">Monday: </span> 8:Am - 8:PM</p>
-        <p><span class="text-color">Tuesday :</span> 8:Am - 8:PM</p>
-        <p><span class="text-color">Wednesday :</span> 8:Am - 8:PM</p>
-        <p><span class="text-color">Friday :</span>Closed</p>
-        <p><span class="text-color">Saturday :</span> Closed</p>
-        <p><span class="text-color">Sunday :</span> 8:AM - 5:PM</p>
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <h3>Contact information</h3>
-        <p class="lead"><a href="https://maps.app.goo.gl/yqUCSJmBp1GEvMMY8" target="_blank" rel="noopener noreferrer">2935 Richmond Rd, Ottawa, ON K2B 8C9، Canada</a></p>
-        <p class="lead"><a href="tel:+1(514)984-4773">+1 (514) 984 4773</a></p>
-        <p><a href="mailto:kingfoodca@gmail.com" target="_blank" rel="noopener noreferrer">kingfoodca@gmail.com</a></p>
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <h3>Social media</h3>
-        <ul class="list-inline f-social">
-          <!-- <li class="list-inline-item">
-            <a href=""><i class="fa-brands fa-facebook-f"></i></a>
-          </li> -->
-          <li class="list-inline-item">
-            <a href="https://www.instagram.com/kingfood.ca/">
-              <i class="fa-brands fa-instagram"></i>
-            </a>
-          </li>
-        </ul>
-        <h3>Links</h3>
-        <p class="lead"><a href="{% url 'prpo' %}">Privacy policy</a> . <a href="{% url 'tms' %}">Terms of use</a></p>
-        <p class="lead"></p>
-        
-      </div>
-    </div>
-  </div>
-  <div class="copyright">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <p class="company-name">All Rights Reserved. &copy;2026 <a href="#">Kingfood</a> | v {{ current_version|default:'—' }} | Designed with ❤️</a></p>
 
+<!-- ========== Island Glass Contact Bar ========== -->
+<div class="island-contact-bar">
+  <div class="container">
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-4">
+        <div class="island-contact-item">
+          <div class="icon-wrap">
+            <i class="fa fa-volume-control-phone"></i>
+          </div>
+          <div class="info">
+            <h4>Phone</h4>
+            <p class="lead">
+              <a href="tel:+15149844773">+1 (514) 984 4773</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="island-contact-item">
+          <div class="icon-wrap">
+            <i class="fa fa-envelope"></i>
+          </div>
+          <div class="info">
+            <h4>Email</h4>
+            <p class="lead">
+              <a href="mailto:kingfoodca@gmail.com">kingfoodca@gmail.com</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="island-contact-item">
+          <div class="icon-wrap">
+            <i class="fa fa-map-marker"></i>
+          </div>
+          <div class="info">
+            <h4>Location</h4>
+            <p class="lead">
+              <a href="https://maps.app.goo.gl/yqUCSJmBp1GEvMMY8" target="_blank" rel="noopener noreferrer">
+                2935 Richmond Rd, Ottawa, ON K2B 8C9, Canada
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- ========== Island Glass Footer ========== -->
+<footer class="island-footer">
+  <div class="container">
+    <div class="island-footer-inner">
+      <div class="row g-5">
+
+        <!-- About -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-block">
+            <h3>About Us</h3>
+            <p>
+              I started to work on 2020. I have been making a lot of cakes and foods.
+              In that time I was in University and doing some works about it and because of that
+              I didn't have a lot of time for making foods. So I could make some cake and foods for myself.
+              Because of that I learned How to cook. Then I graduated from university and I have more time
+              to Make Foods and Cakes.
+            </p>
+            <p class="mb-0">
+              Finally I'm here to make some foods and sell it to you with the Best price!
+            </p>
+          </div>
+        </div>
+
+        <!-- Opening Hours -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-block">
+            <h3>Opening hours</h3>
+            <ul class="hours-list">
+              <li><span>Monday</span> <span>8:00 AM – 8:00 PM</span></li>
+              <li><span>Tuesday</span> <span>8:00 AM – 8:00 PM</span></li>
+              <li><span>Wednesday</span> <span>8:00 AM – 8:00 PM</span></li>
+              <li><span>Friday</span> <span class="closed">Closed</span></li>
+              <li><span>Saturday</span> <span class="closed">Closed</span></li>
+              <li><span>Sunday</span> <span>8:00 AM – 5:00 PM</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-block">
+            <h3>Contact information</h3>
+            <ul class="contact-list">
+              <li>
+                <i class="fa fa-map-marker-alt"></i>
+                <a href="https://maps.app.goo.gl/yqUCSJmBp1GEvMMY8" target="_blank" rel="noopener noreferrer">
+                  2935 Richmond Rd, Ottawa, ON K2B 8C9, Canada
+                </a>
+              </li>
+              <li>
+                <i class="fa fa-phone"></i>
+                <a href="tel:+15149844773">+1 (514) 984 4773</a>
+              </li>
+              <li>
+                <i class="fa fa-envelope"></i>
+                <a href="mailto:kingfoodca@gmail.com">kingfoodca@gmail.com</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Social + Links -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-block">
+            <h3>Social media</h3>
+            <ul class="list-inline f-social">
+              <li class="list-inline-item">
+                <a href="https://www.instagram.com/kingfood.ca/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <i class="fa-brands fa-instagram"></i>
+                </a>
+              </li>
+            </ul>
+
+            <h3 class="mt-4">Links</h3>
+            <p class="footer-links">
+              <a href="{% url 'prpo' %}">Privacy policy</a>
+              <span class="sep">·</span>
+              <a href="{% url 'tms' %}">Terms of use</a>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Copyright bar -->
+  <div class="island-copyright">
+    <div class="container">
+      <p class="company-name mb-0">
+        All Rights Reserved. &copy; 2026
+        <a href="{% url 'index' %}">Kingfood</a>
+        | v {{ current_version|default:'—' }}
+        | Designed with ❤️
+      </p>
+    </div>
+  </div>
 </footer>
+
 <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
