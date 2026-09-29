@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
-from ..decorators import admin_login_protect
+from core.interfaces.http.decorators import admin_login_protect
 from django.contrib import messages
 from core.infrastructure.models import SlideshowMode, Slide, SlideButton
 from core.infrastructure.repositories.slideshow_repository import SlideshowRepository

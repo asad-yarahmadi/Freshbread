@@ -3,8 +3,9 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Avg
-
-from ..decorators import admin_login_protect
+from django.http import JsonResponse
+from django.utils import timezone
+import datetime
 
 def about(request):
     from core.infrastructure.repositories.product_repository import ProductRepository
@@ -101,9 +102,6 @@ def tms (request):
 def coming_soon (request):
     return render(request, 'freshbread/ecommerce/coming_soon.html')
 
-from django.http import JsonResponse
-from django.utils import timezone
-import datetime
 
 def get_countdown_data(request):
     # تاریخ پایان (naive اول، بعد aware می‌کنیم)

@@ -1,5 +1,5 @@
 from django.urls import path, include
-from core.interfaces.http.views.blog_view import *
+from core.interfaces.http.views.ecommerce.blog_view import *
 
 urlpatterns = [
     path('', blog, name='blog'),

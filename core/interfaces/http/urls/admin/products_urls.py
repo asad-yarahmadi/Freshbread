@@ -1,6 +1,5 @@
 from django.urls import path, include
-from .. import views
-from core.interfaces.http.views.product_view import *
+from core.interfaces.http.views.admin.admin_product_view import *
 
 urlpatterns=[
     path('manage/', manage_products, name='manage'),

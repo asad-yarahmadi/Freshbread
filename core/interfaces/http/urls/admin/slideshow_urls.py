@@ -1,5 +1,5 @@
 from django.urls import path
-from core.interfaces.http.views.slideshow_view import *
+from core.interfaces.http.views.admin.slideshow_view import *
 
 urlpatterns = [
     path('manage/', manage_slideshow, name='manage_slideshow'),

@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
 from urllib3 import request
-from ..decorators import admin_login_protect
+from core.interfaces.http.decorators import admin_login_protect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from core.infrastructure.models import Product

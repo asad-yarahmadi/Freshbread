@@ -1,11 +1,10 @@
 from django.urls import path, include
-from .. import views
-from core.interfaces.http.views.auth_view import *
-from core.interfaces.http.views.signup_view import *
-from core.interfaces.http.views.reset_password_view import *
-from core.interfaces.http.views.verify_email_view import *
-from core.interfaces.http.views.social_auth_view import *
-from core.interfaces.http.views.profile_view import *
+from core.interfaces.http.views.auth.auth_view import *
+from core.interfaces.http.views.auth.signup_view import *
+from core.interfaces.http.views.auth.reset_password_view import *
+from core.interfaces.http.views.auth.verify_email_view import *
+from core.interfaces.http.views.auth.social_auth_view import *
+from core.interfaces.http.views.profile.profile_view import *
 urlpatterns = [
     path('Signup/', signup_view, name='Signup'),
     path('Login/', login_view, name='Login'),

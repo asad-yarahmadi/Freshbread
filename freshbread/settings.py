@@ -56,6 +56,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 INSTALLED_APPS = [
     # Django built-in apps
+    "unfold",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -283,6 +284,16 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 EMAIL_TIMEOUT = 20
 
+# --------------------------------------------------------------------------------
+# MELI SMS CONFIGURATION
+# --------------------------------------------------------------------------------
+
+MELI_SMS_API_URL = os.getenv('MELI_SMS_API_URL')
+MELI_SMS_USERNAME = os.getenv('MELI_SMS_USERNAME')
+MELI_SMS_PASSWORD = os.getenv('MELI_SMS_PASSWORD')
+MELI_SMS_FROM = os.getenv('MELI_SMS_FROM')
+MELI_SMS_IS_FLASH = os.getenv('MELI_SMS_IS_FLASH', 'False') == 'True'
+
 # Admins to receive error reports
 ADMINS = [
     ('Admin', os.getenv('ADMIN_EMAIL')),
@@ -318,3 +329,76 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = os.getenv(
 # Payment Inbox Settings (For checking email-based payments)
 PAYMENT_INBOX_USERNAME = os.getenv('PAYMENT_INBOX_USERNAME')
 PAYMENT_INBOX_PASSWORD = os.getenv('PAYMENT_INBOX_PASSWORD')
+
+# --------------------------------------------------------------------------------
+# Unfold configration
+# --------------------------------------------------------------------------------
+
+UNFOLD = {
+    # ─────────────────────────────────────────────
+    # Site
+    # ─────────────────────────────────────────────
+    "SITE_TITLE": "Kingfood",
+    "SITE_HEADER": "Kingfood",
+    "SITE_URL": "/",
+    "SITE_SYMBOL": "restaurant",
+
+    # ─────────────────────────────────────────────
+    # Languages
+    # ─────────────────────────────────────────────
+    "SHOW_LANGUAGES": False,
+
+    # ─────────────────────────────────────────────
+    # Theme
+    # ─────────────────────────────────────────────
+    "COLORS": {
+        "primary": {
+            "50": "254 242 242",
+            "100": "254 226 226",
+            "200": "254 202 202",
+            "300": "252 165 165",
+            "400": "248 113 113",
+            "500": "239 68 68",
+            "600": "220 38 38",
+            "700": "185 28 28",
+            "800": "153 27 27",
+            "900": "127 29 29",
+            "950": "69 10 10",
+        },
+    },
+
+    # ─────────────────────────────────────────────
+    # Sidebar
+    # ─────────────────────────────────────────────
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+    },
+
+    # ─────────────────────────────────────────────
+    # Navigation
+    # ─────────────────────────────────────────────
+    "SHOW_VIEW_ON_SITE": True,
+
+    # ─────────────────────────────────────────────
+    # User menu
+    # ─────────────────────────────────────────────
+    "USERMENU": {
+        "show_language": False,
+    },
+
+    # ─────────────────────────────────────────────
+    # Environment
+    # ─────────────────────────────────────────────
+    "ENVIRONMENT": {
+        "production": {
+            "title": "Production",
+            "color": "danger",
+        },
+        "development": {
+            "title": "Development",
+            "color": "warning",
+        },
+    },
+}
+

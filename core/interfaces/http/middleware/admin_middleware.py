@@ -51,7 +51,7 @@ class URLBlockerMiddleware(MiddlewareMixin):
             return None
 
         from core.infrastructure.models import BlockedURL
-        from core.interfaces.http.views.errors_view import handler404
+        from core.interfaces.http.views.ecommerce.errors_view import handler404
 
         try:
             blocked = None

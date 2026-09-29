@@ -1,4 +1,4 @@
-from core.interfaces.http.views.checkout_view import * 
+from core.interfaces.http.views.order.checkout_view import * 
 from django.urls import path
 
 urlpatterns=[

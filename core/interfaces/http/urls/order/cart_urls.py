@@ -1,6 +1,5 @@
-from django.urls import path, include
-from .. import views
-from core.interfaces.http.views.cart_view import *
+from django.urls import path
+from core.interfaces.http.views.order.cart_view import *
 
 urlpatterns=[
     path('', reservation, name='reservation'),

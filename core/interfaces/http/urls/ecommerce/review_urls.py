@@ -1,7 +1,7 @@
 from django.urls import path
-from django.urls import path, include
-from .. import views
-from core.interfaces.http.views.review_view import *
+from core.interfaces.http.views.admin.user.admin_review_check_view import *
+from core.interfaces.http.views.ecommerce.review_view import *
+
 
 urlpatterns = [
     path('review_check/', review_check, name='review_check'),

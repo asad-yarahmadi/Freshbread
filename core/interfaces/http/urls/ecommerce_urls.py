@@ -1,8 +1,8 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from core.interfaces.http.views.ecommerce_views import *
-from core.interfaces.http.views.release_view import releases_list, release_detail
+from core.interfaces.http.views.ecommerce.ecommerce_views import *
+from core.interfaces.http.views.ecommerce.release_view import releases_list, release_detail
 
 urlpatterns = [
     # Home & Public Pages

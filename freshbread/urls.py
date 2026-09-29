@@ -22,40 +22,55 @@ urlpatterns = [
     path('', include('core.interfaces.http.urls.ecommerce_urls')),
 
     # 🔐 Auth
-    path('auth/', include('core.interfaces.http.urls.auth_urls')),
+    path('auth/', include('core.interfaces.http.urls.auth.auth_urls')),
 
     # 👤 Profile
-    path('profile/', include('core.interfaces.http.urls.profile_urls')),
+    path('profile/', include('core.interfaces.http.urls.profile.profile_urls')),
 
     # 📦 Orders
-    path('orders/', include('core.interfaces.http.urls.order_urls')),
+    path('orders/', include('core.interfaces.http.urls.order.order_urls')),
 
     # ⭐ Reviews
-    path('reviews/', include('core.interfaces.http.urls.review_urls')),
+    path('reviews/', include('core.interfaces.http.urls.ecommerce.review_urls')),
 
     # ⭐ Reviews
-    path('blog/', include('core.interfaces.http.urls.blog_urls')),
+    path('blog/', include('core.interfaces.http.urls.ecommerce.blog_urls')),
 
     # ⭐ Reviews
-    path('cart/', include('core.interfaces.http.urls.cart_urls')),
+    path('cart/', include('core.interfaces.http.urls.order.cart_urls')),
 
     # ⭐ Reviews
-    path('product/', include('core.interfaces.http.urls.products_urls')),
+    path('product/', include('core.interfaces.http.urls.admin.products_urls')),
 
     # ⭐ Reviews
-    path('checkout/', include('core.interfaces.http.urls.checkout_urls')),
+    path('checkout/', include('core.interfaces.http.urls.order.checkout_urls')),
 
     # 🧾 Tickets
-    path('tickets/', include('core.interfaces.http.urls.ticket_urls')),
+    path('tickets/', include('core.interfaces.http.urls.profile.ticket_urls')),
+    
     # 🛠 Admin Tools
-    path('admin_tools/', include('core.interfaces.http.urls.admin_urls')),
+    path('admin_tools/', include('core.interfaces.http.urls.admin.admin_urls')),
+    
     # 🖼️ Slideshow
-    path('slideshow/', include('core.interfaces.http.urls.slideshow_urls')),
+    path('slideshow/', include('core.interfaces.http.urls.admin.slideshow_urls')),
+
+    # Badges
+    path('badges/', include('core.interfaces.http.urls.profile.badge_urls')),
+
+    # Loations
+    path('profile/locations/', include('core.interfaces.http.urls.profile.location_urls')),
+
+    # Admin order
+    path('order/review/', include('core.interfaces.http.urls.admin.admin_order_approval_urls')),
+    path('order/management/', include('core.interfaces.http.urls.admin.admin_order_managment_urls')),
+
+
+    
 ]
 
-handler404 = 'core.interfaces.http.views.errors_view.handler404'
-handler403 = 'core.interfaces.http.views.errors_view.handler403'
-handler500 = 'core.interfaces.http.views.errors_view.handler500'
+handler404 = 'core.interfaces.http.views.ecommerce.errors_view.handler404'
+handler403 = 'core.interfaces.http.views.ecommerce.errors_view.handler403'
+handler500 = 'core.interfaces.http.views.ecommerce.errors_view.handler500'
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
