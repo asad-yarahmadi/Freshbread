@@ -5,25 +5,60 @@ from django.utils import timezone
 from django.core.cache import cache
 from django.db.models import Q
 
+from django.http import Http404
+from core.infrastructure.models import LoginAttempt
+from .utils.ip import get_client_ip
+
+
 def admin_login_protect(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         user = request.user
-        from .utils.ip import get_client_ip
-        ip = get_client_ip(request)
-        now = timezone.now()
-        from core.infrastructure.models import LoginAttempt
-        filter_q = Q(ip_address=ip)
-        if getattr(user, 'is_authenticated', False):
-            filter_q = filter_q | Q(user=user)
-        attempts = LoginAttempt.objects.filter(filter_q).order_by('-timestamp')[:5]
-        blocked = any(a.is_blocked() for a in attempts)
-        if blocked or not (user.is_authenticated and (user.is_staff or user.is_superuser)):
-            messages.error(request, "❌ You are not allowed to access this page or are temporarily blocked.")
-            return redirect('index')
-        return view_func(request, *args, **kwargs)
-    return _wrapped_view
 
+        # ---------------------------------------------------------
+        # Authentication / basic authorization
+        # ---------------------------------------------------------
+        if not user.is_authenticated:
+            raise Http404
+
+        if not (user.is_staff or user.is_superuser):
+            raise Http404
+
+        # ---------------------------------------------------------
+        # Resolve client IP
+        # ---------------------------------------------------------
+        try:
+            ip = get_client_ip(request)
+        except Exception:
+            raise Http404
+
+        if not ip:
+            raise Http404
+
+        # ---------------------------------------------------------
+        # Check active security blocks
+        # ---------------------------------------------------------
+        try:
+            now = timezone.now()
+
+            blocked_query = (
+                Q(ip_address=ip, blocked_until__gt=now)
+                | Q(user=user, blocked_until__gt=now)
+            )
+
+            if LoginAttempt.objects.filter(blocked_query).exists():
+                raise Http404
+
+        except Http404:
+            raise
+
+        except Exception:
+            # Fail closed
+            raise Http404
+
+        return view_func(request, *args, **kwargs)
+
+    return _wrapped_view
 def email_verified_required(view_func):
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:

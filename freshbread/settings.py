@@ -288,11 +288,6 @@ EMAIL_TIMEOUT = 20
 # MELI SMS CONFIGURATION
 # --------------------------------------------------------------------------------
 
-MELI_SMS_API_URL = os.getenv('MELI_SMS_API_URL')
-MELI_SMS_USERNAME = os.getenv('MELI_SMS_USERNAME')
-MELI_SMS_PASSWORD = os.getenv('MELI_SMS_PASSWORD')
-MELI_SMS_FROM = os.getenv('MELI_SMS_FROM')
-MELI_SMS_IS_FLASH = os.getenv('MELI_SMS_IS_FLASH', 'False') == 'True'
 
 # Admins to receive error reports
 ADMINS = [
