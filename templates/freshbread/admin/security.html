@@ -11,168 +11,383 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    body {
-      background-color: #f8f9fc;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --bg: #f1f5f9;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      --shadow-hover: 0 8px 30px rgba(15, 23, 42, 0.1);
+      --radius: 14px;
     }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
     .container {
       max-width: 1140px;
     }
+
+    /* ========== Cards ========== */
     .card {
       border: none;
-      border-radius: 10px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border-radius: var(--radius);
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
       margin-bottom: 1.75rem;
       overflow: hidden;
+      transition: box-shadow 0.25s ease;
     }
+
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
     .card-header {
-      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      background: var(--primary-gradient);
       color: white;
       font-weight: 600;
-      padding: 1rem 1.5rem;
+      padding: 1.1rem 1.5rem;
       border-bottom: none;
+      letter-spacing: 0.01em;
     }
+
+    .card-header small {
+      opacity: 0.85;
+      font-weight: 400;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    /* ========== Status Badge ========== */
     .status-badge {
-      padding: 0.4em 1em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45em 1.15em;
       border-radius: 999px;
-      font-size: 0.95rem;
-      font-weight: 500;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
     }
+
+    .status-badge.locked {
+      background: #fef2f2;
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+
+    .status-badge.unlocked {
+      background: #f0fdf4;
+      color: var(--success);
+      border: 1px solid #bbf7d0;
+    }
+
+    /* ========== Forms ========== */
+    .form-label {
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-control, .form-select {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 0.65rem 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .btn {
+      border-radius: 10px;
+      padding: 0.65rem 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      transition: all 0.2s ease;
+    }
+
+    .btn-sm {
+      padding: 0.4rem 0.9rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: #b91c1c;
+      border-color: #b91c1c;
+    }
+
+    .btn-success {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .btn-success:hover {
+      background: #15803d;
+      border-color: #15803d;
+    }
+
+    .btn-primary {
+      background: var(--primary-light);
+      border-color: var(--primary-light);
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    /* ========== Divider ========== */
+    .divider {
+      border-top: 1px solid var(--border);
+      margin: 1.25rem 0;
+    }
+
+    /* ========== Log List ========== */
     .log-list {
-      max-height: 400px;
+      max-height: 420px;
       overflow-y: auto;
-      padding: 0.5rem;
     }
+
     .list-group-item {
       border-left: 4px solid transparent;
       transition: all 0.2s ease;
+      padding: 1rem 1.5rem;
     }
+
     .list-group-item:hover {
-      background-color: #f1f5f9;
-      border-left-color: #3b82f6;
+      background-color: #f8fafc;
+      border-left-color: var(--primary-light);
     }
-    .btn {
-      border-radius: 8px;
-      padding: 0.65rem 1.5rem;
-      font-weight: 500;
-    }
-    .form-label {
-      font-weight: 500;
-      color: #1e293b;
-    }
-    .text-danger  { color: #dc2626 !important; }
-    .text-success { color: #16a34a !important; }
-    .divider { border-top: 1px solid #e2e8f0; margin: 1.25rem 0; }
-    /* =========================================================
-   BULK ACTION TOOLBAR
-   ========================================================= */
 
-.bulk-toolbar {
-    padding: 12px 24px;
-    border-bottom: 1px solid #dee2e6;
-    background: #f8f9fa;
-}
-
-.bulk-toolbar-inner {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-    width: 100%;
-}
-
-/* Select all */
-
-.bulk-toolbar .form-check {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin: 0;
-    white-space: nowrap;
-}
-
-.bulk-toolbar .form-check-input {
-    margin: 0;
-    cursor: pointer;
-}
-
-.bulk-toolbar .form-check-label {
-    cursor: pointer;
-    user-select: none;
-    white-space: nowrap;
-}
-
-/* Bulk action */
-
-.bulk-toolbar .bulk-action-select {
-    width: 190px;
-    min-width: 190px;
-    flex-shrink: 0;
-}
-
-/* Apply */
-
-.bulk-toolbar .bulk-apply-btn {
-    min-width: 85px;
-    flex-shrink: 0;
-}
-
-/* Selected count */
-
-.bulk-toolbar .selected-count {
-    margin-left: 8px;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-/* Checkbox */
-
-.activity-checkbox,
-#selectAllActivities {
-    width: 17px;
-    height: 17px;
-    cursor: pointer;
-}
-
-/* Disabled */
-
-#applyBulkAction:disabled {
-    cursor: not-allowed;
-    opacity: 0.55;
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 768px) {
-
+    /* ========== Bulk Toolbar ========== */
     .bulk-toolbar {
-        padding: 12px 16px;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border);
+      background: #f8fafc;
     }
 
     .bulk-toolbar-inner {
-        justify-content: flex-start;
-        flex-wrap: wrap;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .bulk-toolbar .form-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .bulk-toolbar .form-check-input {
+      margin: 0;
+      cursor: pointer;
+      width: 17px;
+      height: 17px;
+    }
+
+    .bulk-toolbar .form-check-label {
+      cursor: pointer;
+      user-select: none;
+      font-weight: 500;
     }
 
     .bulk-toolbar .bulk-action-select {
-        width: 180px;
-        min-width: 0;
+      width: 190px;
+      min-width: 160px;
+      flex-shrink: 0;
+    }
+
+    .bulk-toolbar .bulk-apply-btn {
+      min-width: 90px;
+      flex-shrink: 0;
     }
 
     .bulk-toolbar .selected-count {
-        margin-left: auto;
+      margin-left: 4px;
+      white-space: nowrap;
+      font-size: 0.9rem;
+      color: var(--text-muted);
     }
-}
+
+    .activity-checkbox,
+    #selectAllActivities {
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+    }
+
+    #applyBulkAction:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    /* ========== Table ========== */
+    .table {
+      margin-bottom: 0;
+    }
+
+    .table th {
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      border-bottom-width: 1px;
+    }
+
+    .table td {
+      vertical-align: middle;
+    }
+
+    .table-hover tbody tr:hover {
+      background-color: #f8fafc;
+    }
+
+    .bg-warning-subtle {
+      background-color: #fffbeb !important;
+    }
+
+    /* ========== Details / Accordion style ========== */
+    details summary {
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+
+    details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details summary .fa-chevron-right {
+      transition: transform 0.2s ease;
+    }
+
+    details[open] summary .fa-chevron-right {
+      transform: rotate(90deg);
+    }
+
+    details summary:hover {
+      background-color: #f1f5f9 !important;
+    }
+
+    /* ========== Pulse badge ========== */
+    .pulse-badge {
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+
+    /* ========== Verification alert ========== */
+    .verify-alert {
+      background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ========== Empty state ========== */
+    .empty-state {
+      padding: 3.5rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty-state i {
+      opacity: 0.4;
+    }
+
+    /* ========== Page header ========== */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .page-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .page-title i {
+      color: var(--primary-light);
+    }
+
+    /* ========== Mobile ========== */
+    @media (max-width: 768px) {
+      .bulk-toolbar {
+        padding: 12px 16px;
+      }
+
+      .bulk-toolbar-inner {
+        justify-content: flex-start;
+      }
+
+      .bulk-toolbar .bulk-action-select {
+        width: 100%;
+        max-width: 220px;
+      }
+
+      .bulk-toolbar .selected-count {
+        margin-left: auto;
+      }
+
+      .page-title {
+        font-size: 1.35rem;
+      }
+    }
   </style>
 
   <script>
     function getNowIsoLocal() {
       const d = new Date();
       d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-      return d.toISOString().slice(0, 16); // up to minutes for datetime-local
+      return d.toISOString().slice(0, 16);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -196,15 +411,14 @@
 <body>
 {% timezone "America/Toronto" %}
 
-<div class="container py-5">
-<h2></h2><br>
-<h2></h2><br>
-  <h3 class="mb-4 fw-bold text-dark">
-    <i class="fa fa-shield-halved me-2 text-primary"></i>
-    Security Controls
-  </h3>
+<div class="container py-4 py-md-5">
 
-  <div class="d-flex justify-content-end mb-4">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">
+      <i class="fa fa-shield-halved"></i>
+      Security Controls
+    </h1>
     <a href="{% url 'manage_urls' %}" class="btn btn-outline-primary">
       <i class="fa fa-link me-2"></i>
       URL Blocker
@@ -216,35 +430,39 @@
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
         <div>
-          <h5 class="mb-1">Current Site Status</h5>
+          <h5 class="mb-2 fw-semibold">Current Site Status</h5>
           {% if is_effective_lock %}
-            <span class="status-badge bg-danger text-white">Locked</span>
+            <span class="status-badge locked">
+              <i class="fa fa-lock"></i> Locked
+            </span>
           {% else %}
-            <span class="status-badge bg-success text-white">Unlocked</span>
+            <span class="status-badge unlocked">
+              <i class="fa fa-unlock"></i> Unlocked
+            </span>
           {% endif %}
         </div>
         <div class="text-end">
-          <small class="text-muted">Manual lock:</small>
-          <strong>{{ site_lock.is_locked|yesno:"Enabled,Disabled" }}</strong>
+          <small class="text-muted d-block">Manual lock</small>
+          <strong class="fs-6">{{ site_lock.is_locked|yesno:"Enabled,Disabled" }}</strong>
         </div>
       </div>
 
       <div class="divider"></div>
 
       <dl class="row g-0 mb-0 small">
-        {% if site_lock.is_locked %} 
-        <dt class="col-sm-3 text-muted">Lock reason:</dt>
-        <dd class="col-sm-9">{{ site_lock.reason|default:"—" }}</dd>
-         {% else %}
-        <dt class="col-sm-3 text-muted">Unlock reason:</dt>
-        <dd class="col-sm-9">{{ site_lock.reason|default:"—" }}</dd>
-         {% endif %}
-        <dt class="col-sm-3 text-muted mt-2">Schedule:</dt>
+        {% if site_lock.is_locked %}
+          <dt class="col-sm-3 text-muted">Lock reason</dt>
+          <dd class="col-sm-9">{{ site_lock.reason|default:"—" }}</dd>
+        {% else %}
+          <dt class="col-sm-3 text-muted">Unlock reason</dt>
+          <dd class="col-sm-9">{{ site_lock.reason|default:"—" }}</dd>
+        {% endif %}
+        <dt class="col-sm-3 text-muted mt-2">Schedule</dt>
         <dd class="col-sm-9 mt-2">
           {% if site_lock.schedule_start %}
             {{ site_lock.schedule_start|date:"Y-m-d H:i" }}
           {% else %}—{% endif %}
-          →
+          <span class="mx-1 text-muted">→</span>
           {% if site_lock.schedule_end %}
             {{ site_lock.schedule_end|date:"Y-m-d H:i" }}
           {% else %}—{% endif %}
@@ -262,45 +480,36 @@
           <i class="fa fa-lock me-2"></i> Lock / Unlock Site
         </div>
         <div class="card-body">
-          <form method="post">{% csrf_token %}
+          <form method="post">
+            {% csrf_token %}
             <div class="mb-3">
-              {% if site_lock.is_locked %} 
-              <label class="form-label">Reason (Optional) </label>
-              <input name="reason" class="form-control" placeholder="e.g. Maintenance window, security update">
-  <br>
-              <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-              <button name="action" value=""   class="btn btn-danger"   type="submit" disabled>
-                <i class="fa fa-lock me-1"></i> Lock Site
-              </button>
-              <button name="action" value="unlock" class="btn btn-success" type="submit">
-                <i class="fa fa-unlock me-1" aria-disabled="true"></i> Unlock Site
-              </button>
-            </div> 
+              {% if site_lock.is_locked %}
+                <label class="form-label">Reason (Optional)</label>
+                <input name="reason" class="form-control" placeholder="e.g. Maintenance window, security update">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-3">
+                  <button name="action" value="" class="btn btn-danger" type="submit" disabled>
+                    <i class="fa fa-lock me-1"></i> Lock Site
+                  </button>
+                  <button name="action" value="unlock" class="btn btn-success" type="submit">
+                    <i class="fa fa-unlock me-1"></i> Unlock Site
+                  </button>
+                </div>
               {% else %}
-              <label class="form-label">Reason</label>
-              <input name="reason" class="form-control" placeholder="e.g. Maintenance window, security update" required>
-            <br>
-              <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-              <button name="action" value="lock"   class="btn btn-danger"   type="submit">
-                <i class="fa fa-lock me-1"></i> Lock Site
-              </button>
-              <button name="action" value="unlock" class="btn btn-success" type="submit" disabled>
-                <i class="fa fa-unlock me-1"></i> Unlock Site
-              </button>
-            </div> 
+                <label class="form-label">Reason</label>
+                <input name="reason" class="form-control" placeholder="e.g. Maintenance window, security update" required>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-3">
+                  <button name="action" value="lock" class="btn btn-danger" type="submit">
+                    <i class="fa fa-lock me-1"></i> Lock Site
+                  </button>
+                  <button name="action" value="unlock" class="btn btn-success" type="submit" disabled>
+                    <i class="fa fa-unlock me-1"></i> Unlock Site
+                  </button>
+                </div>
               {% endif %}
             </div>
-
-            <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-              <button name="action" value="lock"   class="btn btn-danger"   type="submit">
-                <i class="fa fa-lock me-1"></i> Lock Site
-              </button>
-              <button name="action" value="unlock" class="btn btn-success" type="submit">
-                <i class="fa fa-unlock me-1"></i> Unlock Site
-              </button>
-            </div> -->
           </form>
           <p class="text-muted small mt-3 mb-0">
+            <i class="fa fa-info-circle me-1"></i>
             Unlocking also clears any active DDoS protection locks.
           </p>
         </div>
@@ -314,7 +523,8 @@
           <i class="fa fa-clock-rotate-left me-2"></i> Scheduled Lock
         </div>
         <div class="card-body">
-          <form method="post">{% csrf_token %}
+          <form method="post">
+            {% csrf_token %}
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">Start time</label>
@@ -346,17 +556,17 @@
   </div>
 
   <!-- Security Log -->
-  <div class="card mt-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
+  <div class="card mt-2">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
       <div>
         <i class="fa fa-history me-2"></i> Recent Security Log
       </div>
-      <small class="text-white-75">Includes lock, unlock, and DDoS trigger events</small>
+      <small>Includes lock, unlock, and DDoS trigger events</small>
     </div>
     <div class="card-body log-list p-0">
       <ul class="list-group list-group-flush">
         {% for item in logs %}
-          <li class="list-group-item px-4 py-3">
+          <li class="list-group-item">
             <div class="d-flex justify-content-between align-items-baseline">
               <div>
                 <strong class="d-block">{{ item.event_type }}</strong>
@@ -367,11 +577,12 @@
               </div>
             </div>
             {% if item.message %}
-              <div class="mt-2 text-secondary">{{ item.message }}</div>
+              <div class="mt-2 text-secondary small">{{ item.message }}</div>
             {% endif %}
           </li>
         {% empty %}
           <li class="list-group-item text-center text-muted py-5">
+            <i class="fa fa-inbox fa-2x mb-2 d-block opacity-50"></i>
             No recent security events.
           </li>
         {% endfor %}
@@ -379,1540 +590,504 @@
     </div>
   </div>
 
-<!-- Suspicious Activity -->
-<div class="card shadow border-0 mt-4 overflow-hidden">
+  <!-- Suspicious Activity -->
+  <div class="card mt-4 overflow-hidden">
 
-<!-- Header -->
-<div class="card-header bg-primary bg-gradient text-white d-flex justify-content-between align-items-center py-3 px-4">
-    <div class="d-flex align-items-center">
-        <i class="fa fa-user-secret me-3 fs-4"></i>
-
+    <!-- Header -->
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-3">
+        <i class="fa fa-user-secret fs-4"></i>
         <div>
-            <h5 class="mb-1">Suspicious Activity</h5>
-            <small class="opacity-85">
-                Tracked after 3+ failed actions — IPs, users & behavior
-            </small>
+          <div class="fw-semibold">Suspicious Activity</div>
+          <small class="opacity-85">Tracked after 3+ failed actions — IPs, users & behavior</small>
         </div>
+      </div>
+      <small class="opacity-75 d-none d-md-block">Clicks • Pages • Events</small>
     </div>
 
-    <small class="opacity-75 d-none d-md-block">
-        Clicks • Pages • Events
-    </small>
-</div>
+    <div class="card-body p-0">
 
-
-<div class="card-body p-0">
-
-    <!-- ========================================================= -->
-    <!-- DELETE VERIFICATION -->
-    <!-- ========================================================= -->
-
-    <div class="alert alert-light border-bottom rounded-0 mb-0 px-4 py-3">
-
+      <!-- Delete Verification -->
+      <div class="verify-alert px-4 py-3">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+          <div class="d-flex align-items-center gap-3">
+            {% if delete_verified_until %}
+              <i class="fa fa-check-circle text-success fs-4"></i>
+              <div>
+                <strong>Deletion mode active</strong>
+                <div class="text-muted small">Valid until {{ delete_verified_until }}</div>
+              </div>
+            {% else %}
+              <i class="fa fa-shield-halved text-warning fs-4"></i>
+              <div>
+                <strong>Verification required</strong>
+                <div class="text-muted small">to enable report & record deletion</div>
+              </div>
+            {% endif %}
+          </div>
 
-            <div class="d-flex align-items-center">
+          <div class="d-flex flex-wrap gap-2">
+            <form method="post" class="m-0">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="request_delete_verify">
+              <button type="submit" class="btn btn-sm btn-outline-primary">
+                <i class="fa fa-envelope me-1"></i> Send Code
+              </button>
+            </form>
 
-                {% if delete_verified_until %}
-
-                    <i class="fa fa-check-circle text-success me-2 fs-4"></i>
-
-                    <div>
-                        <strong>Deletion mode active</strong>
-
-                        <div class="text-muted small">
-                            Valid until {{ delete_verified_until }}
-                        </div>
-                    </div>
-
-                {% else %}
-
-                    <i class="fa fa-shield-halved text-warning me-2 fs-4"></i>
-
-                    <div>
-                        <strong>Verification required</strong>
-
-                        <div class="text-muted small">
-                            to enable report & record deletion
-                        </div>
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-
-            <div class="d-flex flex-wrap gap-2">
-
-                <form method="post" class="m-0">
-                    {% csrf_token %}
-
-                    <input
-                        type="hidden"
-                        name="action"
-                        value="request_delete_verify"
-                    >
-
-                    <button
-                        type="submit"
-                        class="btn btn-sm btn-outline-primary"
-                    >
-                        <i class="fa fa-envelope me-1"></i>
-                        Send Code
-                    </button>
-
-                </form>
-
-
-                <form
-                    method="post"
-                    class="d-flex align-items-center m-0 gap-2"
-                >
-                    {% csrf_token %}
-
-                    <input
-                        type="hidden"
-                        name="action"
-                        value="confirm_delete_verify"
-                    >
-
-                    <input
-                        name="verify_code"
-                        class="form-control form-control-sm"
-                        style="width: 140px;"
-                        placeholder="Code"
-                        autocomplete="one-time-code"
-                    >
-
-                    <button
-                        type="submit"
-                        class="btn btn-sm btn-primary"
-                    >
-                        <i class="fa fa-check me-1"></i>
-                        Verify
-                    </button>
-
-                </form>
-
-            </div>
-
+            <form method="post" class="d-flex align-items-center m-0 gap-2">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="confirm_delete_verify">
+              <input name="verify_code" class="form-control form-control-sm" style="width: 140px;"
+                     placeholder="Code" autocomplete="one-time-code">
+              <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-check me-1"></i> Verify
+              </button>
+            </form>
+          </div>
         </div>
+      </div>
 
-    </div>
+      <!-- Active Suspicious Activity -->
+      {% if suspicious %}
+      <div>
 
-
-    <!-- ========================================================= -->
-    <!-- ACTIVE SUSPICIOUS ACTIVITY -->
-    <!-- ========================================================= -->
-
-    {% if suspicious %}
-
-    <div>
-
-        <!-- ===================================================== -->
-        <!-- BULK TOOLBAR -->
-        <!-- ===================================================== -->
-
-
+        <!-- Bulk Toolbar -->
         <div class="bulk-toolbar">
-            <div class="bulk-toolbar-inner">
-
-                <div class="form-check">
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="selectAllActivities"
-                    >
-
-                    <label
-                        class="form-check-label fw-medium"
-                        for="selectAllActivities"
-                    >
-                        Select all
-                    </label>
-                </div>
-
-                <select
-                    id="bulkAction"
-                    class="form-select form-select-sm bulk-action-select"
-                >
-                    <option value="">Bulk action...</option>
-                    <option value="mark_reviewed">Mark reviewed</option>
-                    <option value="mute">Mute logging</option>
-                    <option value="block">Block IPs</option>
-                    <option value="delete_reports">Clear reports</option>
-                    <option value="delete_ips">Delete IP records</option>
-                </select>
-
-                <button
-                    type="button"
-                    id="applyBulkAction"
-                    class="btn btn-sm btn-primary bulk-apply-btn"
-                    disabled
-                >
-                    <i class="fa fa-bolt me-1"></i>
-                    Apply
-                </button>
-
-                <span
-                    id="selectedCount"
-                    class="text-muted selected-count"
-                >
-                    0 selected
-                </span>
-
+          <div class="bulk-toolbar-inner">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="selectAllActivities">
+              <label class="form-check-label" for="selectAllActivities">Select all</label>
             </div>
+
+            <select id="bulkAction" class="form-select form-select-sm bulk-action-select">
+              <option value="">Bulk action...</option>
+              <option value="mark_reviewed">Mark reviewed</option>
+              <option value="mute">Mute logging</option>
+              <option value="block">Block IPs</option>
+              <option value="delete_reports">Clear reports</option>
+              <option value="delete_ips">Delete IP records</option>
+            </select>
+
+            <button type="button" id="applyBulkAction" class="btn btn-sm btn-primary bulk-apply-btn" disabled>
+              <i class="fa fa-bolt me-1"></i> Apply
+            </button>
+
+            <span id="selectedCount" class="selected-count">0 selected</span>
+          </div>
         </div>
 
-
-        <!-- ===================================================== -->
-        <!-- BULK FORM -->
-        <!-- ===================================================== -->
-
-        <form
-            method="post"
-            id="bulkActionForm"
-        >
-
-            {% csrf_token %}
-
-            <input
-                type="hidden"
-                name="action"
-                value="bulk_action"
-            >
-
-            <input
-                type="hidden"
-                name="bulk_action"
-                id="bulkActionInput"
-            >
-
-            <div id="bulkSelectedInputs"></div>
-
+        <!-- Bulk Form -->
+        <form method="post" id="bulkActionForm">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="bulk_action">
+          <input type="hidden" name="bulk_action" id="bulkActionInput">
+          <div id="bulkSelectedInputs"></div>
         </form>
 
-
-        <!-- ===================================================== -->
-        <!-- ACTIVITY TABLE -->
-        <!-- ===================================================== -->
-
+        <!-- Activity Table -->
         <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-4" style="width: 45px;">
+                  <span class="visually-hidden">Select</span>
+                </th>
+                <th>IP</th>
+                <th>User</th>
+                <th>Failures</th>
+                <th>Last Seen</th>
+                <th class="text-end pe-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in suspicious %}
+              <!-- Main IP Row -->
+              <tr class="align-middle {% if a.unread %}bg-warning-subtle{% endif %}">
+                <td class="ps-4">
+                  <input type="checkbox" class="form-check-input activity-checkbox"
+                         value="{{ a.id }}" aria-label="Select {{ a.ip }}">
+                </td>
+                <td>
+                  <strong>{{ a.ip }}</strong>
+                  {% if a.unread %}
+                    <span class="badge bg-danger ms-2 pulse-badge">New</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if a.user %}
+                    {{ a.user.username }}
+                  {% else %}
+                    <span class="text-muted fst-italic">anonymous</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <span class="fw-bold text-danger">{{ a.failure_count }}</span>
+                </td>
+                <td class="text-nowrap">{{ a.last_seen|date:"Y-m-d H:i" }}</td>
+                <td class="text-end pe-4">
+                  <div class="d-flex flex-wrap gap-2 justify-content-end">
+                    <!-- Block -->
+                    <form method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="action" value="block_ip">
+                      <input type="hidden" name="activity_id" value="{{ a.id }}">
+                      <button type="submit" class="btn btn-sm btn-danger">
+                        <i class="fa fa-ban"></i> Block
+                      </button>
+                    </form>
 
-            <table class="table table-sm table-hover mb-0">
+                    <!-- Mute -->
+                    <form method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="action" value="mute_logs">
+                      <input type="hidden" name="activity_id" value="{{ a.id }}">
+                      <button type="submit" class="btn btn-sm btn-outline-secondary">
+                        <i class="fa fa-volume-mute"></i> Mute
+                      </button>
+                    </form>
 
-                <thead class="table-light">
+                    <!-- Delete / Clear -->
+                    {% if delete_verified_until %}
+                      <form method="post" onsubmit="return confirm('Delete this IP record and its reports?');">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete_ip_record">
+                        <input type="hidden" name="activity_id" value="{{ a.id }}">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                          <i class="fa fa-trash-can"></i> Delete IP
+                        </button>
+                      </form>
+                      <form method="post" onsubmit="return confirm('Clear all reports for this IP?');">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete_reports">
+                        <input type="hidden" name="activity_id" value="{{ a.id }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                          <i class="fa fa-trash"></i> Clear Reports
+                        </button>
+                      </form>
+                    {% else %}
+                      <button class="btn btn-sm btn-danger" disabled>
+                        <i class="fa fa-trash-can"></i> Delete IP
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" disabled>
+                        <i class="fa fa-trash"></i> Clear Reports
+                      </button>
+                    {% endif %}
 
-                    <tr>
+                    <!-- Reviewed -->
+                    <form method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="action" value="mark_reviewed">
+                      <input type="hidden" name="activity_id" value="{{ a.id }}">
+                      <button type="submit" class="btn btn-sm btn-outline-primary">
+                        <i class="fa fa-check"></i> Reviewed
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
 
-                        <th
-                            class="ps-4"
-                            style="width: 45px;"
-                        >
-                            <span class="visually-hidden">
-                                Select
-                            </span>
-                        </th>
-
-                        <th>
-                            IP
-                        </th>
-
-                        <th>
-                            User
-                        </th>
-
-                        <th>
-                            Failures
-                        </th>
-
-                        <th>
-                            Last Seen
-                        </th>
-
-                        <th class="text-end pe-4">
-                            Actions
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {% for a in suspicious %}
-
-                    <!-- ================================================= -->
-                    <!-- MAIN IP ROW -->
-                    <!-- ================================================= -->
-
-                    <tr
-                        class="align-middle {% if a.unread %}bg-warning-subtle{% endif %}"
-                    >
-
-                        <!-- Checkbox -->
-                        <td class="ps-4">
-
-                            <input
-                                type="checkbox"
-                                class="form-check-input activity-checkbox"
-                                value="{{ a.id }}"
-                                aria-label="Select {{ a.ip }}"
-                            >
-
-                        </td>
-
-
-                        <!-- IP -->
-                        <td>
-
-                            <strong>
-                                {{ a.ip }}
-                            </strong>
-
-                            {% if a.unread %}
-
-                                <span
-                                    class="badge bg-danger ms-2 pulse-badge"
-                                >
-                                    New
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <!-- User -->
-                        <td>
-
-                            {% if a.user %}
-
-                                {{ a.user.username }}
-
+              <!-- Events -->
+              <tr>
+                <td colspan="6" class="p-0">
+                  <details class="bg-white">
+                    <summary class="d-flex justify-content-between align-items-center px-4 py-3 bg-light">
+                      <div class="d-flex align-items-center">
+                        <i class="fa fa-chevron-right me-3 text-muted"></i>
+                        <strong>Recent Events</strong>
+                        <span class="badge bg-secondary ms-3">{{ a.events.count }}</span>
+                      </div>
+                      {% with succ=a.last_success_event %}
+                        {% if succ or a.last_success_at %}
+                          <small class="text-success fw-medium">
+                            Last success:
+                            {% if succ %}
+                              {{ succ.created_at|date:"Y-m-d H:i" }}
                             {% else %}
-
-                                <span class="text-muted fst-italic">
-                                    anonymous
-                                </span>
-
+                              {{ a.last_success_at|date:"Y-m-d H:i" }}
                             {% endif %}
-
-                        </td>
-
-
-                        <!-- Failures -->
-                        <td>
-
-                            <span class="fw-bold text-danger">
-                                {{ a.failure_count }}
-                            </span>
-
-                        </td>
-
-
-                        <!-- Last Seen -->
-                        <td class="text-nowrap">
-
-                            {{ a.last_seen|date:"Y-m-d H:i" }}
-
-                        </td>
-
-
-                        <!-- Actions -->
-                        <td class="text-end pe-4">
-
-                            <div class="d-flex flex-wrap gap-2 justify-content-end">
-
-                                <!-- Block -->
-                                <form method="post">
-                                    {% csrf_token %}
-
-                                    <input
-                                        type="hidden"
-                                        name="action"
-                                        value="block_ip"
-                                    >
-
-                                    <input
-                                        type="hidden"
-                                        name="activity_id"
-                                        value="{{ a.id }}"
-                                    >
-
-                                    <button
-                                        type="submit"
-                                        class="btn btn-sm btn-danger"
-                                    >
-                                        <i class="fa fa-ban"></i>
-                                        Block
-                                    </button>
-
-                                </form>
-
-
-                                <!-- Mute -->
-                                <form method="post">
-                                    {% csrf_token %}
-
-                                    <input
-                                        type="hidden"
-                                        name="action"
-                                        value="mute_logs"
-                                    >
-
-                                    <input
-                                        type="hidden"
-                                        name="activity_id"
-                                        value="{{ a.id }}"
-                                    >
-
-                                    <button
-                                        type="submit"
-                                        class="btn btn-sm btn-outline-secondary"
-                                    >
-                                        <i class="fa fa-volume-mute"></i>
-                                        Mute
-                                    </button>
-
-                                </form>
-
-
-                                <!-- Delete / Clear Reports -->
-                                {% if delete_verified_until %}
-
-                                    <!-- Delete IP -->
-                                    <form
-                                        method="post"
-                                        onsubmit="return confirm('Delete this IP record and its reports?');"
-                                    >
-
-                                        {% csrf_token %}
-
-                                        <input
-                                            type="hidden"
-                                            name="action"
-                                            value="delete_ip_record"
-                                        >
-
-                                        <input
-                                            type="hidden"
-                                            name="activity_id"
-                                            value="{{ a.id }}"
-                                        >
-
-                                        <button
-                                            type="submit"
-                                            class="btn btn-sm btn-danger"
-                                        >
-                                            <i class="fa fa-trash-can"></i>
-                                            Delete IP
-                                        </button>
-
-                                    </form>
-
-
-                                    <!-- Clear Reports -->
-                                    <form
-                                        method="post"
-                                        onsubmit="return confirm('Clear all reports for this IP?');"
-                                    >
-
-                                        {% csrf_token %}
-
-                                        <input
-                                            type="hidden"
-                                            name="action"
-                                            value="delete_reports"
-                                        >
-
-                                        <input
-                                            type="hidden"
-                                            name="activity_id"
-                                            value="{{ a.id }}"
-                                        >
-
-                                        <button
-                                            type="submit"
-                                            class="btn btn-sm btn-outline-danger"
-                                        >
-                                            <i class="fa fa-trash"></i>
-                                            Clear Reports
-                                        </button>
-
-                                    </form>
-
-                                {% else %}
-
-                                    <button
-                                        class="btn btn-sm btn-danger"
-                                        disabled
-                                    >
-                                        <i class="fa fa-trash-can"></i>
-                                        Delete IP
-                                    </button>
-
-                                    <button
-                                        class="btn btn-sm btn-outline-danger"
-                                        disabled
-                                    >
-                                        <i class="fa fa-trash"></i>
-                                        Clear Reports
-                                    </button>
-
-                                {% endif %}
-
-
-                                <!-- Reviewed -->
-                                <form method="post">
-                                    {% csrf_token %}
-
-                                    <input
-                                        type="hidden"
-                                        name="action"
-                                        value="mark_reviewed"
-                                    >
-
-                                    <input
-                                        type="hidden"
-                                        name="activity_id"
-                                        value="{{ a.id }}"
-                                    >
-
-                                    <button
-                                        type="submit"
-                                        class="btn btn-sm btn-outline-primary"
-                                    >
-                                        <i class="fa fa-check"></i>
-                                        Reviewed
-                                    </button>
-
-                                </form>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- ================================================= -->
-                    <!-- EVENTS -->
-                    <!-- ================================================= -->
-
-                    <tr>
-
-                        <td
-                            colspan="6"
-                            class="p-0"
-                        >
-
-                            <details class="bg-white">
-
-                                <summary
-                                    class="d-flex justify-content-between align-items-center px-4 py-3 bg-light-subtle hover-bg-light pointer"
-                                >
-
-                                    <div class="d-flex align-items-center">
-
-                                        <i
-                                            class="fa fa-chevron-right me-3 text-muted transition-rotate"
-                                        ></i>
-
-                                        <strong>
-                                            Recent Events
-                                        </strong>
-
-                                        <span
-                                            class="badge bg-secondary ms-3"
-                                        >
-                                            {{ a.events.count }}
-                                        </span>
-
-                                    </div>
-
-
-                                    {% with succ=a.last_success_event %}
-
-                                        {% if succ or a.last_success_at %}
-
-                                            <small
-                                                class="text-success fw-medium"
-                                            >
-                                                Last success:
-
-                                                {% if succ %}
-
-                                                    {{ succ.created_at|date:"Y-m-d H:i" }}
-
-                                                {% else %}
-
-                                                    {{ a.last_success_at|date:"Y-m-d H:i" }}
-
-                                                {% endif %}
-
-                                            </small>
-
-                                        {% endif %}
-
-                                    {% endwith %}
-
-                                </summary>
-
-
-                                <!-- ================================================= -->
-                                <!-- EVENT DETAILS -->
-                                <!-- ================================================= -->
-
-                                <div class="p-4 bg-white small">
-
-                                    {% if a.events.exists %}
-
-                                        <ul class="list-unstyled mb-0">
-
-                                            {% for e in a.events.all %}
-
-                                                <li
-                                                    class="py-3 border-top d-flex justify-content-between align-items-start gap-4 hover-bg-light"
-                                                >
-
-                                                    <div class="flex-grow-1">
-
-                                                        <div
-                                                            class="d-flex align-items-center mb-2 flex-wrap gap-2"
-                                                        >
-
-                                                            <!-- Time -->
-                                                            <span
-                                                                class="text-muted font-monospace"
-                                                            >
-                                                                {{ e.created_at|date:"H:i:s" }}
-                                                            </span>
-
-
-                                                            <!-- Method + Path -->
-                                                            <code
-                                                                class="bg-light px-1 py-0"
-                                                            >
-                                                                {{ e.method }}
-                                                                {{ e.path }}
-                                                            </code>
-
-
-                                                            <!-- Status -->
-                                                            <span
-                                                                class="badge bg-secondary"
-                                                            >
-                                                                {{ e.status_code }}
-                                                            </span>
-
-
-                                                            <!-- Action -->
-                                                            {% if e.action %}
-
-                                                                <span
-                                                                    class="badge bg-info"
-                                                                >
-                                                                    {{ e.action }}
-                                                                </span>
-
-                                                            {% endif %}
-
-                                                        </div>
-
-
-                                                        <!-- Meta -->
-                                                        {% if e.meta %}
-
-                                                            <div class="text-muted mt-1">
-                                                                {{ e.meta|truncatechars:160 }}
-                                                            </div>
-
-                                                        {% endif %}
-
-
-                                                        <!-- Referer -->
-                                                        {% if e.referer %}
-
-                                                            <div class="text-muted mt-1 small">
-                                                                Referer:
-                                                                {{ e.referer|truncatechars:100 }}
-                                                            </div>
-
-                                                        {% endif %}
-
-                                                    </div>
-
-
-                                                    <!-- Delete Event -->
-                                                    <div class="flex-shrink-0">
-
-                                                        {% if delete_verified_until %}
-
-                                                            <form method="post">
-
-                                                                {% csrf_token %}
-
-                                                                <input
-                                                                    type="hidden"
-                                                                    name="action"
-                                                                    value="delete_report_event"
-                                                                >
-
-                                                                <input
-                                                                    type="hidden"
-                                                                    name="event_id"
-                                                                    value="{{ e.id }}"
-                                                                >
-
-                                                                <button
-                                                                    type="submit"
-                                                                    class="btn btn-sm btn-outline-danger"
-                                                                    title="Delete event"
-                                                                >
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-
-                                                            </form>
-
-                                                        {% else %}
-
-                                                            <button
-                                                                class="btn btn-sm btn-outline-danger"
-                                                                disabled
-                                                                title="Verification required"
-                                                            >
-                                                                <i class="fa fa-trash"></i>
-                                                            </button>
-
-                                                        {% endif %}
-
-                                                    </div>
-
-                                                </li>
-
-                                            {% endfor %}
-
-                                        </ul>
-
-                                    {% else %}
-
-                                        <p
-                                            class="text-center text-muted py-5 mb-0"
-                                        >
-
-                                            <i
-                                                class="fa fa-history fa-2x opacity-50 mb-2 d-block"
-                                            ></i>
-
-                                            No events captured yet.
-
-                                        </p>
-
-                                    {% endif %}
-
+                          </small>
+                        {% endif %}
+                      {% endwith %}
+                    </summary>
+
+                    <div class="p-4 bg-white small">
+                      {% if a.events.exists %}
+                        <ul class="list-unstyled mb-0">
+                          {% for e in a.events.all %}
+                            <li class="py-3 border-top d-flex justify-content-between align-items-start gap-4">
+                              <div class="flex-grow-1">
+                                <div class="d-flex align-items-center mb-2 flex-wrap gap-2">
+                                  <span class="text-muted font-monospace">{{ e.created_at|date:"H:i:s" }}</span>
+                                  <code class="bg-light px-2 py-1 rounded">{{ e.method }} {{ e.path }}</code>
+                                  <span class="badge bg-secondary">{{ e.status_code }}</span>
+                                  {% if e.action %}
+                                    <span class="badge bg-info">{{ e.action }}</span>
+                                  {% endif %}
                                 </div>
-
-                            </details>
-
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
+                                {% if e.meta %}
+                                  <div class="text-muted mt-1">{{ e.meta|truncatechars:160 }}</div>
+                                {% endif %}
+                                {% if e.referer %}
+                                  <div class="text-muted mt-1 small">Referer: {{ e.referer|truncatechars:100 }}</div>
+                                {% endif %}
+                              </div>
+                              <div class="flex-shrink-0">
+                                {% if delete_verified_until %}
+                                  <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete_report_event">
+                                    <input type="hidden" name="event_id" value="{{ e.id }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete event">
+                                      <i class="fa fa-trash"></i>
+                                    </button>
+                                  </form>
+                                {% else %}
+                                  <button class="btn btn-sm btn-outline-danger" disabled title="Verification required">
+                                    <i class="fa fa-trash"></i>
+                                  </button>
+                                {% endif %}
+                              </div>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% else %}
+                        <p class="text-center text-muted py-5 mb-0">
+                          <i class="fa fa-history fa-2x opacity-50 mb-2 d-block"></i>
+                          No events captured yet.
+                        </p>
+                      {% endif %}
+                    </div>
+                  </details>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
+      </div>
+
+      {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+          <i class="fa fa-shield-halved fa-4x mb-3"></i>
+          <h5 class="mb-2">All clear</h5>
+          <p class="lead mb-0">No suspicious activity is currently being tracked.</p>
+        </div>
+      {% endif %}
+
+      <!-- Muted IPs -->
+      {% if muted %}
+      <details class="border-top">
+        <summary class="px-4 py-3 bg-light d-flex justify-content-between align-items-center">
+          <div>
+            <i class="fa fa-volume-mute text-warning me-2"></i>
+            <strong>Muted IPs</strong>
+            <span class="badge bg-warning text-dark ms-2">{{ muted|length }}</span>
+          </div>
+          <i class="fa fa-chevron-down text-muted"></i>
+        </summary>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-4">IP</th>
+                <th>User</th>
+                <th>Failures</th>
+                <th>Last Seen</th>
+                <th class="text-end pe-4">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in muted %}
+              <tr>
+                <td class="ps-4"><strong>{{ a.ip }}</strong></td>
+                <td>
+                  {% if a.user %}{{ a.user.username }}{% else %}<span class="text-muted fst-italic">anonymous</span>{% endif %}
+                </td>
+                <td><span class="fw-bold text-danger">{{ a.failure_count }}</span></td>
+                <td class="text-nowrap">{{ a.last_seen|date:"Y-m-d H:i" }}</td>
+                <td class="text-end pe-4">
+                  <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="unmute_logs">
+                    <input type="hidden" name="activity_id" value="{{ a.id }}">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">
+                      <i class="fa fa-volume-up me-1"></i> Unmute
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </details>
+      {% endif %}
+
+      <!-- Blocked IPs -->
+      {% if blocked %}
+      <details class="border-top">
+        <summary class="px-4 py-3 bg-light d-flex justify-content-between align-items-center">
+          <div>
+            <i class="fa fa-ban text-danger me-2"></i>
+            <strong>Blocked IPs</strong>
+            <span class="badge bg-danger ms-2">{{ blocked|length }}</span>
+          </div>
+          <i class="fa fa-chevron-down text-muted"></i>
+        </summary>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-4">IP</th>
+                <th>User</th>
+                <th>Failures</th>
+                <th>Last Seen</th>
+                <th class="text-end pe-4">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in blocked %}
+              <tr>
+                <td class="ps-4"><strong>{{ a.ip }}</strong></td>
+                <td>
+                  {% if a.user %}{{ a.user.username }}{% else %}<span class="text-muted fst-italic">anonymous</span>{% endif %}
+                </td>
+                <td><span class="fw-bold text-danger">{{ a.failure_count }}</span></td>
+                <td class="text-nowrap">{{ a.last_seen|date:"Y-m-d H:i" }}</td>
+                <td class="text-end pe-4">
+                  <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="unblock_ip">
+                    <input type="hidden" name="activity_id" value="{{ a.id }}">
+                    <button type="submit" class="btn btn-sm btn-success">
+                      <i class="fa fa-unlock me-1"></i> Unblock
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </details>
+      {% endif %}
 
     </div>
+  </div>
 
-    {% else %}
-
-        <!-- ========================================================= -->
-        <!-- EMPTY STATE -->
-        <!-- ========================================================= -->
-
-        <div class="p-5 text-center text-muted">
-
-            <i
-                class="fa fa-shield-halved fa-4x mb-4 opacity-50"
-            ></i>
-
-            <h5 class="mb-2">
-                All clear
-            </h5>
-
-            <p class="lead mb-0">
-                No suspicious activity is currently being tracked.
-            </p>
-
-        </div>
-
-    {% endif %}
-
-
-    <!-- ========================================================= -->
-    <!-- MUTED IPS -->
-    <!-- ========================================================= -->
-
-    {% if muted %}
-
-    <details class="border-top">
-
-        <summary
-            class="px-4 py-3 bg-light d-flex justify-content-between align-items-center pointer"
-        >
-
-            <div>
-
-                <i
-                    class="fa fa-volume-mute text-warning me-2"
-                ></i>
-
-                <strong>
-                    Muted IPs
-                </strong>
-
-                <span
-                    class="badge bg-warning text-dark ms-2"
-                >
-                    {{ muted|length }}
-                </span>
-
-            </div>
-
-            <i class="fa fa-chevron-down"></i>
-
-        </summary>
-
-
-        <div class="table-responsive">
-
-            <table class="table table-sm table-hover mb-0">
-
-                <thead class="table-light">
-
-                    <tr>
-
-                        <th class="ps-4">
-                            IP
-                        </th>
-
-                        <th>
-                            User
-                        </th>
-
-                        <th>
-                            Failures
-                        </th>
-
-                        <th>
-                            Last Seen
-                        </th>
-
-                        <th class="text-end pe-4">
-                            Action
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {% for a in muted %}
-
-                    <tr>
-
-                        <td class="ps-4">
-
-                            <strong>
-                                {{ a.ip }}
-                            </strong>
-
-                        </td>
-
-
-                        <td>
-
-                            {% if a.user %}
-
-                                {{ a.user.username }}
-
-                            {% else %}
-
-                                <span class="text-muted fst-italic">
-                                    anonymous
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="fw-bold text-danger">
-                                {{ a.failure_count }}
-                            </span>
-
-                        </td>
-
-
-                        <td class="text-nowrap">
-
-                            {{ a.last_seen|date:"Y-m-d H:i" }}
-
-                        </td>
-
-
-                        <td class="text-end pe-4">
-
-                            <form method="post">
-
-                                {% csrf_token %}
-
-                                <input
-                                    type="hidden"
-                                    name="action"
-                                    value="unmute_logs"
-                                >
-
-                                <input
-                                    type="hidden"
-                                    name="activity_id"
-                                    value="{{ a.id }}"
-                                >
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-sm btn-outline-secondary"
-                                >
-                                    <i class="fa fa-volume-up me-1"></i>
-                                    Unmute
-                                </button>
-
-                            </form>
-
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </details>
-
-    {% endif %}
-
-
-    <!-- ========================================================= -->
-    <!-- BLOCKED IPS -->
-    <!-- ========================================================= -->
-
-    {% if blocked %}
-
-    <details class="border-top">
-
-        <summary
-            class="px-4 py-3 bg-light d-flex justify-content-between align-items-center pointer"
-        >
-
-            <div>
-
-                <i
-                    class="fa fa-ban text-danger me-2"
-                ></i>
-
-                <strong>
-                    Blocked IPs
-                </strong>
-
-                <span
-                    class="badge bg-danger ms-2"
-                >
-                    {{ blocked|length }}
-                </span>
-
-            </div>
-
-            <i class="fa fa-chevron-down"></i>
-
-        </summary>
-
-
-        <div class="table-responsive">
-
-            <table class="table table-sm table-hover mb-0">
-
-                <thead class="table-light">
-
-                    <tr>
-
-                        <th class="ps-4">
-                            IP
-                        </th>
-
-                        <th>
-                            User
-                        </th>
-
-                        <th>
-                            Failures
-                        </th>
-
-                        <th>
-                            Last Seen
-                        </th>
-
-                        <th class="text-end pe-4">
-                            Action
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {% for a in blocked %}
-
-                    <tr>
-
-                        <td class="ps-4">
-
-                            <strong>
-                                {{ a.ip }}
-                            </strong>
-
-                        </td>
-
-
-                        <td>
-
-                            {% if a.user %}
-
-                                {{ a.user.username }}
-
-                            {% else %}
-
-                                <span class="text-muted fst-italic">
-                                    anonymous
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <td>
-
-                            <span class="fw-bold text-danger">
-                                {{ a.failure_count }}
-                            </span>
-
-                        </td>
-
-
-                        <td class="text-nowrap">
-
-                            {{ a.last_seen|date:"Y-m-d H:i" }}
-
-                        </td>
-
-
-                        <td class="text-end pe-4">
-
-                            <form method="post">
-
-                                {% csrf_token %}
-
-                                <input
-                                    type="hidden"
-                                    name="action"
-                                    value="unblock_ip"
-                                >
-
-                                <input
-                                    type="hidden"
-                                    name="activity_id"
-                                    value="{{ a.id }}"
-                                >
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-sm btn-success"
-                                >
-                                    <i class="fa fa-unlock me-1"></i>
-                                    Unblock
-                                </button>
-
-                            </form>
-
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </details>
-
-    {% endif %}
-
-
-</div>
-
-</div>
-
-
-<!-- ========================================================= -->
-<!-- BULK SELECTION SCRIPT -->
-<!-- ========================================================= -->
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const selectAll = document.getElementById("selectAllActivities");
-    const checkboxes = document.querySelectorAll(".activity-checkbox");
-
-    const selectedCount = document.getElementById("selectedCount");
-
-    const bulkAction = document.getElementById("bulkAction");
-    const applyButton = document.getElementById("applyBulkAction");
-
-    const bulkForm = document.getElementById("bulkActionForm");
-    const bulkActionInput = document.getElementById("bulkActionInput");
-    const selectedInputs = document.getElementById("bulkSelectedInputs");
-
-
-    function getSelected() {
-
-        return Array.from(checkboxes).filter(function (checkbox) {
-            return checkbox.checked;
-        });
-
-    }
-
-
-    function updateBulkUI() {
-
-        const selected = getSelected();
-        const count = selected.length;
-
-        selectedCount.textContent = count + " selected";
-
-
-        /*
-         * Apply is available only when:
-         * 1. At least one IP is selected
-         * 2. A bulk action is selected
-         */
-        applyButton.disabled = (
-            count === 0 ||
-            !bulkAction.value
-        );
-
-
-        /*
-         * Select All state
-         */
-        if (selectAll) {
-
-            if (count === 0) {
-
-                selectAll.checked = false;
-                selectAll.indeterminate = false;
-
-            } else if (count === checkboxes.length) {
-
-                selectAll.checked = true;
-                selectAll.indeterminate = false;
-
-            } else {
-
-                selectAll.checked = false;
-                selectAll.indeterminate = true;
-
-            }
-
-        }
-
-    }
-
-
-    /*
-     * Select All
-     */
-    if (selectAll) {
-
-        selectAll.addEventListener("change", function () {
-
-            checkboxes.forEach(function (checkbox) {
-
-                checkbox.checked = selectAll.checked;
-
-            });
-
-            updateBulkUI();
-
-        });
-
-    }
-
-
-    /*
-     * Individual checkbox
-     */
-    checkboxes.forEach(function (checkbox) {
-
-        checkbox.addEventListener("change", function () {
-
-            updateBulkUI();
-
-        });
-
-    });
-
-
-    /*
-     * Bulk action changed
-     */
-    bulkAction.addEventListener("change", function () {
-
-        updateBulkUI();
-
-    });
-
-
-    /*
-     * Apply Bulk Action
-     */
-    applyButton.addEventListener("click", function () {
-
-        const selected = getSelected();
-
-        if (selected.length === 0) {
-            return;
-        }
-
-
-        if (!bulkAction.value) {
-            return;
-        }
-
-
-        /*
-         * Confirmation for destructive actions
-         */
-        if (bulkAction.value === "delete_ips") {
-
-            const confirmed = confirm(
-                "Are you sure you want to delete the selected IP records and their reports?"
-            );
-
-            if (!confirmed) {
-                return;
-            }
-
-        }
-
-
-        if (bulkAction.value === "delete_reports") {
-
-            const confirmed = confirm(
-                "Are you sure you want to clear all reports for the selected IPs?"
-            );
-
-            if (!confirmed) {
-                return;
-            }
-
-        }
-
-
-        /*
-         * Set selected bulk action
-         */
-        bulkActionInput.value = bulkAction.value;
-
-
-        /*
-         * Remove old generated inputs
-         */
-        selectedInputs.innerHTML = "";
-
-
-        /*
-         * Add selected IDs
-         */
-        selected.forEach(function (checkbox) {
-
-            const input = document.createElement("input");
-
-            input.type = "hidden";
-            input.name = "selected_ids";
-            input.value = checkbox.value;
-
-            selectedInputs.appendChild(input);
-
-        });
-
-
-        /*
-         * Submit
-         */
-        sessionStorage.setItem(
-            "adminSecurityScrollPosition",
-            String(window.scrollY)
-        );
-
-        bulkForm.submit();
-
-        });
-
-
-    /*
-     * Initial state
-     */
-    updateBulkUI();
-
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const SCROLL_KEY = "adminSecurityScrollPosition";
-
-    /*
-     * Restore previous scroll position
-     */
-    const savedScroll = sessionStorage.getItem(SCROLL_KEY);
-
-    if (savedScroll !== null) {
-
-        const scrollPosition = parseInt(savedScroll, 10);
-
-        /*
-         * Small delay because the page/table/details
-         * may need to finish rendering first.
-         */
-        requestAnimationFrame(function () {
-            window.scrollTo({
-                top: scrollPosition,
-                behavior: "instant"
-            });
-
-            sessionStorage.removeItem(SCROLL_KEY);
-        });
-    }
-
-
-    /*
-     * Save scroll position before submitting
-     * any POST form on the security page.
-     */
-    document.querySelectorAll("form[method='post']").forEach(function (form) {
-
-        form.addEventListener("submit", function () {
-
-            sessionStorage.setItem(
-                SCROLL_KEY,
-                String(window.scrollY)
-            );
-
-        });
-
-    });
-
-});
-</script>
 </div>
 
 {% include 'freshbread/footer.html' %}
 
 <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
-<!-- ============================================================= -->
-<!-- BULK ACTION JAVASCRIPT -->
-<!-- ============================================================= -->
 
+<!-- Bulk Selection + Scroll Restore Script -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+  const selectAll = document.getElementById("selectAllActivities");
+  const checkboxes = document.querySelectorAll(".activity-checkbox");
+  const selectedCount = document.getElementById("selectedCount");
+  const bulkAction = document.getElementById("bulkAction");
+  const applyButton = document.getElementById("applyBulkAction");
+  const bulkForm = document.getElementById("bulkActionForm");
+  const bulkActionInput = document.getElementById("bulkActionInput");
+  const selectedInputs = document.getElementById("bulkSelectedInputs");
+  const SCROLL_KEY = "adminSecurityScrollPosition";
 
-    const selectAll =
-        document.getElementById("selectAllActivities");
+  function getSelected() {
+    return Array.from(checkboxes).filter(cb => cb.checked);
+  }
 
-    const checkboxes =
-        document.querySelectorAll(".activity-checkbox");
+  function updateBulkUI() {
+    if (!selectedCount || !applyButton) return;
 
-    const selectedCount =
-        document.getElementById("selectedCount");
+    const selected = getSelected();
+    const count = selected.length;
 
-    const bulkAction =
-        document.getElementById("bulkAction");
+    selectedCount.textContent = count + " selected";
+    applyButton.disabled = (count === 0 || !bulkAction.value);
 
-    const applyBulkAction =
-        document.getElementById("applyBulkAction");
-
-    const bulkActionForm =
-        document.getElementById("bulkActionForm");
-
-    const bulkActionInput =
-        document.getElementById("bulkActionInput");
-
-    const bulkSelectedInputs =
-        document.getElementById("bulkSelectedInputs");
-
-
-    function updateSelectedCount() {
-
-        const selected =
-            document.querySelectorAll(
-                ".activity-checkbox:checked"
-            ).length;
-
-        selectedCount.textContent =
-            `${selected} selected`;
-
-        selectAll.checked =
-            selected > 0 &&
-            selected === checkboxes.length;
-
-        selectAll.indeterminate =
-            selected > 0 &&
-            selected < checkboxes.length;
+    if (selectAll) {
+      if (count === 0) {
+        selectAll.checked = false;
+        selectAll.indeterminate = false;
+      } else if (count === checkboxes.length) {
+        selectAll.checked = true;
+        selectAll.indeterminate = false;
+      } else {
+        selectAll.checked = false;
+        selectAll.indeterminate = true;
+      }
     }
+  }
 
-
-    selectAll.addEventListener(
-        "change",
-        function () {
-
-            checkboxes.forEach(function (checkbox) {
-
-                checkbox.checked =
-                    selectAll.checked;
-
-            });
-
-            updateSelectedCount();
-        }
-    );
-
-
-    checkboxes.forEach(function (checkbox) {
-
-        checkbox.addEventListener(
-            "change",
-            updateSelectedCount
-        );
-
+  if (selectAll) {
+    selectAll.addEventListener("change", function () {
+      checkboxes.forEach(cb => { cb.checked = selectAll.checked; });
+      updateBulkUI();
     });
+  }
 
+  checkboxes.forEach(cb => {
+    cb.addEventListener("change", updateBulkUI);
+  });
 
-    applyBulkAction.addEventListener(
-        "click",
-        function () {
+  if (bulkAction) {
+    bulkAction.addEventListener("change", updateBulkUI);
+  }
 
-            const action =
-                bulkAction.value;
+  if (applyButton) {
+    applyButton.addEventListener("click", function () {
+      const selected = getSelected();
+      if (selected.length === 0 || !bulkAction.value) return;
 
-            if (!action) {
+      if (bulkAction.value === "delete_ips") {
+        if (!confirm("Are you sure you want to delete the selected IP records and their reports?")) return;
+      }
+      if (bulkAction.value === "delete_reports") {
+        if (!confirm("Are you sure you want to clear all reports for the selected IPs?")) return;
+      }
 
-                alert(
-                    "Please select a bulk action."
-                );
+      bulkActionInput.value = bulkAction.value;
+      selectedInputs.innerHTML = "";
 
-                return;
-            }
+      selected.forEach(cb => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "selected_ids";
+        input.value = cb.value;
+        selectedInputs.appendChild(input);
+      });
 
+      sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
+      bulkForm.submit();
+    });
+  }
 
-            const selected =
-                Array.from(
-                    document.querySelectorAll(
-                        ".activity-checkbox:checked"
-                    )
-                ).map(
-                    checkbox => checkbox.value
-                );
+  // Restore scroll position
+  const savedScroll = sessionStorage.getItem(SCROLL_KEY);
+  if (savedScroll !== null) {
+    const scrollPosition = parseInt(savedScroll, 10);
+    requestAnimationFrame(function () {
+      window.scrollTo({ top: scrollPosition, behavior: "instant" });
+      sessionStorage.removeItem(SCROLL_KEY);
+    });
+  }
 
+  // Save scroll on any POST form
+  document.querySelectorAll("form[method='post']").forEach(function (form) {
+    form.addEventListener("submit", function () {
+      sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
+    });
+  });
 
-            if (!selected.length) {
-
-                alert(
-                    "Please select at least one activity."
-                );
-
-                return;
-            }
-
-
-            if (
-                action === "delete_ips" ||
-                action === "delete_reports"
-            ) {
-
-                const confirmed =
-                    confirm(
-                        `Are you sure you want to perform this action on ${selected.length} selected IP(s)?`
-                    );
-
-                if (!confirmed) {
-                    return;
-                }
-
-            }
-
-
-            bulkActionInput.value =
-                action;
-
-            bulkSelectedInputs.innerHTML = "";
-
-
-            selected.forEach(function (id) {
-
-                const input =
-                    document.createElement("input");
-
-                input.type = "hidden";
-                input.name = "selected_ids";
-                input.value = id;
-
-                bulkSelectedInputs.appendChild(
-                    input
-                );
-
-            });
-
-
-            bulkActionForm.submit();
-
-        }
-    );
-
-
-    updateSelectedCount();
-
+  updateBulkUI();
 });
 </script>
+
 </body>
 {% endtimezone %}
 </html>
