@@ -88,4 +88,4 @@ def admin_email(request):
         scheduled = ScheduledEmail.objects.filter(is_active=True).order_by("-created_at")
         return render(request, "admin_email.html", {"scheduled": scheduled})
 
-    return render(request, "admin/admin_email.html", {"scheduled": scheduled})
+    return render(request, "admin/user/admin_email.html", {"scheduled": scheduled})
