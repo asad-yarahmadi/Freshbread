@@ -31,7 +31,7 @@ def complete_social_profile_view(request):
                     return redirect(next_url)
             return redirect("profile")
 
-        return render(request, "freshbread/social_auth/complete_profile1.html", {
+        return render(request, "social_auth/complete_profile1.html", {
             "email": request.session.get("social_email"),
             "provider": request.session.get("social_provider"),
             "next": next_url

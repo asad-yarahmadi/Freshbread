@@ -10,7 +10,7 @@ def review_check(request):
     from core.application.services.review_service import ReviewService
     reviews = ReviewService.get_all_reviews()
     blog_reviews = BlogReview.objects.all().order_by('-created_at')
-    return render(request, 'freshbread/review/review_check.html', {'reviews': reviews, 'blog_reviews': blog_reviews})
+    return render(request, 'review/review_check.html', {'reviews': reviews, 'blog_reviews': blog_reviews})
 
 @admin_login_protect
 def approve_review(request, review_id):

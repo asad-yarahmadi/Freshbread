@@ -136,6 +136,7 @@ celerybeat.pid
 liara.json
 # Environments
 .env
+kingfood-ca-firebase-adminsdk-fbsvc-771145390c
 .envrc
 .venv
 env/

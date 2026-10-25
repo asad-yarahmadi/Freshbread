@@ -16,7 +16,7 @@ def admin_users(request):
         users = users.filter(
             Q(username__icontains=q) | Q(first_name__icontains=q) | Q(last_name__icontains=q)
         )
-    return render(request, "freshbread/admin/users.html", {"users": users, "q": q})
+    return render(request, "admin/user/users.html", {"users": users, "q": q})
 
 
 @admin_login_protect
@@ -125,4 +125,4 @@ def admin_user_detail(request, user_id: int):
         "profile": profile,
         "blogs": blogs,
     }
-    return render(request, "freshbread/admin/user_detail.html", ctx)
+    return render(request, "admin/user/user_detail.html", ctx)

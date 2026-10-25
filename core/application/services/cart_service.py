@@ -1,6 +1,6 @@
 """
 Application Layer: Cart Service
-منطق تجاری سبد خرید
+
 """
 import logging
 from typing import Dict, List, Optional, Any, Tuple

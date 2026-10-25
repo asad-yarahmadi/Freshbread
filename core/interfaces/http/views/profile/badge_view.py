@@ -40,7 +40,7 @@ def badge_explorer(request):
     
     return render(
         request,
-        "freshbread/profile/badge_explorer.html",
+        "profile/badge_explorer.html",
         {
             "categories": category_data,
             "total_badges": total_badges,

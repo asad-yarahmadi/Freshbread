@@ -174,7 +174,7 @@ def manage_urls(request):
     blocked_count = sum(1 for item in urls_with_status if item['is_blocked'])
     active_count = len(all_url_paths) - blocked_count
 
-    return render(request, 'freshbread/admin/block_url.html', {
+    return render(request, 'admin/security/block_url.html', {
         'urls': visible_urls,
         'logs': logs_data,
         'category_summary': category_summary,

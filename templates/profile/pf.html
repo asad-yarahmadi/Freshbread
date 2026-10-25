@@ -1,0 +1,617 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ user.first_name }} – Kingfood</title>
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --bg: #f4f1ed;
+      --card: #ffffff;
+      --ink: #1c1714;
+      --ink-2: #5a504a;
+      --ink-3: #9e948d;
+      --orange: #e8541c;
+      --orange-light: #fdf0ea;
+      --orange-mid: #f5a984;
+      --teal: #0f8080;
+      --teal-light: #e3f5f5;
+      --red: #c42b2b;
+      --red-light: #fbeaea;
+      --green: #1a7a52;
+      --green-light: #e4f5ee;
+      --gold: #b07a18;
+      --gold-light: #fdf3dc;
+      --blue: #1a52a8;
+      --blue-light: #e6eefb;
+      --border: #ede7e0;
+      --radius: 20px;
+      --radius-sm: 12px;
+      --shadow: 0 2px 20px rgba(28,23,20,0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    a { text-decoration: none; }
+
+    .kf-page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 36px 20px 80px;
+    }
+
+    /* ── PROFILE HERO ── */
+    .kf-hero {
+      background: var(--ink);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 28px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .kf-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(232,84,28,0.15);
+      pointer-events: none;
+    }
+    .kf-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; right: 80px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(232,84,28,0.08);
+      pointer-events: none;
+    }
+
+    .kf-avatar-wrap { position: relative; z-index: 1; }
+    #avatarPreview {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid rgba(255,255,255,0.15);
+      display: block;
+      transition: transform 0.3s;
+    }
+    .kf-avatar-wrap:hover #avatarPreview { transform: scale(1.04); }
+
+    .kf-hero-info { position: relative; z-index: 1; }
+    .kf-hero-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .kf-hero-email {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 20px;
+    }
+
+    .kf-btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .kf-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.18s, transform 0.18s;
+      text-decoration: none;
+    }
+    .kf-btn:hover { opacity: 0.88; transform: translateY(-2px); }
+    .kf-btn-edit      { background: var(--orange); color: #fff; }
+    .kf-btn-locations { background: var(--teal);   color: #fff; }
+    .kf-btn-logout    { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.18); }
+
+    /* ── REFERRAL CARD ── */
+    .kf-referral {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .kf-referral-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-3);
+      margin-bottom: 5px;
+    }
+    .kf-referral-code {
+      font-family: 'Fira Code', monospace;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--orange);
+      background: var(--orange-light);
+      padding: 5px 14px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    .kf-referral-stat {
+      text-align: right;
+    }
+    .kf-referral-count {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .kf-referral-sublabel {
+      font-size: 12px;
+      color: var(--ink-3);
+      font-weight: 500;
+      margin-top: 3px;
+    }
+
+    /* ── SECTION ── */
+    .kf-section {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .kf-section-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .kf-section-icon {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .kf-section-icon.orange { background: var(--orange-light); color: var(--orange); }
+    .kf-section-icon.green  { background: var(--green-light);  color: var(--green); }
+    .kf-section-icon.red    { background: var(--red-light);    color: var(--red); }
+    .kf-section-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .kf-section-count {
+      margin-left: auto;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-3);
+      padding: 2px 11px;
+    }
+
+    /* ── ORDER ROW ── */
+    .kf-order-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+      gap: 12px;
+    }
+    .kf-order-row:last-child { border-bottom: none; }
+    .kf-order-row:hover { background: var(--bg); }
+
+    .kf-order-left { flex: 1; min-width: 0; }
+    .kf-order-code {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+      font-family: 'Fira Code', monospace;
+    }
+    .kf-order-meta {
+      font-size: 13px;
+      color: var(--ink-3);
+    }
+    .kf-order-meta strong { color: var(--ink-2); }
+
+    .kf-order-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .kf-order-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .kf-order-status.pending    { background: var(--gold-light); color: var(--gold); }
+    .kf-order-status.cooking,
+    .kf-order-status.processing { background: #fff3e6; color: #c45e00; }
+    .kf-order-status.sending    { background: var(--blue-light); color: var(--blue); }
+    .kf-order-status.delivered  { background: var(--green-light); color: var(--green); }
+    .kf-order-status.cancelled  { background: var(--red-light); color: var(--red); }
+
+    .kf-order-chevron {
+      color: var(--ink-3);
+      font-size: 16px;
+    }
+
+    /* ── EMPTY STATE ── */
+    .kf-empty {
+      padding: 44px 24px;
+      text-align: center;
+      color: var(--ink-3);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .kf-empty i {
+      display: block;
+      font-size: 36px;
+      margin-bottom: 12px;
+      color: var(--border);
+    }
+    .kf-empty a {
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    /* ── BADGE SECTION ── */
+    .kf-badge-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 20px 24px;
+    }
+    .kf-badge-card {
+      text-align: center;
+      padding: 16px 12px;
+      border-radius: 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kf-badge-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .kf-badge-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      background: linear-gradient(135deg, var(--orange), #ff7a45);
+      font-size: 28px;
+      color: white;
+      box-shadow: 0 4px 10px rgba(232,84,28,0.25);
+    }
+    .kf-badge-icon.earned {
+      background: linear-gradient(135deg, #1a7a52, #2d9b6d);
+      box-shadow: 0 4px 10px rgba(26,122,82,0.25);
+    }
+    .kf-badge-name {
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+    .kf-badge-level {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 100px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    .kf-badge-level.bronze { background: #d4a574; color: #3a2a1a; }
+    .kf-badge-level.silver { background: #c0c0c0; color: #333; }
+    .kf-badge-level.gold { background: #ffd700; color: #3a2a1a; }
+    .kf-badge-level.platinum { background: #e5e4e2; color: #333; }
+    .kf-badge-progress-wrap {
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .kf-badge-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--orange), #ff7a45);
+      border-radius: 100px;
+      transition: width 0.4s ease;
+    }
+    .kf-badge-progress-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-3);
+      margin-top: 6px;
+    }
+    .kf-view-all-badges {
+      text-align: center;
+      padding: 0 24px 20px;
+    }
+    .kf-view-all-btn {
+      background: var(--ink);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-weight: 800;
+      font-size: 13px;
+      text-decoration: none;
+    }
+    .kf-view-all-btn:hover { opacity: 0.9; }
+    
+    /* ── RESPONSIVE ── */
+    @media (max-width: 580px) {
+      .kf-page { padding: 20px 12px 60px; }
+      .kf-hero { grid-template-columns: 1fr; text-align: center; padding: 28px 20px; }
+      .kf-avatar-wrap { margin: 0 auto; }
+      .kf-btn-row { justify-content: center; }
+      .kf-referral-stat { text-align: left; }
+      .kf-order-row { padding: 14px 16px; }
+      .kf-section-head { padding: 15px 16px; }
+      .kf-badge-grid { gap: 10px; padding: 16px; }
+      .kf-badge-card { padding: 12px 8px; }
+      .kf-badge-icon { width: 52px; height: 52px; font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+{% include 'include/header.html' %}
+<h2></h2><br>
+<h2></h2><br>
+<div class="kf-page">
+
+  <!-- PROFILE HERO -->
+  <div class="kf-hero">
+    <div class="kf-avatar-wrap">
+      <img id="avatarPreview"
+           src="{% if profile.avatar and profile.avatar.name and profile.avatar.name != 'default_avatar.png' %}{{ profile.avatar.url }}{% else %}{% static 'images/def.webp' %}{% endif %}"
+           alt="Avatar"
+           onerror="this.onerror=null;this.src='{% static 'images/def.webp' %}'">
+    </div>
+    <div class="kf-hero-info">
+      <div class="kf-hero-name">{{ user.first_name }} {{ user.last_name }}</div>
+      <div class="kf-hero-email">{{ user.email }}</div>
+      <div class="kf-btn-row">
+        <a class="kf-btn kf-btn-edit" href="{% url 'edit_profile' %}">
+          <i class="bi bi-pencil-fill"></i> Edit Profile
+        </a>
+        <a class="kf-btn kf-btn-locations" href="{% url 'locations_manage' %}">
+          <i class="bi bi-geo-alt-fill"></i> Locations
+        </a>
+        <a class="kf-btn kf-btn-logout" href="{% url 'logout' %}">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERRAL CARD -->
+  <div class="kf-referral">
+    <div>
+      <div class="kf-referral-label">Your referral code</div>
+      <span class="kf-referral-code">{{ profile.referral_code }}</span>
+    </div>
+    <div class="kf-referral-stat">
+      <div class="kf-referral-count">{{ profile.referral_used_count }}</div>
+      <div class="kf-referral-sublabel">orders from referrals</div>
+    </div>
+  </div>
+
+  <!-- BADGE SECTION -->
+  <div class="kf-section">
+    <div class="kf-section-head">
+      <div class="kf-section-icon orange"><i class="bi bi-award-fill"></i></div>
+      <span class="kf-section-title">My Badges</span>
+      <span class="kf-section-count">{{ badge_stats.total_earned }} / {{ badge_stats.total_badges }}</span>
+    </div>
+
+    {% if display_badges %}
+    <div class="kf-badge-grid">
+      {% for item in display_badges %}
+      <div class="kf-badge-card">
+        <div class="kf-badge-icon {% if item.type == 'earned' %}earned{% endif %}">
+          {% if item.badge.icon_svg %}
+            <img src="{{ item.badge.icon_svg.url }}" alt="{{ item.badge.name }}" style="width: 36px; height: 36px;">
+          {% elif item.badge.icon_webp %}
+            <img src="{{ item.badge.icon_webp.url }}" alt="{{ item.badge.name }}" style="width: 36px; height: 36px;">
+          {% else %}
+            <i class="bi bi-trophy-fill"></i>
+          {% endif %}
+        </div>
+        <div class="kf-badge-name">{{ item.badge.name }}</div>
+        <div class="kf-badge-level {% if item.badge.level == 1 %}bronze{% elif item.badge.level == 2 %}silver{% elif item.badge.level == 3 %}gold{% elif item.badge.level == 4 %}platinum{% endif %}">Level {{ item.badge.level }}</div>
+        <div class="kf-badge-progress-wrap">
+          <div class="kf-badge-progress-bar" style="width: {{ item.progress }}%;"></div>
+        </div>
+        <div class="kf-badge-progress-text">{{ item.progress|floatformat:0 }}%</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="kf-empty">
+      <i class="bi bi-star"></i>
+      Start earning badges!<br>
+      Complete orders to unlock your first badge.
+    </div>
+    {% endif %}
+
+    <div class="kf-view-all-badges">
+      <a href="{% url 'badge_explorer' %}" class="kf-view-all-btn">
+        <i class="bi bi-grid-3x3"></i> View All Badges
+      </a>
+    </div>
+  </div>
+
+  <!-- ACTIVE ORDERS -->
+  <div class="kf-section">
+    <div class="kf-section-head">
+      <div class="kf-section-icon orange"><i class="bi bi-lightning-charge-fill"></i></div>
+      <span class="kf-section-title">Active Orders</span>
+      {% if active_orders %}
+        <span class="kf-section-count">{{ active_orders|length }}</span>
+      {% endif %}
+    </div>
+
+    {% if active_orders %}
+      {% for order in active_orders %}
+      <div class="kf-order-row" onclick="window.location.href='{% url 'order_detail' order.order_code %}'">
+        <div class="kf-order-left">
+          <div class="kf-order-code">#{{ order.order_code }}</div>
+          <div class="kf-order-meta">
+            Total: <strong>${{ order.total_price }}</strong>
+            {% if order.delivery_slot %} &nbsp;·&nbsp; {{ order.delivery_slot }}{% endif %}
+          </div>
+        </div>
+        <div class="kf-order-right">
+          {% if order.status == 'pending' %}
+            <span class="kf-order-status pending"><i class="bi bi-hourglass-split"></i> Pending</span>
+          {% elif order.status == 'processing' %}
+            <span class="kf-order-status processing"><i class="bi bi-fire"></i> Processing</span>
+          {% elif order.status == 'cooking' %}
+            <span class="kf-order-status cooking"><i class="bi bi-fire"></i> Cooking</span>
+          {% elif order.status == 'sending' %}
+            <span class="kf-order-status sending"><i class="bi bi-truck"></i> On the Way</span>
+          {% else %}
+            <span class="kf-order-status pending">{{ order.status|upper }}</span>
+          {% endif %}
+          <i class="bi bi-chevron-right kf-order-chevron"></i>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="kf-empty">
+        <i class="bi bi-bag-x"></i>
+        No active orders right now.<br>
+        <a href="{% url 'reservation' %}">Order something delicious →</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- DELIVERED ORDERS -->
+  <div class="kf-section">
+    <div class="kf-section-head">
+      <div class="kf-section-icon green"><i class="bi bi-check-circle-fill"></i></div>
+      <span class="kf-section-title">Delivered Orders</span>
+      {% if delivered_orders %}
+        <span class="kf-section-count">{{ delivered_orders|length }}</span>
+      {% endif %}
+    </div>
+
+    {% if delivered_orders %}
+      {% for order in delivered_orders %}
+      <div class="kf-order-row" onclick="window.location.href='{% url 'order_detail' order.order_code %}'">
+        <div class="kf-order-left">
+          <div class="kf-order-code">#{{ order.order_code }}</div>
+          <div class="kf-order-meta">Total: <strong>${{ order.total_price }}</strong></div>
+        </div>
+        <div class="kf-order-right">
+          <span class="kf-order-status delivered"><i class="bi bi-check-circle-fill"></i> Delivered</span>
+          <i class="bi bi-chevron-right kf-order-chevron"></i>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="kf-empty">
+        <i class="bi bi-bag-check"></i>
+        No delivered orders yet.
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- CANCELLED ORDERS -->
+  <div class="kf-section">
+    <div class="kf-section-head">
+      <div class="kf-section-icon red"><i class="bi bi-x-circle-fill"></i></div>
+      <span class="kf-section-title">Cancelled Orders</span>
+      {% if cancelled_orders %}
+        <span class="kf-section-count">{{ cancelled_orders|length }}</span>
+      {% endif %}
+    </div>
+
+    {% if cancelled_orders %}
+      {% for order in cancelled_orders %}
+      <div class="kf-order-row" onclick="window.location.href='{% url 'order_detail' order.order_code %}'">
+        <div class="kf-order-left">
+          <div class="kf-order-code">#{{ order.order_code }}</div>
+          <div class="kf-order-meta">Total: <strong>${{ order.total_price }}</strong></div>
+        </div>
+        <div class="kf-order-right">
+          <span class="kf-order-status cancelled"><i class="bi bi-x-circle-fill"></i> Cancelled</span>
+          <i class="bi bi-chevron-right kf-order-chevron"></i>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="kf-empty">
+        <i class="bi bi-check2-all"></i>
+        No cancelled orders.
+      </div>
+    {% endif %}
+  </div>
+
+</div><!-- /.kf-page -->
+
+{% include 'include/footer.html' %}
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+</html>

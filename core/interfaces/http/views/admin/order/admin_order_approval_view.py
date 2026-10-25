@@ -15,7 +15,7 @@ def admin_order_reviews(request):
     from core.infrastructure.models import ManualOrderRequest, Profile
     pending = ManualOrderRequest.objects.filter(status='pending').order_by('-created_at')
     rejected = ManualOrderRequest.objects.filter(status='rejected').order_by('-updated_at')
-    return render(request, "freshbread/admin/order_reviews.html", {
+    return render(request, "admin/order_reviews.html", {
         "pending": pending,
         "rejected": rejected,
     })
@@ -161,7 +161,7 @@ def admin_notifications(request):
         return redirect("checkout_s1")
     from core.infrastructure.models import AdminNotification
     notes = AdminNotification.objects.filter(user=request.user, unread=True).order_by('-created_at')
-    return render(request, "freshbread/admin/notifications.html", {"notifications": notes})
+    return render(request, "admin/notifications.html", {"notifications": notes})
 
 @login_required
 @admin_login_protect

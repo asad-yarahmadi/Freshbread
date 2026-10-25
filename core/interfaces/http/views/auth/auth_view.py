@@ -60,7 +60,7 @@ def login_view(request):
             return redirect(redirect_url)
 
     mark_form_render(request, "login_failed")
-    return render(request, "freshbread/auth/ru.html", {"next": next_url})
+    return render(request, "auth/ru.html", {"next": next_url})
 
 
 @login_required

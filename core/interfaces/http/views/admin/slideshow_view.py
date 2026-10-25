@@ -16,7 +16,7 @@ def manage_slideshow(request):
         'active_mode': active_mode,
         'all_modes': all_modes,
     }
-    return render(request, 'freshbread/slideshow/manage_slideshow.html', context)
+    return render(request, 'slideshow/manage_slideshow.html', context)
 
 
 @admin_login_protect
@@ -42,7 +42,7 @@ def add_slideshow_mode(request):
             return redirect('edit_slideshow_mode', mode_id=mode.id)
     else:
         form = SlideshowModeForm()
-    return render(request, 'freshbread/slideshow/add_edit_slideshow_mode.html', {'form': form, 'is_edit': False})
+    return render(request, 'slideshow/add_edit_slideshow_mode.html', {'form': form, 'is_edit': False})
 
 
 @admin_login_protect
@@ -64,7 +64,7 @@ def edit_slideshow_mode(request, mode_id):
         'mode': mode,
         'slides': mode.slides.all(),
     }
-    return render(request, 'freshbread/slideshow/add_edit_slideshow_mode.html', context)
+    return render(request, 'slideshow/add_edit_slideshow_mode.html', context)
 
 
 @admin_login_protect
@@ -98,7 +98,7 @@ def add_slide(request, mode_id):
             return redirect('edit_slideshow_mode', mode_id=mode.id)
     else:
         form = SlideForm()
-    return render(request, 'freshbread/slideshow/add_edit_slide.html', {'form': form, 'is_edit': False, 'mode': mode})
+    return render(request, 'slideshow/add_edit_slide.html', {'form': form, 'is_edit': False, 'mode': mode})
 
 
 @admin_login_protect
@@ -112,7 +112,7 @@ def edit_slide(request, slide_id):
             return redirect('edit_slideshow_mode', mode_id=slide.slideshow_mode.id)
     else:
         form = SlideForm(instance=slide)
-    return render(request, 'freshbread/slideshow/add_edit_slide.html', {'form': form, 'is_edit': True, 'mode': slide.slideshow_mode, 'slide': slide})
+    return render(request, 'slideshow/add_edit_slide.html', {'form': form, 'is_edit': True, 'mode': slide.slideshow_mode, 'slide': slide})
 
 
 @admin_login_protect
@@ -137,7 +137,7 @@ def add_slide_button(request, slide_id):
             return redirect('edit_slide', slide_id=slide.id)
     else:
         form = SlideButtonForm()
-    return render(request, 'freshbread/slideshow/add_edit_button.html', {'form': form, 'is_edit': False, 'slide': slide})
+    return render(request, 'slideshow/add_edit_button.html', {'form': form, 'is_edit': False, 'slide': slide})
 
 
 @admin_login_protect
@@ -151,7 +151,7 @@ def edit_slide_button(request, button_id):
             return redirect('edit_slide', slide_id=btn.slide.id)
     else:
         form = SlideButtonForm(instance=btn)
-    return render(request, 'freshbread/slideshow/add_edit_button.html', {'form': form, 'is_edit': True, 'slide': btn.slide})
+    return render(request, 'slideshow/add_edit_button.html', {'form': form, 'is_edit': True, 'slide': btn.slide})
 
 
 @admin_login_protect

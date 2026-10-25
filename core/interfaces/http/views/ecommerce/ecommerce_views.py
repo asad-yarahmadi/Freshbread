@@ -6,19 +6,20 @@ from django.db.models import Avg
 from django.http import JsonResponse
 from django.utils import timezone
 import datetime
+import requests
 
 def about(request):
     from core.infrastructure.repositories.product_repository import ProductRepository
     products = ProductRepository.get_all_products(available_only=True)
-    return render(request, 'freshbread/ecommerce/about.html', {'products': products})
+    return render(request, 'ecommerce/about.html', {'products': products})
 
 def contact(request):
-    return render(request, 'freshbread/ecommerce/contact.html')
+    return render(request, 'ecommerce/contact.html')
 
 def gallery(request):
     from core.infrastructure.models import GalleryImage
     images = GalleryImage.objects.filter(is_active=True).order_by('-created_at')
-    return render(request, 'freshbread/ecommerce/gallery.html', {"images": images})
+    return render(request, 'ecommerce/gallery.html', {"images": images})
 
 def index(request):
     from core.infrastructure.repositories.product_repository import ProductRepository
@@ -36,7 +37,7 @@ def index(request):
         slides = slideshow_mode.slides.prefetch_related('buttons').all()
         use_custom = True
 
-    return render(request, "freshbread/ecommerce/index.html", {
+    return render(request, "ecommerce/index.html", {
         "products": products,
         "hero_images": hero_images,
         "images": images,
@@ -48,24 +49,70 @@ def index(request):
 def menu(request):
     from core.infrastructure.repositories.product_repository import ProductRepository
     products = ProductRepository.get_all_products()
-    return render(request, 'freshbread/ecommerce/menu.html', {'products': products})
+    return render(request, 'ecommerce/menu.html', {'products': products})
 
 def reverse_geocode(request):
     lat = request.GET.get("lat")
     lon = request.GET.get("lon")
-    url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json&addressdetails=1"
-    headers = {"User-Agent": "FreshBreadApp/1.0 (contact@freshbread.com)"}
-    import requests
+
+    if not lat or not lon:
+        return JsonResponse(
+            {"error": "Latitude and longitude are required."},
+            status=400,
+        )
+
     try:
-        res = requests.get(url, headers=headers, timeout=5)
-        return JsonResponse(res.json())
-    except Exception as e:
-        return JsonResponse({"error": "Failed to reverse geocode", "details": str(e)}, status=500)
+        lat = float(lat)
+        lon = float(lon)
+    except (TypeError, ValueError):
+        return JsonResponse(
+            {"error": "Invalid latitude or longitude."},
+            status=400,
+        )
+
+    if not (-90 <= lat <= 90 and -180 <= lon <= 180):
+        return JsonResponse(
+            {"error": "Latitude or longitude is out of range."},
+            status=400,
+        )
+
+    url = "https://nominatim.openstreetmap.org/reverse"
+
+    params = {
+        "lat": lat,
+        "lon": lon,
+        "format": "jsonv2",
+        "addressdetails": 1,
+        "accept-language": "en",
+    }
+
+    headers = {
+        "User-Agent": "KingFood/1.0 (https://kingfood.ca/)",
+        "Accept": "application/json",
+    }
+
+    try:
+        response = requests.get(
+            url,
+            params=params,
+            headers=headers,
+            timeout=5,
+        )
+
+        response.raise_for_status()
+
+        return JsonResponse(response.json())
+
+    except requests.RequestException:
+        return JsonResponse(
+            {"error": "Reverse geocoding service is temporarily unavailable."},
+            status=502,
+        )
 
 def stuff(request):
     from django.http import HttpResponse
 
-    return render (request, 'freshbread/ecommerce/stuff.html')
+    return render (request, 'ecommerce/stuff.html')
 
 
 def food_de(request, slug):
@@ -91,16 +138,16 @@ def food_de(request, slug):
         'avg_rating': round(avg_rating, 1),
         'approved_reviews_count': approved_reviews.count(),
     }
-    return render(request, 'freshbread/fd.html', context)
+    return render(request, 'fd.html', context)
 
 def prpo (request):
-    return render(request, 'freshbread/ecommerce/prpo.html')
+    return render(request, 'ecommerce/prpo.html')
 
 def tms (request):
-    return render(request, 'freshbread/ecommerce/tms.html')
+    return render(request, 'ecommerce/tms.html')
 
 def coming_soon (request):
-    return render(request, 'freshbread/ecommerce/coming_soon.html')
+    return render(request, 'ecommerce/coming_soon.html')
 
 
 def get_countdown_data(request):

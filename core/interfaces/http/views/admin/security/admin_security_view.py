@@ -1169,6 +1169,6 @@ def admin_security(request):
 
     return render(
         request,
-        "freshbread/admin/security.html",
+        "admin/security/security.html",
         ctx,
     )

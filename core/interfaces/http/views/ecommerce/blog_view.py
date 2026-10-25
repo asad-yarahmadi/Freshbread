@@ -31,7 +31,7 @@ def blog_details(request, slug):
     avg = 0
     if reviews.exists():
         avg = round(sum(r.rating for r in reviews) / reviews.count(), 1)
-    return render(request, 'freshbread/blog/blog_details.html', {"post": post, "recent": recent, "popular": popular, "reviews": reviews, "avg": avg, "is_liked": is_liked})
+    return render(request, 'blog/blog_details.html', {"post": post, "recent": recent, "popular": popular, "reviews": reviews, "avg": avg, "is_liked": is_liked})
 
 
 @login_required
@@ -81,7 +81,7 @@ def blog(request):
         else:
             posts = posts.filter(Q(title__icontains=q) | Q(seo_keywords__icontains=q))
     posts = posts.order_by('-likes_count', '-views_count', '-created_at')
-    return render(request, 'freshbread/blog/blog.html', {"posts": posts, "q": q})
+    return render(request, 'blog/blog.html', {"posts": posts, "q": q})
 
 
 import os
@@ -131,7 +131,7 @@ def blog_add(request):
         messages.success(request, "Blog submitted successfully and is under review.")
         return redirect("blog_manage")
 
-    return render(request, "freshbread/blog/blog_add.html")
+    return render(request, "blog/blog_add.html")
 
 
 def blog_like(request, slug):
@@ -174,8 +174,8 @@ def blog_manage(request):
                 i += 1
             post.slug = candidate
             post.save()
-    return render(request, 'freshbread/blog/blog_manage.html', {"posts": posts})
-    # return render(request, 'freshbread/ecommerce/coming_soon.html')
+    return render(request, 'blog/blog_manage.html', {"posts": posts})
+    # return render(request, 'ecommerce/coming_soon.html')
 
 
 @login_required
@@ -200,7 +200,7 @@ def blog_edit(request, slug):
         post.save()
         messages.success(request, "Blog updated.")
         return redirect("blog_manage")
-    return render(request, 'freshbread/blog/blog_edit.html', {"post": post})
+    return render(request, 'blog/blog_edit.html', {"post": post})
 
 
 

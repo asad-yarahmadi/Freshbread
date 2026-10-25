@@ -77,7 +77,7 @@ def reservation(request):
     if request.user.is_authenticated:
         available_rewards = get_available_rewards(request.user)
     
-    return render(request, 'freshbread/cart/reservation.html', {
+    return render(request, 'cart/reservation.html', {
         'cart_items': transformed,
         'original_total': summary['original_total'],
         'savings': summary['savings'],

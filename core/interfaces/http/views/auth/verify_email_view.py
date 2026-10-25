@@ -48,4 +48,4 @@ def verify_email_view(request):
             messages.error(request, str(e))
             return redirect("verify_email")
 
-    return render(request, "freshbread/verify_email.html", {"next": next_url})
+    return render(request, "verify_email.html", {"next": next_url})

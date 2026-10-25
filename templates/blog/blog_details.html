@@ -1,0 +1,748 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{{ post.title }} – Kingfood Blog</title>
+  <meta name="description" content="{{ post.seo_keywords|default:post.title }}">
+  <meta name="author" content="{{ post.author.username }}">
+
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --accent: #e74c3c;
+      --accent-hover: #c0392b;
+      --bg: #f5f5f7;
+      --card: rgba(255, 255, 255, 0.82);
+      --ink: #1a1a1a;
+      --ink-2: #555;
+      --ink-3: #888;
+      --border: rgba(0, 0, 0, 0.07);
+      --radius: 22px;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.75;
+    }
+
+    /* ── Hero Card ── */
+    .blog-hero {
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin: 1.5rem 0 3rem;
+    }
+
+    .blog-cover {
+      position: relative;
+      line-height: 0;
+    }
+
+    .blog-cover img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .date-badge {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: var(--accent);
+      color: #fff;
+      padding: 0.55rem 1.1rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 6px 18px rgba(231, 76, 60, 0.35);
+      z-index: 5;
+    }
+
+    .blog-header {
+      padding: 2.5rem 3rem 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .blog-header h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin: 0 0 0.75rem;
+      color: var(--ink);
+      line-height: 1.25;
+      letter-spacing: -0.4px;
+    }
+
+    .blog-header .lead {
+      color: var(--ink-2);
+      font-size: 1.05rem;
+    }
+
+    .blog-meta {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.4rem;
+      color: var(--ink-3);
+      font-size: 0.98rem;
+      margin: 1.2rem 0 0;
+      list-style: none;
+      padding: 0;
+    }
+
+    .blog-meta li {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .blog-meta a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .blog-meta a:hover { text-decoration: underline; }
+
+    .blog-content {
+      padding: 2.5rem 3rem 3rem;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .content {
+      line-height: 1.9;
+    }
+    .content p { margin-bottom: 1.4rem; }
+
+    /* Tags */
+    .tags {
+      margin: 2.5rem 0 3rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+
+    .badge-tag {
+      background: rgba(0, 0, 0, 0.05);
+      color: #555;
+      padding: 0.5rem 1.15rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.25s ease;
+    }
+    .badge-tag:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Like */
+    .like-section {
+      text-align: center;
+      margin: 2.5rem 0;
+      padding: 1.5rem 0;
+    }
+
+    .btn-like {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .like-heart {
+      font-size: 4.2rem;
+      transition: transform 0.2s ease, color 0.25s ease;
+    }
+    #like-btn:hover .like-heart { transform: scale(1.12); }
+    #like-btn:active .like-heart { transform: scale(0.92); }
+
+    /* Related */
+    .related-section {
+      margin: 3.5rem 0 1rem;
+    }
+
+    .related-section h4 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 1.4rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 3px solid var(--accent);
+      display: inline-block;
+    }
+
+    .related-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      transition: all 0.28s ease;
+      height: 100%;
+    }
+    .related-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+    }
+    .related-card .card-body { padding: 1.4rem 1.5rem; }
+    .related-card .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      color: var(--ink);
+    }
+    .related-meta {
+      font-size: 0.88rem;
+      color: var(--ink-3);
+    }
+
+    /* Reviews */
+    .reviews-section {
+      margin-top: 3.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .review-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.5) !important;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+      margin-bottom: 1.25rem;
+    }
+
+    .avatar {
+      min-width: 28px;
+    }
+
+    .profile-link {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .profile-link:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .stars { font-size: 1.35rem; letter-spacing: 2px; }
+    .star-filled { color: #fbbf24; }
+    .star-empty { color: #e5e7eb; }
+
+    .btn-warning {
+      background: var(--accent) !important;
+      border-color: var(--accent) !important;
+      padding: 0.7rem 2rem;
+      font-weight: 600;
+      border-radius: 50px !important;
+    }
+    .btn-warning:hover {
+      background: var(--accent-hover) !important;
+      border-color: var(--accent-hover) !important;
+    }
+
+    .btn-primary {
+      background: var(--accent) !important;
+      border-color: var(--accent) !important;
+      border-radius: 50px !important;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover) !important;
+    }
+
+    .thread-container { position: relative; }
+    .thread-line {
+      position: relative;
+      padding-left: 1.25rem;
+    }
+    .thread-line.border-start {
+      border-color: rgba(231, 76, 60, 0.25) !important;
+      border-width: 3px !important;
+    }
+    .thread-line.border-2 {
+      border-width: 2px !important;
+      border-color: #adb5bd !important;
+    }
+
+    .hover-scale:hover { transform: scale(1.12); }
+    .cursor-pointer { cursor: pointer; }
+
+    .form-control {
+      border-radius: 12px !important;
+      border: 1px solid var(--border);
+    }
+    .form-control:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.12);
+    }
+
+    #back-to-top {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      color: var(--ink) !important;
+      font-size: 1.3rem;
+      transition: all 0.3s ease;
+    }
+    #back-to-top:hover {
+      background: var(--accent) !important;
+      color: #fff !important;
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 992px) {
+      .blog-header, .blog-content {
+        padding-left: 1.75rem;
+        padding-right: 1.75rem;
+      }
+      .blog-header h1 { font-size: 2rem; }
+    }
+
+    @media (max-width: 576px) {
+      .blog-meta {
+        flex-direction: column;
+        gap: 0.6rem;
+        align-items: center;
+      }
+      .blog-header h1 { font-size: 1.7rem; }
+      .blog-cover img { max-height: 280px; }
+      .like-heart { font-size: 3.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+{% include 'include/header.html' %}
+
+<div class="container py-3">
+  <div class="blog-hero">
+
+    <!-- Cover -->
+    <div class="blog-cover">
+      <img src="{{ post.cover_single.url }}" alt="{{ post.title }}">
+      <div class="date-badge">{{ post.created_at|date:"M d" }}</div>
+    </div>
+
+    <!-- Header -->
+    <div class="blog-header">
+      <h1>{{ post.title }}</h1>
+      {% if post.seo_keywords %}
+        <p class="lead mt-2 mb-0">{{ post.seo_keywords }}</p>
+      {% endif %}
+
+      <ul class="blog-meta">
+        <li>
+          <i class="zmdi zmdi-account"></i>
+          <a href="{% url 'public_user_profile' post.author.id %}">{{ post.author.username }}</a>
+        </li>
+        <li>•</li>
+        <li>
+          <i class="zmdi zmdi-calendar"></i>
+          <time class="local-dt" data-iso="{{ post.created_at|date:'c' }}"></time>
+        </li>
+        <li>•</li>
+        <li>❤️ <span id="likes-count-meta">{{ post.likes_count }}</span></li>
+        <li>•</li>
+        <li>👁️ <span id="views-count">{{ post.views_count }}</span></li>
+      </ul>
+    </div>
+
+    <!-- Content -->
+    <div class="blog-content">
+      <div class="content mb-4">
+        {{ post.content|safe }}
+      </div>
+
+      <!-- Tags -->
+      <div class="tags">
+        {% for t in post.tag_list %}
+          <span class="badge-tag">#{{ t }}</span>
+        {% empty %}
+          <small class="text-muted">No tags added yet</small>
+        {% endfor %}
+      </div>
+
+      <!-- Like -->
+      <div class="like-section">
+        <button id="like-btn" class="btn-like" aria-label="Like / Unlike post">
+          <i id="like-icon"
+             class="zmdi zmdi-favorite{% if not is_liked %}-outline{% endif %} like-heart"
+             style="color: {% if is_liked %}#ef4444{% else %}#9ca3af{% endif %};">
+          </i>
+        </button>
+        <div class="mt-2">
+          <span id="likes-count" class="fs-4 fw-bold">{{ post.likes_count }}</span>
+          <span class="text-muted ms-1">like this post. Do you like it?</span>
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="row g-4 related-section">
+        <div class="col-lg-6">
+          <h4>Recent Posts Today</h4>
+          <div class="row g-3">
+            {% for r in recent %}
+              <div class="col-12">
+                <div class="related-card">
+                  <div class="card-body">
+                    <a href="{% url 'blog_details' slug=r.slug %}" class="text-decoration-none">
+                      <h5 class="card-title">{{ r.title }}</h5>
+                    </a>
+                    <div class="related-meta d-flex gap-3 flex-wrap">
+                      <span>❤️ {{ r.likes_count }}</span>
+                      <span>👁️ {{ r.views_count }}</span>
+                      <span>{{ r.created_at|date:"d M" }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <div class="col-12">
+                <div class="alert alert-light text-center py-4 rounded-3 mb-0">No posts published today.</div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <h4>Readers Also Viewed</h4>
+          <div class="row g-3">
+            {% for p in popular %}
+              <div class="col-12">
+                <div class="related-card">
+                  <div class="card-body">
+                    <a href="{% url 'blog_details' slug=p.slug %}" class="text-decoration-none">
+                      <h5 class="card-title">{{ p.title }}</h5>
+                    </a>
+                    <div class="related-meta d-flex gap-3 flex-wrap">
+                      <span>❤️ {{ p.likes_count }}</span>
+                      <span>👁️ {{ p.views_count }}</span>
+                      <span>{{ p.created_at|date:"d M" }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <div class="col-12">
+                <div class="alert alert-light text-center py-4 rounded-3 mb-0">No popular posts yet.</div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews -->
+      <div class="reviews-section">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+          <h3 class="mb-0 fw-bold">Reader Reviews</h3>
+          <div class="d-flex align-items-center gap-2 fs-5">
+            Average rating:
+            <strong class="text-warning fs-4">{{ avg|default:"0.0" }}</strong>
+            <span class="text-muted">/ 5</span>
+          </div>
+        </div>
+
+        {% for r0 in reviews %}
+          <div class="review-card card">
+            <div class="card-body p-4 p-md-4">
+              <div class="d-flex gap-3">
+                <div class="avatar rounded-circle bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+                     style="width:52px; height:52px; font-size:1.15rem;">
+                  {{ r0.first_name|slice:":1" }}{{ r0.last_name|slice:":1" }}
+                </div>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between flex-wrap gap-2 mb-1">
+                    <h5 class="mb-0 fw-semibold">
+                      {% if r0.user %}
+                        <a href="{% url 'public_user_profile' r0.user.id %}" class="profile-link">{{ r0.first_name }} {{ r0.last_name }}</a>
+                      {% else %}
+                        {{ r0.first_name }} {{ r0.last_name }}
+                      {% endif %}
+                      {% if r0.user and r0.user.is_staff or r0.user.is_superuser %}
+                        <span class="badge bg-danger bg-opacity-10 text-danger ms-2">Admin</span>
+                      {% endif %}
+                    </h5>
+                    <small class="text-muted"><time class="local-dt" data-iso="{{ r0.created_at|date:'c' }}"></time></small>
+                  </div>
+                  <div class="stars mb-2">
+                    {% for i in "12345" %}
+                      <span class="{% if forloop.counter <= r0.rating %}text-warning{% else %}text-muted opacity-50{% endif %}">★</span>
+                    {% endfor %}
+                  </div>
+                  <p class="mb-3 lh-base">{{ r0.comment|linebreaks }}</p>
+
+                  {% if user.is_authenticated %}
+                    <a class="text-danger small fw-medium text-decoration-none" data-bs-toggle="collapse" href="#reply-form-{{ r0.id }}" role="button">
+                      <i class="bi bi-reply-fill me-1"></i> Reply
+                    </a>
+                    <div class="collapse mt-3" id="reply-form-{{ r0.id }}">
+                      <form method="post" action="{% url 'blog_reply_review' r0.id %}">
+                        {% csrf_token %}
+                        <textarea class="form-control form-control-sm mb-2" name="comment" rows="2" placeholder="Write your reply..." required></textarea>
+                        <div class="d-flex gap-2">
+                          <button type="submit" class="btn btn-sm btn-primary px-3">Send</button>
+                          <button type="button" class="btn btn-sm btn-outline-secondary px-3" data-bs-toggle="collapse" data-bs-target="#reply-form-{{ r0.id }}">Cancel</button>
+                        </div>
+                      </form>
+                    </div>
+                  {% endif %}
+
+                  <!-- Level 1 -->
+                  {% for r1 in r0.replies.all %}
+                    {% if r1.is_approved %}
+                      <div class="thread-container mt-4 ps-4">
+                        <div class="thread-line border-start border-3 ps-4">
+                          <div class="d-flex gap-3 mb-3">
+                            <div class="avatar rounded-circle bg-secondary bg-opacity-10 text-secondary d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+                                 style="width:42px;height:42px;font-size:1rem;">
+                              {{ r1.first_name|slice:":1" }}{{ r1.last_name|slice:":1" }}
+                            </div>
+                            <div class="flex-grow-1">
+                              <div class="d-flex justify-content-between flex-wrap gap-2 mb-1">
+                                <strong class="small fw-semibold">
+                                  {% if r1.user %}
+                                    <a href="{% url 'public_user_profile' r1.user.id %}" class="profile-link">{{ r1.first_name }} {{ r1.last_name }}</a>
+                                  {% else %}
+                                    {{ r1.first_name }} {{ r1.last_name }}
+                                  {% endif %}
+                                  {% if r1.user and r1.user.is_staff or r1.user.is_superuser %}
+                                    <span class="badge bg-danger bg-opacity-10 text-danger ms-2 small">Admin</span>
+                                  {% endif %}
+                                </strong>
+                                <small class="text-muted"><time class="local-dt" data-iso="{{ r1.created_at|date:'c' }}"></time></small>
+                              </div>
+                              <p class="mb-2 small lh-base">{{ r1.comment|linebreaks }}</p>
+
+                              {% if user.is_authenticated %}
+                                <a class="text-danger small fw-medium text-decoration-none" data-bs-toggle="collapse" href="#reply-form-{{ r1.id }}" role="button">
+                                  <i class="bi bi-reply-fill me-1"></i> Reply
+                                </a>
+                                <div class="collapse mt-3" id="reply-form-{{ r1.id }}">
+                                  <form method="post" action="{% url 'blog_reply_review' r1.id %}">
+                                    {% csrf_token %}
+                                    <textarea class="form-control form-control-sm mb-2" name="comment" rows="2" placeholder="Write your reply..." required></textarea>
+                                    <div class="d-flex gap-2">
+                                      <button type="submit" class="btn btn-sm btn-primary px-3">Send</button>
+                                      <button type="button" class="btn btn-sm btn-outline-secondary px-3" data-bs-toggle="collapse" data-bs-target="#reply-form-{{ r1.id }}">Cancel</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              {% endif %}
+
+                              <!-- Level 2 -->
+                              {% for r2 in r1.replies.all %}
+                                {% if r2.is_approved %}
+                                  <div class="thread-container mt-3 ps-3">
+                                    <div class="thread-line border-start border-2 ps-3">
+                                      <div class="d-flex gap-3 mb-3">
+                                        <div class="avatar rounded-circle bg-light text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+                                             style="width:36px;height:36px;font-size:0.9rem;">
+                                          {{ r2.first_name|slice:":1" }}{{ r2.last_name|slice:":1" }}
+                                        </div>
+                                        <div class="flex-grow-1">
+                                          <div class="d-flex justify-content-between flex-wrap gap-2 mb-1">
+                                            <strong class="small fw-semibold">
+                                              {% if r2.user %}
+                                                <a href="{% url 'public_user_profile' r2.user.id %}" class="profile-link">{{ r2.first_name }} {{ r2.last_name }}</a>
+                                              {% else %}
+                                                {{ r2.first_name }} {{ r2.last_name }}
+                                              {% endif %}
+                                              {% if r2.user and r2.user.is_staff or r2.user.is_superuser %}
+                                                <span class="badge bg-danger bg-opacity-10 text-danger ms-2 small">Admin</span>
+                                              {% endif %}
+                                            </strong>
+                                            <small class="text-muted"><time class="local-dt" data-iso="{{ r2.created_at|date:'c' }}"></time></small>
+                                          </div>
+                                          <p class="mb-2 small lh-base">{{ r2.comment|linebreaks }}</p>
+
+                                          {% if user.is_authenticated %}
+                                            <a class="text-danger small fw-medium text-decoration-none" data-bs-toggle="collapse" href="#reply-form-{{ r2.id }}" role="button">
+                                              <i class="bi bi-reply-fill me-1"></i> Reply
+                                            </a>
+                                            <div class="collapse mt-3" id="reply-form-{{ r2.id }}">
+                                              <form method="post" action="{% url 'blog_reply_review' r2.id %}">
+                                                {% csrf_token %}
+                                                <textarea class="form-control form-control-sm mb-2" name="comment" rows="1" placeholder="Write your reply..." required></textarea>
+                                                <div class="d-flex gap-2">
+                                                  <button type="submit" class="btn btn-sm btn-primary px-3">Send</button>
+                                                  <button type="button" class="btn btn-sm btn-outline-secondary px-3" data-bs-toggle="collapse" data-bs-target="#reply-form-{{ r2.id }}">Cancel</button>
+                                                </div>
+                                              </form>
+                                            </div>
+                                          {% endif %}
+
+                                          {% for r3 in r2.replies.all %}
+                                            {% if r3.is_approved %}
+                                              <div class="thread-container mt-3 ps-3">
+                                                <div class="thread-line border-start border-2 ps-3">
+                                                  <!-- r3 content similar pattern -->
+                                                </div>
+                                              </div>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <div class="text-center py-5 my-4 bg-white bg-opacity-50 rounded-4">
+            <p class="lead text-muted mb-1">No reviews yet.</p>
+            <p class="text-muted">Be the first to share your thoughts!</p>
+          </div>
+        {% endfor %}
+
+        <!-- Write Review -->
+        {% if user.is_authenticated %}
+          <div class="card border-0 shadow-sm mt-4" style="background: rgba(255,255,255,0.8); border-radius: 18px;">
+            <div class="card-body p-4 p-md-5">
+              <h4 class="fw-bold mb-4">Write Your Review</h4>
+              <form method="post" action="{% url 'blog_add_review' slug=post.slug %}">
+                {% csrf_token %}
+                <div class="mb-4">
+                  <label class="form-label fw-semibold">Your Rating</label>
+                  <div class="d-flex gap-1 fs-2">
+                    {% for value in "54321" %}
+                      <input type="radio" name="rating" id="star{{ value }}" value="{{ value }}" class="d-none" required>
+                      <label for="star{{ value }}" class="text-warning cursor-pointer hover-scale">★</label>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <label for="comment" class="form-label fw-semibold">Your Thoughts</label>
+                  <textarea class="form-control" id="comment" name="comment" rows="5" placeholder="What did you think about this post?" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-warning btn-lg px-5">Submit Review</button>
+              </form>
+            </div>
+          </div>
+        {% else %}
+          <div class="alert alert-light text-center mt-4 py-4 rounded-3 shadow-sm">
+            Please <a href="{% url 'ru' %}?next={{ request.path }}" class="alert-link fw-bold text-danger">sign in</a> to write a review.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'include/footer.html' %}
+
+<a href="#" id="back-to-top" title="Back to top" style="display: none;">↑</a>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+<script src="{% static 'js/images-loded.min.js' %}"></script>
+<script src="{% static 'js/isotope.min.js' %}"></script>
+<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+<script src="{% static 'js/form-validator.min.js' %}"></script>
+<script src="{% static 'js/contact-form-script.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('time.local-dt').forEach(function (el) {
+    var iso = el.getAttribute('data-iso');
+    if (!iso) return;
+    var d = new Date(iso);
+    el.textContent = d.toLocaleString();
+    el.setAttribute('title', d.toString());
+  });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const likeBtn  = document.getElementById('like-btn');
+  const likeIcon = document.getElementById('like-icon');
+  const countEl  = document.getElementById('likes-count');
+  const countMeta = document.getElementById('likes-count-meta');
+
+  if (!likeBtn) return;
+
+  likeBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    fetch('{% url "blog_like" slug=post.slug %}', {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data && typeof data.liked !== 'undefined') {
+        if (data.liked) {
+          likeIcon.classList.remove('zmdi-favorite-outline');
+          likeIcon.classList.add('zmdi-favorite');
+          likeIcon.style.color = '#ef4444';
+        } else {
+          likeIcon.classList.remove('zmdi-favorite');
+          likeIcon.classList.add('zmdi-favorite-outline');
+          likeIcon.style.color = '#9ca3af';
+        }
+        countEl.textContent = data.likes;
+        if (countMeta) countMeta.textContent = data.likes;
+      }
+    })
+    .catch(err => console.error('Like error:', err));
+  });
+});
+</script>
+
+</body>
+</html>

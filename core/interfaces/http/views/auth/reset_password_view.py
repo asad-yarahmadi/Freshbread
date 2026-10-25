@@ -37,7 +37,7 @@ def reset_password_step1_view(request):
             messages.error(request, "Internal error during reset initiation")
 
     mark_form_render(request, "reset_step1_failed")
-    return render(request, "freshbread/reset_password/reset 1.html")
+    return render(request, "reset_password/reset 1.html")
 
 
 def reset_password_step2_view(request):
@@ -76,7 +76,7 @@ def reset_password_step2_view(request):
             messages.error(request, "Internal error during code verification")
 
     mark_form_render(request, "reset_step2_failed")
-    return render(request, "freshbread/reset_password/reset 2.html")
+    return render(request, "reset_password/reset 2.html")
 
 
 def reset_password_step3_view(request):
@@ -109,7 +109,7 @@ def reset_password_step3_view(request):
             if password != password_confirm:
                 record_failure(request, "reset_step3_failed", meta_text="mismatch")
                 messages.error(request, "❌ Passwords do not match.")
-                return render(request, "freshbread/reset_password/reset 3.html")
+                return render(request, "reset_password/reset 3.html")
 
             PasswordResetService.reset_password(username, password, ip)
 
@@ -136,4 +136,4 @@ def reset_password_step3_view(request):
             messages.error(request, "Internal error during password reset")
 
     mark_form_render(request, "reset_step3_failed")
-    return render(request, "freshbread/reset_password/reset 3.html")
+    return render(request, "reset_password/reset 3.html")

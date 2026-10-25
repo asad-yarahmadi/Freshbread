@@ -37,7 +37,7 @@ def complete_profile_view(request):
         except Exception as e:
             messages.error(request, str(e))
 
-    return render(request, "freshbread/profile/complete_profile.html", {"next": next_url})
+    return render(request, "profile/complete_profile.html", {"next": next_url})
 
 @login_required
 def profile(request):
@@ -95,7 +95,7 @@ def profile(request):
     total_earned = len(earned_badge_ids)
     
     context = {
-        "orders": orders,               # اگر هنوز لازم داری
+        "orders": orders,               
         "active_orders": active_orders,
         "delivered_orders": delivered_orders,
         "cancelled_orders": cancelled_orders,
@@ -107,7 +107,7 @@ def profile(request):
         }
     }
 
-    return render(request, "freshbread/profile/pf.html", context)
+    return render(request, "profile/pf.html", context)
 
 @login_required
 def edit_profile(request):
@@ -124,7 +124,7 @@ def edit_profile(request):
         "email": user.email or "",
         "phone": getattr(profile, "phone", "") or "",
         "postal_code": getattr(profile, "postal_code", "") or "",
-        "bio": getattr(profile, "bio", "") or "hi there! im using Freshbread.",
+        "bio": getattr(profile, "bio", "") or "Hi there! I'm using Kingfood.",
         "latitude": "",
         "longitude": "",
     }
@@ -156,7 +156,7 @@ def edit_profile(request):
             "email": email,
             "phone": phone,
             "postal_code": postal_code,
-            "bio": bio or "hi there! im using Freshbread.",
+            "bio": bio or "Hi there! I'm using Kingfood.",
             "latitude": latitude or "",
             "longitude": longitude or "",
         })
@@ -249,7 +249,7 @@ def edit_profile(request):
             # persist profile fields (no location here)
             profile.phone = phone or profile.phone
             profile.postal_code = postal_code or profile.postal_code
-            profile.bio = bio or "hi there! im using Freshbread."
+            profile.bio = bio or "Hi there! I'm using Kingfood."
 
             user.save()
             profile.save()
@@ -258,12 +258,12 @@ def edit_profile(request):
 
         except ValidationError as e:
             messages.error(request, str(e))
-            return render(request, "freshbread/profile/pfe.html", {"user": user, "profile": profile, "values": values})
+            return render(request, "profile/pfe.html", {"user": user, "profile": profile, "values": values})
         except Exception as e:
             messages.error(request, "System error while saving profile.")
-            return render(request, "freshbread/profile/pfe.html", {"user": user, "profile": profile, "values": values})
+            return render(request, "profile/pfe.html", {"user": user, "profile": profile, "values": values})
 
-    return render(request, "freshbread/profile/pfe.html", {"user": user, "profile": profile, "values": values})
+    return render(request, "profile/pfe.html", {"user": user, "profile": profile, "values": values})
 
 def public_user_profile(request, user_id: int):
     try:
@@ -275,13 +275,13 @@ def public_user_profile(request, user_id: int):
     prof = getattr(target, 'profile', None)
     if not prof:
         prof = Profile.objects.create(user=target)
-    bio = prof.bio or "hi there! im using Freshbread."
+    bio = prof.bio or "Hi there! I'm using Kingfood."
     from core.infrastructure.models import BlogPost
     authored_blogs = BlogPost.objects.filter(author=target, is_published=True).order_by('-created_at')
     
     return render(
         request,
-        "freshbread/profile/user_public.html",
+        "profile/user_public.html",
         {
             "target": target,
             "profile": prof,

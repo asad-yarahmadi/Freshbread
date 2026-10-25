@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 def locations_manage_view(request):
     from core.infrastructure.models import UserLocation
     locations = list(UserLocation.objects.filter(user=request.user).order_by('-updated_at'))
-    return render(request, 'freshbread/order/locations_manage.html', { 'locations': locations })
+    return render(request, 'profile/locations_manage.html', { 'locations': locations })
 
 @login_required
 def location_add_view(request):
@@ -28,7 +28,7 @@ def location_add_view(request):
                 raise ValidationError('Please choose a location on the map.')
             # validate Ottawa street
             url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lng}&format=json&addressdetails=1"
-            headers = {"User-Agent": "FreshBreadApp/1.0 (contact@freshbread.com)"}
+            headers = {"User-Agent": "kingfood/1.5.0 (support@kingfood.ca)"}
             info = requests.get(url, headers=headers, timeout=5).json()
             a = info.get('address', {})
             if not ((a.get('road') or a.get('pedestrian') or a.get('cycleway') or a.get('footway')) and a.get('city') == 'Ottawa'):
@@ -61,7 +61,7 @@ def location_add_view(request):
             return redirect('locations_manage')
         except ValidationError as e:
             messages.error(request, str(e))
-    return render(request, 'freshbread/order/location_add.html')
+    return render(request, 'profile/location_add.html')
 
 @login_required
 def location_edit_view(request, pk):
@@ -104,7 +104,7 @@ def location_edit_view(request, pk):
             return redirect('locations_manage')
         except ValidationError as e:
             messages.error(request, str(e))
-    return render(request, 'freshbread/order/location_add.html', { 'edit': True, 'location': loc })
+    return render(request, 'profile/location_add.html', { 'edit': True, 'location': loc })
 
 @login_required
 def location_delete_view(request, pk):

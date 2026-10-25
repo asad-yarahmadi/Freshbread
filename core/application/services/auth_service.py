@@ -1,6 +1,5 @@
 """
 Authentication Service
-سرویس منطق تجاری احراز هویت
 """
 import logging
 from typing import Optional, Dict, Any
@@ -26,24 +25,24 @@ logger = logging.getLogger(__name__)
 
 class AuthService:
     """
-    سرویس منطق تجاری احراز هویت
+    Authentication Service
     """
 
     def login(self, *, request, username_or_email: str, password: str, ip: str) -> Dict[str, Any]:
         """
-        ورود کاربر
+        User login
 
         Args:
-            request: درخواست HTTP
-            username_or_email: نام کاربری یا ایمیل
-            password: رمز عبور
-            ip: آدرس IP
+            request: HTTP request
+            username_or_email: Username or Email
+            password: Password
+            ip: IP adrress
 
         Returns:
-            Dict[str, Any]: نتیجه عملیات
+            Dict[str, Any]: Process resualt
 
         Raises:
-            ValidationError: در صورت خطا
+            ValidationError: 
         """
         try:
             # اعتبارسنجی تلاش ورود
@@ -111,13 +110,13 @@ class AuthService:
 
     def logout(self, request) -> Dict[str, Any]:
         """
-        خروج کاربر
+        User logout
 
         Args:
-            request: درخواست HTTP
+            request: Request HTTP
 
         Returns:
-            Dict[str, Any]: نتیجه عملیات
+            Dict[str, Any]: Process resualt
         """
         try:
             if request.user.is_authenticated:
@@ -137,17 +136,17 @@ class AuthService:
 
     def signup(self, *, signup_data: Dict[str, Any], ip: str) -> Dict[str, Any]:
         """
-        ثبت نام کاربر جدید
+        New user sign up
 
         Args:
-            signup_data: داده‌های ثبت نام
-            ip: آدرس IP
+            signup_data: Sighn up datas
+            ip: Ip
 
         Returns:
-            Dict[str, Any]: نتیجه عملیات
+            Dict[str, Any]: Process resualt
 
         Raises:
-            ValidationError: در صورت خطا
+            ValidationError
         """
         try:
             # ایجاد entity
@@ -198,17 +197,16 @@ class AuthService:
 
     def verify_email(self, *, email: str, verification_code: str) -> Dict[str, Any]:
         """
-        تایید ایمیل و فعالسازی حساب
+        Email coniformation and Activating account
 
         Args:
-            email: آدرس ایمیل
-            verification_code: کد تایید
-
+            email
+            verification_code: Coniformation code
         Returns:
-            Dict[str, Any]: نتیجه عملیات
+            Dict[str, Any]: Process resualt
 
         Raises:
-            ValidationError: در صورت خطا
+            ValidationError
         """
         try:
             # یافتن کاربر موقت
@@ -406,33 +404,33 @@ class AuthService:
             raise
         except Exception as e:
             logger.error(f"Password reset initiation error for {email}: {str(e)}")
-            raise ValidationError("خطای سیستمی. لطفاً دوباره تلاش کنید.")
+            raise ValidationError("System Error. Try again.")
 
     def confirm_password_reset(self, *, token: str, new_password: str, confirm_password: str) -> Dict[str, Any]:
         """
-        تایید بازنشانی رمز عبور
+        Coniformation of users pasword reset.
 
         Args:
-            token: توکن بازنشانی
-            new_password: رمز عبور جدید
-            confirm_password: تایید رمز عبور
+            token: Reset token
+            new_password: New password
+            confirm_password: Password coniformation
 
         Returns:
-            Dict[str, Any]: نتیجه عملیات
+            Dict[str, Any]: Process resualt
 
         Raises:
-            ValidationError: در صورت خطا
+            ValidationError
         """
         try:
             # یافتن کاربر موقت با توکن
             temp_user = TempUser.objects.filter(verification_code=token).first()
             if not temp_user:
-                raise ValidationError("توکن بازنشانی نامعتبر یا منقضی شده است.")
+                raise ValidationError("Token is not valid.")
 
             # یافتن کاربر واقعی
             user = AuthRepository.get_user_by_username_or_email(temp_user.email)
             if not user:
-                raise ValidationError("کاربر یافت نشد.")
+                raise ValidationError("User not found.")
 
             # ایجاد entity
             reset_entity = PasswordResetEntity(
@@ -444,7 +442,7 @@ class AuthService:
 
             # اعتبارسنجی رمز عبور جدید
             if not reset_entity.validate_new_password():
-                raise ValidationError("رمز عبور جدید نامعتبر است.")
+                raise ValidationError("New password is NOT valuable.")
 
             # اعتبارسنجی رمز عبور
             validate_password(new_password)
@@ -460,7 +458,7 @@ class AuthService:
 
             return {
                 'success': True,
-                'message': 'رمز عبور با موفقیت تغییر یافت. اکنون می‌توانید وارد شوید.',
+                'message': 'Succses',
                 'login_required': True,
             }
 
@@ -469,14 +467,14 @@ class AuthService:
             raise
         except Exception as e:
             logger.error(f"Password reset confirmation error: {str(e)}")
-            raise ValidationError("خطای سیستمی. لطفاً دوباره تلاش کنید.")
+            raise ValidationError("System faliure. Please try again.")
 
     def get_auth_statistics(self) -> Dict[str, Any]:
         """
-        دریافت آمار احراز هویت
+        sighned in statistics
 
         Returns:
-            Dict[str, Any]: آمار
+            Dict[str, Any]: Statistics
         """
         try:
             return AuthRepository.get_auth_statistics()
@@ -486,13 +484,13 @@ class AuthService:
 
     def _generate_verification_code(self, length: int = 6) -> str:
         """
-        تولید کد تایید
+        Generating code
 
         Args:
-            length: طول کد
+            length: Code length
 
         Returns:
-            str: کد تولید شده
+            str: Generated code
         """
         import random
         import string
@@ -500,25 +498,23 @@ class AuthService:
 
     def _send_verification_email(self, email: str, code: str) -> None:
         """
-        ارسال ایمیل تایید
+        Sending coniformation email
 
         Args:
-            email: آدرس ایمیل
-            code: کد تایید
+            email
+            code: Coniformation code
         """
         try:
-            subject = 'تایید حساب کاربری - FreshBread'
+            subject = 'Creat account - Kingfood'
             message = f"""
-            سلام!
+            Hi!
 
-            برای فعالسازی حساب کاربری خود، لطفاً از کد زیر استفاده کنید:
+            For activating your account, please confirm your email:
 
-            کد تایید: {code}
+            Coniformation code: {code}
 
-            اگر این درخواست را شما انجام نداده‌اید، این ایمیل را نادیده بگیرید.
-
-            با تشکر
-            تیم FreshBread
+            Ignore this email if you haven't requested. 
+            
             """
 
             from core.infrastructure.email.email_sender import email_sender
@@ -539,54 +535,7 @@ class AuthService:
 
         except Exception as e:
             logger.error(f"Failed to send verification email to {email}: {str(e)}")
-            raise ValidationError("خطا در ارسال ایمیل تایید.")
-
-    def _send_password_reset_email(self, email: str, token: str) -> None:
-        """
-        ارسال ایمیل بازنشانی رمز عبور
-
-        Args:
-            email: آدرس ایمیل
-            token: توکن بازنشانی
-        """
-        try:
-            subject = 'بازنشانی رمز عبور - FreshBread'
-            reset_url = f"{settings.SITE_URL}/reset-password/confirm/{token}/"
-            message = f"""
-            سلام!
-
-            برای بازنشانی رمز عبور حساب کاربری خود، لطفاً روی لینک زیر کلیک کنید:
-
-            {reset_url}
-
-            اگر این درخواست را شما انجام نداده‌اید، این ایمیل را نادیده بگیرید.
-
-            با تشکر
-            تیم FreshBread
-            """
-
-            from core.infrastructure.email.email_sender import email_sender
-            email_sender.send(
-                subject=subject,
-                message=message,
-                to=email,
-                html_message=(
-                    "Hello!<br>"
-                    "To reset your password, click the link below:<br><br>"
-                    f"<a href=\"{reset_url}\" style=\"color:#C47A3A; text-decoration:underline;\">{reset_url}</a>"
-                ),
-                title="Reset Password",
-                cta_text="Reset Password",
-                action_url=reset_url,
-                wrap=True,
-            )
-
-            logger.info(f"Password reset email sent to {email}")
-
-        except Exception as e:
-            logger.error(f"Failed to send password reset email to {email}: {str(e)}")
-            raise ValidationError("Failed to send password reset email.")
-
+            raise ValidationError("Failed in sending email.")
 
 # Instance
 auth_service = AuthService()

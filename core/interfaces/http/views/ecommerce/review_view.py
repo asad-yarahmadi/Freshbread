@@ -26,7 +26,7 @@ def add_review(request, slug):
         form = ReviewForm()
     from core.infrastructure.repositories.product_repository import ProductRepository
     product = ProductRepository.get_product_by_slug(slug)
-    return render(request, 'freshbread/fd.html', {'review_form': form, 'product': product})
+    return render(request, 'fd.html', {'review_form': form, 'product': product})
 
 @login_required
 def reply_review(request, review_id):
@@ -100,7 +100,7 @@ def submit_order_review(request, token):
             return redirect('food_de', slug=products[0].slug)
         return redirect('menu')
     
-    return render(request, 'freshbread/order_review.html', {
+    return render(request, 'order_review.html', {
         'review_request': review_request,
         'order': order
     })

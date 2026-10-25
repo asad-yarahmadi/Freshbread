@@ -151,7 +151,7 @@ def checkout_s1(request):
         "shipping_charge": 5.00,
         "discount_code_applied": bool(request.session.get("checkout_discount_id")),
     }
-    return render(request, "freshbread/checkout/checkout_s1.html", context)
+    return render(request, "checkout/checkout_s1.html", context)
 
 
 # ─────────────────────────────────────────────
@@ -175,7 +175,7 @@ def checkout_s2(request):
 
     return render(
         request,
-        "freshbread/checkout/checkout_s2.html",
+        "checkout/checkout_s2.html",
         {
             "site_email": request.user.email,
             "payable": round(total_due, 2),
@@ -303,7 +303,7 @@ def checkout_s3(request):
 
     return render(
         request,
-        "freshbread/checkout/checkout_s3.html",
+        "checkout/checkout_s3.html",
         {"payable": round(total_due, 2)}
     )
 
@@ -312,7 +312,6 @@ def checkout_s3(request):
 # Cancel checkout safely
 # ─────────────────────────────────────────────
 @login_required
-@require_POST
 def checkout_cancel(request):
     for key in [
         "checkout_delivery_slot",
@@ -354,6 +353,6 @@ def checkout_success(request):
     # clear session keys after success
     for key in keys_to_remove:
         request.session.pop(key, None)
-    return render(request, "freshbread/checkout/success.html")
+    return render(request, "checkout/success.html")
 
 

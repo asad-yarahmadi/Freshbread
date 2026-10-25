@@ -41,15 +41,15 @@ class OrderAdapter:
         """
         try:
             orders = OrderService.get_user_orders(request.user)
-            return render(request, "freshbread/pf.html", {"orders": orders})
+            return render(request, "pf.html", {"orders": orders})
             
         except OrderException as e:
             messages.error(request, str(e))
-            return render(request, "freshbread/pf.html", {"orders": []})
+            return render(request, "pf.html", {"orders": []})
         except Exception as e:
             logger.exception(f"خطای غیرمنتظره در نمایش پروفایل: {str(e)}")
             messages.error(request, "خطای غیرمنتظره رخ داد")
-            return render(request, "freshbread/pf.html", {"orders": []})
+            return render(request, "pf.html", {"orders": []})
 
     @staticmethod
     @login_required
@@ -63,7 +63,7 @@ class OrderAdapter:
         Returns:
             HttpResponse: پاسخ
         """
-        return render(request, "freshbread/pfe.html")
+        return render(request, "pfe.html")
 
     @staticmethod
     @login_required
@@ -148,7 +148,7 @@ class OrderAdapter:
                 'stats': stats_dto
             }
             
-            return render(request, 'freshbread/order_manage.html', context)
+            return render(request, 'order_manage.html', context)
             
         except OrderException as e:
             messages.error(request, str(e))
@@ -227,7 +227,7 @@ class OrderAdapter:
                 messages.error(request, "سفارش پیدا نشد")
                 return redirect('manage_orders')
             
-            return render(request, 'freshbread/order/order_info.html', {'order': order})
+            return render(request, 'order/order_info.html', {'order': order})
             
         except Exception as e:
             logger.exception(f"خطای غیرمنتظره در نمایش اطلاعات سفارش: {str(e)}")

@@ -39,4 +39,4 @@ def admin_announcements(request):
             messages.success(request, "Announcement deleted.")
             return redirect("admin_announcements")
     anns = SiteAnnouncement.objects.order_by("-created_at")[:20]
-    return render(request, "freshbread/admin/announcements.html", {"announcements": anns})
+    return render(request, "admin/announcements.html", {"announcements": anns})

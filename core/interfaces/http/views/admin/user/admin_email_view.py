@@ -39,7 +39,7 @@ def admin_email(request):
 
         if not subject or not body_template:
             messages.error(request, "Subject and body are required.")
-            return render(request, "freshbread/admin_email.html", {"scheduled": scheduled})
+            return render(request, "admin_email.html", {"scheduled": scheduled})
 
         # resolve recipients
         qs = User.objects.all()
@@ -86,6 +86,6 @@ def admin_email(request):
             messages.success(request, "Scheduled email saved.")
 
         scheduled = ScheduledEmail.objects.filter(is_active=True).order_by("-created_at")
-        return render(request, "freshbread/admin_email.html", {"scheduled": scheduled})
+        return render(request, "admin_email.html", {"scheduled": scheduled})
 
-    return render(request, "freshbread/admin_email.html", {"scheduled": scheduled})
+    return render(request, "admin/admin_email.html", {"scheduled": scheduled})

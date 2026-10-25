@@ -9,7 +9,7 @@ from core.infrastructure.models import SupportTicket, TicketMessage
 @login_required
 def tickets(request):
     qs = SupportTicket.objects.filter(user=request.user).order_by('-updated_at')
-    return render(request, 'freshbread/tickets/list.html', {"tickets": qs})
+    return render(request, 'tickets/list.html', {"tickets": qs})
 
 
 @login_required
@@ -24,7 +24,7 @@ def ticket_new(request):
         TicketMessage.objects.create(ticket=t, sender=request.user, is_admin=False, message=message)
         messages.success(request, 'Ticket submitted. We will reply via this page and email.')
         return redirect('ticket_detail', ticket_id=t.id)
-    return render(request, 'freshbread/tickets/new.html')
+    return render(request, 'tickets/new.html')
 
 
 @login_required
@@ -47,5 +47,5 @@ def ticket_detail(request, ticket_id: int):
             messages.success(request, 'Message sent.')
             return redirect('ticket_detail', ticket_id=t.id)
     msgs = t.messages.order_by('created_at')
-    return render(request, 'freshbread/tickets/detail.html', {"ticket": t, "messages": msgs})
+    return render(request, 'tickets/detail.html', {"ticket": t, "messages": msgs})
 

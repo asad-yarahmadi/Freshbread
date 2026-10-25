@@ -89,7 +89,7 @@ class AuthAdapter:
                 return redirect('login')
 
         # GET request
-        return render(request, 'freshbread/login.html')
+        return render(request, 'login.html')
 
     @staticmethod
     def logout_view(request: HttpRequest) -> HttpResponse:
@@ -161,7 +161,7 @@ class AuthAdapter:
                 return redirect('signup')
 
         # GET request
-        return render(request, 'freshbread/signup.html')
+        return render(request, 'signup.html')
 
     @staticmethod
     def verify_email_view(request: HttpRequest) -> HttpResponse:
@@ -210,7 +210,7 @@ class AuthAdapter:
                 return redirect('verify_email')
 
         # GET request
-        return render(request, 'freshbread/verify_email.html')
+        return render(request, 'verify_email.html')
 
     @staticmethod
     def complete_profile_view(request: HttpRequest) -> HttpResponse:
@@ -260,7 +260,7 @@ class AuthAdapter:
                 return redirect('complete_profile')
 
         # GET request - نمایش فرم تکمیل پروفایل
-        return render(request, 'freshbread/complete_profile.html')
+        return render(request, 'complete_profile.html')
 
     @staticmethod
     def oauth_login_view(request: HttpRequest, provider: str) -> HttpResponse:
@@ -365,7 +365,7 @@ class AuthAdapter:
                 return redirect('password_reset')
 
         # GET request
-        return render(request, 'freshbread/password_reset.html')
+        return render(request, 'password_reset.html')
 
     @staticmethod
     def password_reset_confirm_view(request: HttpRequest, token: str) -> HttpResponse:
@@ -417,7 +417,7 @@ class AuthAdapter:
                 return redirect('password_reset_confirm', token=token)
 
         # GET request
-        return render(request, 'freshbread/password_reset_confirm.html', {'token': token})
+        return render(request, 'password_reset_confirm.html', {'token': token})
 
     @staticmethod
     def check_profile_view(request: HttpRequest) -> HttpResponse:

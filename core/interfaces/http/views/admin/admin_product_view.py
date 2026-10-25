@@ -56,7 +56,7 @@ def manage_products(request):
         'request': request,
         'categories': categories,
     }
-    return render(request, 'freshbread/product/manage_f.html', context)
+    return render(request, 'admin/product/manage_f.html', context)
 
 
 @admin_login_protect
@@ -76,7 +76,7 @@ def add_product(request):
                 messages.error(request, str(e))
     else:
         form = ProductForm()
-    return render(request, 'freshbread/product/food_su.html', {'form': form})
+    return render(request, 'admin/product/food_su.html', {'form': form})
 
 
 @admin_login_protect
@@ -102,7 +102,7 @@ def edit_product(request, slug):
                 messages.error(request, str(e))
     else:
         form = ProductForm(instance=product)
-    return render(request, 'freshbread/product/edf.html', {'form': form, 'product': product})
+    return render(request, 'admin/product/edf.html', {'form': form, 'product': product})
 
 
 @admin_login_protect
@@ -121,7 +121,7 @@ def delete_product(request, slug):
         except Exception as e:
             messages.error(request, str(e))
             return redirect('manage')
-    return render(request, 'freshbread/product/manage_f.html', {'product': product})
+    return render(request, 'admin/product/manage_f.html', {'product': product})
 
 
 @admin_login_protect

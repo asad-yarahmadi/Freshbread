@@ -34,7 +34,7 @@ def signup_view(request):
             )
             if next_url:
                 request.session['next_url'] = next_url
-            return render(request, "freshbread/verify_email.html", {"next": next_url})
+            return render(request, "verify_email.html", {"next": next_url})
 
         except Exception as e:
             uname = (request.POST.get("username") or "").strip()
@@ -43,4 +43,4 @@ def signup_view(request):
             messages.error(request, str(e))
 
     mark_form_render(request, "signup_failed")
-    return render(request, "freshbread/signup/su.html", {"next": next_url})
+    return render(request, "signup/su.html", {"next": next_url})

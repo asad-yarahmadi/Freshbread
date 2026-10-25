@@ -5,7 +5,7 @@ from core.interfaces.http.views.admin.security.admin_security_view import admin_
 from core.interfaces.http.views.admin.user.admin_announcement_view import admin_announcements
 from core.interfaces.http.views.admin.admin_release_view import admin_releases
 from core.interfaces.http.views.admin.security.admin_block_url_view import manage_urls, log_list
-from core.interfaces.http.views.admin.user.admin_ticket_view import *
+from core.interfaces.http.views.admin.ticket.admin_ticket_view import *
 
 urlpatterns = [
     path('email/', admin_email, name='admin_email'),

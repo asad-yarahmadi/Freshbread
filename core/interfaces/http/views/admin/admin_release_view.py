@@ -47,4 +47,4 @@ def admin_releases(request):
             messages.success(request, "Release deleted.")
             return redirect("admin_releases")
     releases = ReleaseNote.objects.all()[:20]
-    return render(request, "freshbread/admin/releases.html", {"releases": releases})
+    return render(request, "admin/releases.html", {"releases": releases})

@@ -33,7 +33,7 @@ def manage_orders(request):
     # sent_orders = orders.filter(status__in=["sending", "delivered"])
     # cancelled_orders = orders.filter(status="cancelled")
 
-    return render(request, 'freshbread/order/order_manage.html', {'orders': orders, 'by': by, 'q': q, 'sort': sort})
+    return render(request, 'admin/orders/order_manage.html', {'orders': orders, 'by': by, 'q': q, 'sort': sort})
 
 @login_required
 @admin_login_protect
@@ -104,14 +104,14 @@ def deliver_verify(request, order_id):
         except Exception:
             messages.error(request, "Failed to update order status.")
             return redirect('manage_orders')
-    return render(request, 'freshbread/order/deliver_verify.html', {'order': order})
+    return render(request, 'admin/orders/deliver_verify.html', {'order': order})
 
 @login_required
 @admin_login_protect
 def delivered_list(request):
     from core.infrastructure.repositories.order_repository import OrderRepository
     orders = OrderRepository.get_orders_by_status('delivered')
-    return render(request, 'freshbread/order/delivered_list.html', {'orders': orders})
+    return render(request, 'admin/orders/delivered_list.html', {'orders': orders})
 
 @login_required
 @admin_login_protect
@@ -140,4 +140,4 @@ def order_info(request, order_id):
     except Exception:
         discount_used = None
     claimed_rewards = ClaimedBadgeReward.objects.filter(order=order).select_related('badge')
-    return render(request, 'freshbread/order/order_info.html', {'order': order, 'discount_used': discount_used, 'claimed_rewards': claimed_rewards})
+    return render(request, 'order/order_info.html', {'order': order, 'discount_used': discount_used, 'claimed_rewards': claimed_rewards})

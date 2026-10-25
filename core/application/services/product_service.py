@@ -38,6 +38,7 @@ class ProductService:
     
     @classmethod
     def create_product(cls, product_data: Dict[str, Any], images: List = None) -> 'ProductEntity':
+        from ...application.services import ImageOptimizer
         """
         ایجاد محصول جدید
         
@@ -76,8 +77,18 @@ class ProductService:
             product = ProductRepository.create_product(product_data)
             
             # اضافه کردن تصاویر
+# اضافه کردن تصاویر بهینه‌شده
             if images:
-                ProductRepository.add_product_images(product, images)
+                optimized_images = []
+
+                for image in images:
+                    optimized_image = ImageOptimizer.optimize(image)
+                    optimized_images.append(optimized_image)
+
+                ProductRepository.add_product_images(
+                    product,
+                    optimized_images
+                )
             
             logger.info(f"محصول جدید ایجاد شد: {product.name} (ID: {product.id})")
             

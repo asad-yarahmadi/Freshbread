@@ -24,7 +24,7 @@ def order_detail(request, order_code):
     except Exception:
         discount_used = None
     claimed_rewards = ClaimedBadgeReward.objects.filter(order=order).select_related('badge')
-    return render(request, "freshbread/order/order_info1.html", {"order": order, "discount_used": discount_used, "claimed_rewards": claimed_rewards})
+    return render(request, "admin/orders/order_info1.html", {"order": order, "discount_used": discount_used, "claimed_rewards": claimed_rewards})
 
 @login_required
 def cancel_order(request, order_id):

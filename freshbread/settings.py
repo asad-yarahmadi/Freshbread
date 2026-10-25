@@ -316,7 +316,7 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = os.getenv(
     "SECURE_CROSS_ORIGIN_OPENER_POLICY",
     "same-origin"
 )
-
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 # --------------------------------------------------------------------------------
 # CUSTOM APPLICATION SETTINGS
 # --------------------------------------------------------------------------------
@@ -324,6 +324,13 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = os.getenv(
 # Payment Inbox Settings (For checking email-based payments)
 PAYMENT_INBOX_USERNAME = os.getenv('PAYMENT_INBOX_USERNAME')
 PAYMENT_INBOX_PASSWORD = os.getenv('PAYMENT_INBOX_PASSWORD')
+
+#--------------------------------------------------------------------------------
+#  FIREBASE CONFIGRATION
+#--------------------------------------------------------------------------------
+
+FIREBASE_PROJECT_ID = os.getenv("FIREBASE_PROJECT_ID")
+FIREBASE_CREDENTIALS = os.getenv("FIREBASE_CREDENTIALS")
 
 # --------------------------------------------------------------------------------
 # Unfold configration

@@ -61,8 +61,8 @@ urlpatterns = [
     path('profile/locations/', include('core.interfaces.http.urls.profile.location_urls')),
 
     # Admin order
-    path('order/review/', include('core.interfaces.http.urls.admin.admin_order_approval_urls')),
-    path('order/management/', include('core.interfaces.http.urls.admin.admin_order_managment_urls')),
+    path('orders/review/', include('core.interfaces.http.urls.admin.admin_order_approval_urls')),
+    path('orders/management/', include('core.interfaces.http.urls.admin.admin_order_managment_urls')),
 
 
     
